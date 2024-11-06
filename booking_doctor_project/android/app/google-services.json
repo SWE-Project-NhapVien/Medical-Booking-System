@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1041576948012",
+    "project_id": "medical-booking-app-e367f",
+    "storage_bucket": "medical-booking-app-e367f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041576948012:android:025b667ea2bc3327867c89",
+        "android_client_info": {
+          "package_name": "com.example.booking_doctor_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcx8cFm10Jy__HdqPu-X1wnboXKFTlgK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
