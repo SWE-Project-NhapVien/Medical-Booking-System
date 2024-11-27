@@ -2,8 +2,8 @@ import 'package:booking_doctor_project/utils/text_styles.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:flutter/material.dart';
 
-import '../../../widgets/common_app_bar_view.dart';
-import '../../../widgets/comon_button.dart';
+import '../../widgets/common_app_bar_view.dart';
+import '../../widgets/comon_button.dart';
 
 class AppointmentDetail extends StatefulWidget {
   const AppointmentDetail({super.key});

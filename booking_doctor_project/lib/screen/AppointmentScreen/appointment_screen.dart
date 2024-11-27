@@ -1,9 +1,9 @@
-import 'package:booking_doctor_project/screen/patient/AppointmentScreen/cancelled_appointment.dart';
-import 'package:booking_doctor_project/screen/patient/AppointmentScreen/complete_appointment.dart';
+import 'package:booking_doctor_project/screen/AppointmentScreen/cancelled_appointment.dart';
+import 'package:booking_doctor_project/screen/AppointmentScreen/complete_appointment.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/enum.dart';
+import '../../utils/enum.dart';
 // import '../../../widgets/bottom_move_top_animation.dart'; // nho them nay nua nhe
 import 'tab_button.dart';
 import 'upcoming_appointment.dart';

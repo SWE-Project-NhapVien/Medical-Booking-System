@@ -1,10 +1,10 @@
-import 'package:booking_doctor_project/bloc/patient/Appointment/CancelledAppointment/cancelled_appointment_bloc.dart';
-import 'package:booking_doctor_project/bloc/patient/Appointment/CancelledAppointment/cancelled_appointment_state.dart';
+import 'package:booking_doctor_project/bloc/Appointment/CancelledAppointment/cancelled_appointment_bloc.dart';
+import 'package:booking_doctor_project/bloc/Appointment/CancelledAppointment/cancelled_appointment_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../bloc/patient/Appointment/CancelledAppointment/cancelled_appointment_event.dart';
+import '../../bloc/Appointment/CancelledAppointment/cancelled_appointment_event.dart';
 
 class CancelledAppointment extends StatefulWidget {
   const CancelledAppointment({super.key});
