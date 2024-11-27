@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'enum.dart';
-import 'themes.dart';
+import 'color_palette.dart';
 
 class TextStyles {
   final BuildContext context;

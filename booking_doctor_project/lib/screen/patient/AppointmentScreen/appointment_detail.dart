@@ -1,5 +1,5 @@
 import 'package:booking_doctor_project/utils/text_styles.dart';
-import 'package:booking_doctor_project/utils/themes.dart';
+import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:flutter/material.dart';
 
 import '../../../widgets/common_app_bar_view.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/themes.dart';
+import '../../../utils/color_palette.dart';
 
 class TabButton extends StatelessWidget {
   final Function()? onTap;

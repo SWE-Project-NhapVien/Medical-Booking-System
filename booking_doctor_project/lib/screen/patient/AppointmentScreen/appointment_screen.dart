@@ -1,10 +1,10 @@
-import 'package:booking_doctor_project/screen/patient/Appointment/cancelled_appointment.dart';
-import 'package:booking_doctor_project/screen/patient/Appointment/complete_appointment.dart';
+import 'package:booking_doctor_project/screen/patient/AppointmentScreen/cancelled_appointment.dart';
+import 'package:booking_doctor_project/screen/patient/AppointmentScreen/complete_appointment.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/enum.dart';
-// import '../../../widgets/bottom_move_top_animation.dart';
+// import '../../../widgets/bottom_move_top_animation.dart'; // nho them nay nua nhe
 import 'tab_button.dart';
 import 'upcoming_appointment.dart';
 
@@ -45,36 +45,32 @@ class _AppointmentScreenState extends State<AppointmentScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      // khúc này bỏ nhé
-      textDirection: TextDirection.ltr, // khúc này bỏ nhé
-      child: Scaffold(
-        body: isFirstTime
-            ? Container(
-                child: const CircularProgressIndicator(
-                  strokeWidth: 2,
-                ),
-              )
-            : Column(
-                children: [
-                  CommonAppBarView(
-                    iconData: Icons.arrow_back_ios,
-                    title: "All Appointments",
-                    onBackClick: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16.0, horizontal: 16.0),
-                    child: _buildTab(),
-                  ),
-                  Expanded(
-                    child: indexView,
-                  )
-                ],
+    return Scaffold(
+      body: isFirstTime
+          ? Container(
+              child: const CircularProgressIndicator(
+                strokeWidth: 2,
               ),
-      ),
+            )
+          : Column(
+              children: [
+                CommonAppBarView(
+                  iconData: Icons.arrow_back_ios,
+                  title: "All Appointments",
+                  onBackClick: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 16.0, horizontal: 16.0),
+                  child: _buildTab(),
+                ),
+                Expanded(
+                  child: indexView,
+                )
+              ],
+            ),
     );
   }
 

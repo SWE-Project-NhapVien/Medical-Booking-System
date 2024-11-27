@@ -1,4 +1,4 @@
-import 'package:booking_doctor_project/screen/patient/Appointment/appointment_screen.dart';
+import 'package:booking_doctor_project/medical_booking_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -20,9 +20,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: AppointmentScreen(),
-    );
+    return const MedicalBookingApp();
   }
 }
-
