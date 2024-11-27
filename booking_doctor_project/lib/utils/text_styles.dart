@@ -19,6 +19,17 @@ class TextStyles {
               fontWeight: fontWeight,
               color: color,
             ));
+  TextStyle getTitleStyle(
+      {double size = 24,
+      FontWeight fontWeight = FontWeight.w300,
+      Color color = Colors.white}) {
+    return getTextStyle(
+        FontFamilyType.LeagueSpartan,
+        Theme.of(context).textTheme.titleLarge!.copyWith(
+              fontSize: size,
+              fontWeight: fontWeight,
+              color: color,
+            ));
   }
 
   TextStyle getDescriptionStyle() {
@@ -33,13 +44,36 @@ class TextStyles {
   TextStyle getHintTextStyle({double size = 18}) {
     return getTextStyle(
         FontFamilyType.LeagueSpartan,
+        FontFamilyType.LeagueSpartan,
         Theme.of(context).textTheme.bodyLarge!.copyWith(
+              fontWeight: FontWeight.w300,
+              color: ColorPalette.blackTextColor,
+            ));
+  }
+
+  TextStyle getHintTextStyle({double size = 18}) {
+    return getTextStyle(
+        FontFamilyType.LeagueSpartan,
+        Theme.of(context).textTheme.bodyLarge!.copyWith(
+              fontSize: size,
+              fontWeight: FontWeight.w300,
+              color: ColorPalette.lightBlueTextColor,
               fontSize: size,
               fontWeight: FontWeight.w300,
               color: ColorPalette.lightBlueTextColor,
             ));
   }
 
+  TextStyle getRegularStyle(
+      {FontWeight fontWeight = FontWeight.w400,
+      Color color = const Color.fromARGB(255, 0, 0, 0)}) {
+    return getTextStyle(
+        FontFamilyType.LeagueSpartan,
+        Theme.of(context).textTheme.bodyLarge!.copyWith(
+              fontSize: 18,
+              fontWeight: fontWeight,
+              color: color,
+            ));
   TextStyle getRegularStyle(
       {FontWeight fontWeight = FontWeight.w400,
       Color color = const Color.fromARGB(255, 0, 0, 0)}) {
