@@ -7,6 +7,7 @@ enum FontFamilyType {
   KaushanScript,
   Inter,
   DmSerifDisplay,
+  LeagueSpartan
 }
 
 enum ColorType {
