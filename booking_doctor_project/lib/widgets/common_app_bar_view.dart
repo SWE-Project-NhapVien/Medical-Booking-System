@@ -1,61 +1,48 @@
+import 'package:booking_doctor_project/utils/text_styles.dart';
+import 'package:booking_doctor_project/utils/themes.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/themes.dart';
-import 'tap_effect.dart';
-
+// ignore: must_be_immutable
 class CommonAppBarView extends StatelessWidget {
-  final double? topPadding;
+  final EdgeInsets? padding;
   final IconData iconData;
   final VoidCallback? onBackClick;
-  final Color? iconColor;
-  final Color? backgroundColor;
-  final int iconSize;
+  final double iconTextSize;
+  final String? title;
   const CommonAppBarView({
     super.key,
-    this.topPadding,
+    this.padding,
     required this.iconData,
     this.onBackClick,
-    this.iconColor,
-    this.iconSize = 30,
-    this.backgroundColor,
+    this.iconTextSize = 24,
+    this.title,
   });
 
   @override
   Widget build(BuildContext context) {
-    final double tmp = topPadding ?? MediaQuery.of(context).padding.top;
     return Padding(
-      padding: EdgeInsets.only(top: tmp),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: AppBar().preferredSize.height,
-            child: TapEffect(
-              onClick: () {
-                onBackClick!();
-              },
-              child: Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  color: backgroundColor ?? ColorPalette.whiteColor,
-                  shape: BoxShape.circle,
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        offset: const Offset(2.0, 3.5),
-                        blurRadius: 8),
-                  ],
-                ),
-                child: Center(
-                  child: Icon(iconData,
-                      color: iconColor, size: iconSize.toDouble()),
-                ),
-              ),
-            ),
+      padding: padding ??
+          EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.05,
+            AppBar().preferredSize.height,
+            MediaQuery.of(context).size.width * 0.1,
+            MediaQuery.of(context).size.height * 0.01,
           ),
-          const SizedBox(
-            height: 10.0,
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              onBackClick!();
+            },
+            child: Icon(iconData,
+                color: ColorPalette.deepBlue, size: iconTextSize),
+          ),
+          Expanded(
+            child: Center(
+              child: Text(title!,
+                  style: TextStyles(context).getBoldStyle(
+                      fontSize: 24.0, color: ColorPalette.deepBlue)),
+            ),
           )
         ],
       ),

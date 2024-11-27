@@ -15,3 +15,5 @@ enum ColorType {
   DarkSkyBlue,
   BilobaFlower,
 }
+
+enum AppointmentType { Complete, Upcoming, Pending, Cancelled }

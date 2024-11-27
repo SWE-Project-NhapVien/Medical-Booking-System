@@ -11,7 +11,7 @@ class TextStyles {
   TextStyle getTitleStyle([double size = 24]) {
     return Theme.of(context).textTheme.titleLarge!.copyWith(
           fontSize: size,
-          color: ColorPalette.blackTextColor,
+          color: ColorPalette.blackColor,
         );
   }
 
@@ -19,27 +19,27 @@ class TextStyles {
     return getTextStyle(
         FontFamilyType.Inter,
         Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: ColorPalette.greyTextColor,
+              color: ColorPalette.greyColor,
             ));
   }
 
-  TextStyle getRegularStyle() {
+  TextStyle getRegularStyle({double fontSize = 14.0, Color? color}) {
     return Theme.of(context).textTheme.bodyLarge!.copyWith(
-          fontSize: 16,
-          color: ColorPalette.blackTextColor,
+          fontSize: fontSize,
+          color: color ?? ColorPalette.blackColor,
         );
   }
 
-  TextStyle getBoldStyle() {
+  TextStyle getBoldStyle({double fontSize = 14.0, Color? color}) {
     return Theme.of(context).textTheme.titleMedium!.copyWith(
-          fontSize: 14,
-          color: ColorPalette.blackTextColor,
+          fontSize: fontSize,
+          color: color ?? ColorPalette.blackColor,
         );
   }
 
   TextStyle getSmallStyle() {
     return Theme.of(context).textTheme.bodySmall!.copyWith(
-          color: ColorPalette.blackTextColor,
+          color: ColorPalette.blackColor,
         );
   }
 
@@ -47,20 +47,22 @@ class TextStyles {
     return Theme.of(context).textTheme.bodyLarge!.copyWith(
           fontSize: 16,
           fontWeight: FontWeight.bold,
-          color: isSelected ? Colors.white : Colors.black,
+          color: isSelected
+              ? ColorPalette.whiteColor
+              : ColorPalette.blackColor,
         );
   }
 
   TextStyle getTextFieldHintStyle() {
     return Theme.of(context).textTheme.bodyLarge!.copyWith(
-          color: ColorPalette.greyTextColor,
+          color: ColorPalette.greyColor,
         );
   }
 
   TextStyle getSubtitleStyle() {
     return Theme.of(context).textTheme.bodyMedium!.copyWith(
           fontSize: 14,
-          color: ColorPalette.greyTextColor,
+          color: ColorPalette.greyColor,
         );
   }
 
