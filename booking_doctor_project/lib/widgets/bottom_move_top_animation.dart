@@ -27,3 +27,4 @@ class BottomTopMoveAnimationView extends StatelessWidget {
         });
   }
 }
+

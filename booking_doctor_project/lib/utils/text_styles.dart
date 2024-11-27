@@ -8,26 +8,48 @@ class TextStyles {
 
   TextStyles(this.context);
 
-  TextStyle getTitleStyle([double size = 24]) {
-    return Theme.of(context).textTheme.titleLarge!.copyWith(
-          fontSize: size,
-          color: ColorPalette.blackColor,
-        );
+  TextStyle getTitleStyle(
+      {double size = 24,
+      FontWeight fontWeight = FontWeight.w300,
+      Color color = Colors.white}) {
+    return getTextStyle(
+        FontFamilyType.LeagueSpartan,
+        Theme.of(context).textTheme.titleLarge!.copyWith(
+              fontSize: size,
+              fontWeight: fontWeight,
+              color: color,
+            ));
   }
 
   TextStyle getDescriptionStyle() {
     return getTextStyle(
-        FontFamilyType.Inter,
+        FontFamilyType.LeagueSpartan,
         Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: ColorPalette.greyColor,
+              fontWeight: FontWeight.w300,
+              color: ColorPalette.blackTextColor,
             ));
   }
 
-  TextStyle getRegularStyle({double fontSize = 14.0, Color? color}) {
-    return Theme.of(context).textTheme.bodyLarge!.copyWith(
-          fontSize: fontSize,
-          color: color ?? ColorPalette.blackColor,
-        );
+  TextStyle getHintTextStyle({double size = 18}) {
+    return getTextStyle(
+        FontFamilyType.LeagueSpartan,
+        Theme.of(context).textTheme.bodyLarge!.copyWith(
+              fontSize: size,
+              fontWeight: FontWeight.w300,
+              color: ColorPalette.lightBlueTextColor,
+            ));
+  }
+
+  TextStyle getRegularStyle(
+      {FontWeight fontWeight = FontWeight.w400,
+      Color color = const Color.fromARGB(255, 0, 0, 0)}) {
+    return getTextStyle(
+        FontFamilyType.LeagueSpartan,
+        Theme.of(context).textTheme.bodyLarge!.copyWith(
+              fontSize: 18,
+              fontWeight: fontWeight,
+              color: color,
+            ));
   }
 
   TextStyle getBoldStyle({double fontSize = 14.0, Color? color}) {
@@ -85,6 +107,8 @@ class TextStyles {
         return GoogleFonts.inter(textStyle: textStyle);
       case FontFamilyType.DmSerifDisplay:
         return GoogleFonts.dmSerifDisplay(textStyle: textStyle);
+      case FontFamilyType.LeagueSpartan:
+        return GoogleFonts.leagueSpartan(textStyle: textStyle);
       default:
         return GoogleFonts.roboto(textStyle: textStyle);
     }
