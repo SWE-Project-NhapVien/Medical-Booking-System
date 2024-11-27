@@ -40,12 +40,6 @@ class CommonAppBarView extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: backgroundColor ?? ColorPalette.whiteColor,
                   shape: BoxShape.circle,
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        offset: const Offset(2.0, 3.5),
-                        blurRadius: 8),
-                  ],
                 ),
                 child: Center(
                   child: Icon(iconData,
