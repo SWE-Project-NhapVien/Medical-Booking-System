@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/screen/DoctorInfo/doctor_info_screen.dart';
 import 'package:booking_doctor_project/screen/SplashScreen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
-      '/': (BuildContext context) => const SplashScreen(),
+      '/': (BuildContext context) => const DoctorInfoScreen(),
     };
   }
 }
