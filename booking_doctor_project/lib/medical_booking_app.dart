@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/screen/DoctorInfo/doctor_info_screen.dart';
 import 'package:booking_doctor_project/screen/patient/CreateProfileScreen/create_profile_screen.dart';
 import 'package:booking_doctor_project/screen/patient/ForgotPasswordScreen/forgot_password_screen.dart';
 import 'package:booking_doctor_project/screen/patient/LoginAndSignUp/login_and_signup_screen.dart';
@@ -5,7 +6,6 @@ import 'package:booking_doctor_project/screen/patient/SplashScreen/splash_screen
 import 'package:flutter/material.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
 
 class MedicalBookingApp extends StatefulWidget {
   const MedicalBookingApp({super.key});
@@ -47,9 +47,6 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
       '/': (BuildContext context) => const SplashScreen(),
-      '/reset-password': (BuildContext context) => const ForgotPasswordScreen(),
-      '/create-profile': (BuildContext context) => const CreateProfileScreen(),
-      '/login': (BuildContext context) => LoginOrSignUpScreen(showLoginScreen: true),
     };
   }
 }
