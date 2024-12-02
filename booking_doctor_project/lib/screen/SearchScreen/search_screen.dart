@@ -104,14 +104,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     const Spacer(),
                     GestureDetector(
-                      onTap: () {
-                        // Define the action here
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SearchResult()),
-                        );
-                      },
+                      onTap: () {},
                       child: Container(
                         width: 40.0, // Width of the button
                         height:
