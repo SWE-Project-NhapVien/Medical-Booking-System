@@ -1,6 +1,9 @@
 import 'package:booking_doctor_project/screen/SplashScreen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+
 class MedicalBookingApp extends StatefulWidget {
   const MedicalBookingApp({super.key});
 
@@ -16,6 +19,7 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
         title: 'Medical Booking App',
         debugShowCheckedModeBanner: false,
         routes: _buildRoutes(),
+        navigatorKey: navigatorKey,
         builder: (BuildContext context, Widget? child) {
           return Directionality(
               textDirection: TextDirection.ltr,
@@ -40,6 +44,9 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
       '/': (BuildContext context) => const SplashScreen(),
+      '/reset-password': (BuildContext context) => const ForgotPasswordScreen(),
+      '/create-profile': (BuildContext context) => const CreateProfileScreen(),
+      '/login': (BuildContext context) => LoginOrSignUpScreen(showLoginScreen: true),
     };
   }
 }

@@ -1,9 +1,9 @@
 import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/utils/text_styles.dart';
-import 'package:booking_doctor_project/utils/themes.dart';
 import 'package:booking_doctor_project/widgets/common_button.dart';
 import 'package:flutter/material.dart';
 
+import '../../../utils/color_palette.dart';
 import '../LoginAndSignUp/login_and_signup_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -34,7 +34,7 @@ class WelcomeScreen extends StatelessWidget {
               Text(
                 'NhapVien',
                 style: TextStyles(context).getTitleStyle(
-                    size: 36, fontWeight: FontWeight.w100,color: ColorPalette.blueColor),
+                    size: 36, fontWeight: FontWeight.w100,color: ColorPalette.deepBlue),
               ),
               SizedBox(
                 height: size.height * 0.001,
@@ -44,7 +44,7 @@ class WelcomeScreen extends StatelessWidget {
                 style: TextStyles(context).getTitleStyle(
                     size: 18,
                     fontWeight: FontWeight.w400,
-                    color: ColorPalette.blueColor),
+                    color: ColorPalette.deepBlue),
               ),
               SizedBox(
                 height: size.height * 0.2,
@@ -83,7 +83,7 @@ class WelcomeScreen extends StatelessWidget {
                 buttonTextWidget: Text(
                   'Sign Up',
                   style: TextStyles(context).getTitleStyle(
-                    color: ColorPalette.blueColor,
+                    color: ColorPalette.deepBlue,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -98,8 +98,8 @@ class WelcomeScreen extends StatelessWidget {
                 width: size.width / 2,
                 height: size.height * 0.06,
                 radius: 30,
-                backgroundColor: ColorPalette.lightBlueColor,
-                bordeColor: ColorPalette.lightBlueColor,
+                backgroundColor: ColorPalette.lightdeepBlue,
+                bordeColor: ColorPalette.lightdeepBlue,
               ),
             ],
           ),

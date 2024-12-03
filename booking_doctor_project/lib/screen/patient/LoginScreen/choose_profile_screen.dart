@@ -1,10 +1,12 @@
-import 'package:booking_doctor_project/utils/localfiles.dart';
-import 'package:booking_doctor_project/utils/themes.dart';
-import 'package:booking_doctor_project/widgets/bottom_move_top_animation.dart';
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
+import 'package:booking_doctor_project/utils/patient/patient_localfiles.dart';
+import 'package:booking_doctor_project/widgets/common_dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../utils/text_styles.dart';
-import '../../widgets/common_appbar_with_title.dart';
+import '../../../utils/color_palette.dart';
+import '../../../utils/text_styles.dart';
+import '../../../widgets/common_appbar_with_title.dart';
 
 class ChooseProfileScreen extends StatefulWidget {
   const ChooseProfileScreen({super.key});
@@ -14,6 +16,9 @@ class ChooseProfileScreen extends StatefulWidget {
 }
 
 class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
+  List<Map<String, dynamic>> profiles = [];
+  bool isLoading = true;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -39,14 +44,29 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
                       style: TextStyles(context).getTitleStyle(
                           size: 20,
                           fontWeight: FontWeight.w500,
-                          color: ColorPalette.blueColor),
+                          color: ColorPalette.deepBlue),
                     ),
-                    const ProfileAccount(
-                      profileName: 'Tran Phuong Anh',
-                      profilePicture: Localfiles.defaultProfilePciture,
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: profiles.length,
+                      itemBuilder: (context, index) {
+                        return ProfileAccount(
+                          profileName: profiles[index]['p_last_name'] + profiles[index]['p_first_name'],
+                          profilePicture: PatientLocalfiles.defaultProfilePicture,
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: size.height * 0.02,
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        NavigationServices(context).pushCompleteProfileScreen();
+                      },
                       child: Row(
                         children: [
                           CircleAvatar(
@@ -55,7 +75,7 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
                             child: Icon(
                               Icons.add,
                               size: 50,
-                              color: ColorPalette.blueColor,
+                              color: ColorPalette.deepBlue,
                             ),
                           ),
                           SizedBox(
@@ -64,13 +84,35 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
                           Text(
                             'Add Member',
                             style: TextStyles(context)
-                                .getRegularStyle(color: ColorPalette.blueColor),
+                                .getRegularStyle(color: ColorPalette.deepBlue),
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ]))),
     );
+  }
+
+  Future<void> fetchProfiles() async {
+    try {
+      final response = await Supabase.instance.client
+          .rpc('read_patient_profiles_by_patient_account');
+
+      if (response.error != null) {
+        throw response.error!;
+      }
+
+      setState(() {
+        profiles = List<Map<String, dynamic>>.from(response.data);
+        isLoading = false;
+      });
+
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      Dialogs(context).showErrorDialog(message: e.toString());
+    }
   }
 }
 
@@ -103,7 +145,7 @@ class ProfileAccount extends StatelessWidget {
         Text(
           profileName,
           style: TextStyles(context)
-              .getRegularStyle(color: ColorPalette.blueColor),
+              .getRegularStyle(color: ColorPalette.deepBlue),
         ),
       ],
     );

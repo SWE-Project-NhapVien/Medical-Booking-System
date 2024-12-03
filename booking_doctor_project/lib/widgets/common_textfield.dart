@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/color_palette.dart';
 import '../utils/text_styles.dart';
-import '../utils/themes.dart';
 
 // ignore: must_be_immutable
 class CommonTextField extends StatefulWidget {
@@ -11,6 +11,7 @@ class CommonTextField extends StatefulWidget {
   final Color? cursorColor;
   final TextInputType? keyboardType;
   final String? errorText;
+  final String? suffixText;
   final TextStyle hintTextStyle;
   final TextEditingController? textEditingController;
   final EdgeInsetsGeometry contentPadding;
@@ -34,6 +35,7 @@ class CommonTextField extends StatefulWidget {
     this.keyboardType,
     this.selectedIconData,
     this.errorText,
+    this.suffixText,
     this.suffixIconData,
     this.prefixIconData,
     this.cursorColor,
@@ -54,13 +56,13 @@ class _CommonTextFieldState extends State<CommonTextField> {
   void initState() {
     super.initState();
     _focusNode = FocusNode();
-    _iconColor = widget.initialIconColor ?? ColorPalette.blackTextColor;
+    _iconColor = widget.initialIconColor ?? ColorPalette.blackColor;
     if (widget.isObscureText) _focusNode.addListener(_handleFocusChange);
   }
 
   void _handleFocusChange() {
     setState(() {
-      _iconColor = _focusNode.hasFocus ? widget.focusColor : ColorPalette.blackTextColor;
+      _iconColor = _focusNode.hasFocus ? widget.focusColor : ColorPalette.blackColor;
     });
   }
 
@@ -92,6 +94,10 @@ class _CommonTextFieldState extends State<CommonTextField> {
               contentPadding: widget.contentPadding,
               hintText: widget.hintText,
               hintStyle: widget.hintTextStyle,
+              suffixText: widget.suffixText?? '',
+              suffixStyle: TextStyles(context).getRegularStyle(
+                color: ColorPalette.lightBlueTextColor
+              ),
               prefixIcon: widget.prefixIconData != null
                   ? Icon(widget.prefixIconData, color: _iconColor)
                   : null,
@@ -126,11 +132,12 @@ class _CommonTextFieldState extends State<CommonTextField> {
           if (widget.errorText != null && widget.errorText!.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 5, left: 8),
-              child: Text(
+                child: Text(
                 widget.errorText ?? "",
                 style: TextStyles(context).getSmallStyle().copyWith(
-                      color: ColorPalette.redErrorColor,
-                    ),
+                    color: ColorPalette.redColor,
+                    fontStyle: FontStyle.italic,
+                  ),
               ),
             ),
         ],

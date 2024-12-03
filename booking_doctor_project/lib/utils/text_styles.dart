@@ -26,7 +26,7 @@ class TextStyles {
         FontFamilyType.LeagueSpartan,
         Theme.of(context).textTheme.bodyLarge!.copyWith(
               fontWeight: FontWeight.w300,
-              color: ColorPalette.blackTextColor,
+              color: ColorPalette.blackColor,
             ));
   }
 
@@ -60,18 +60,18 @@ class TextStyles {
   }
 
   TextStyle getSmallStyle() {
-    return Theme.of(context).textTheme.bodySmall!.copyWith(
-          color: ColorPalette.blackColor,
-        );
+    return getTextStyle(
+        FontFamilyType.LeagueSpartan,
+        Theme.of(context).textTheme.bodySmall!.copyWith(
+              color: ColorPalette.blackColor,
+            ));
   }
 
   TextStyle getCategoryButtonStyle(bool isSelected) {
     return Theme.of(context).textTheme.bodyLarge!.copyWith(
           fontSize: 16,
           fontWeight: FontWeight.bold,
-          color: isSelected
-              ? ColorPalette.whiteColor
-              : ColorPalette.blackColor,
+          color: isSelected ? ColorPalette.whiteColor : ColorPalette.blackColor,
         );
   }
 
