@@ -3,7 +3,8 @@ import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:flutter/material.dart';
 
 class SearchResult extends StatefulWidget {
-  const SearchResult({super.key});
+  final List searchResult;
+  const SearchResult({super.key, required this.searchResult});
 
   @override
   State<SearchResult> createState() => _SearchResultState();
@@ -11,9 +12,26 @@ class SearchResult extends StatefulWidget {
 
 class _SearchResultState extends State<SearchResult> {
   int chosenFilterOption = 0;
-  List<String> data = ['Dr. Alexander Bennett, Ph.D.', 'Dr. John Doe, M.D.'];
+
   @override
   Widget build(BuildContext context) {
+    List result = [];
+    if (chosenFilterOption == 1) {
+      for (var i = 0; i < widget.searchResult.length; i++) {
+        if (widget.searchResult[i]['gender'] == 'Female') {
+          result.add(widget.searchResult[i]);
+        }
+      }
+    } else if (chosenFilterOption == 2) {
+      for (var i = 0; i < widget.searchResult.length; i++) {
+        if (widget.searchResult[i]['gender'] == 'Male') {
+          result.add(widget.searchResult[i]);
+        }
+      }
+    } else {
+      result = widget.searchResult;
+    }
+
     return Scaffold(
       body: Column(
         children: [
@@ -38,10 +56,11 @@ class _SearchResultState extends State<SearchResult> {
                       onTap: () {
                         setState(() {
                           chosenFilterOption = 0;
+                          result = widget.searchResult;
                         });
                       },
                       child: Container(
-                        width: 60.0, // Width of the button
+                        width: 40.0, // Width of the button
                         height:
                             28.0, // Height of the button (same as width for circular shape)
                         decoration: BoxDecoration(
@@ -53,7 +72,7 @@ class _SearchResultState extends State<SearchResult> {
                         ),
                         child: Center(
                           child: Text(
-                            'A → Z',
+                            'All',
                             style: TextStyle(
                                 color: chosenFilterOption == 0
                                     ? ColorPalette.whiteColor
@@ -123,7 +142,7 @@ class _SearchResultState extends State<SearchResult> {
                     height: MediaQuery.of(context).size.height - 300,
                     child: ListView.builder(
                         padding: EdgeInsets.zero,
-                        itemCount: data.length,
+                        itemCount: result.length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 10),
@@ -144,9 +163,14 @@ class _SearchResultState extends State<SearchResult> {
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         image: DecorationImage(
-                                            image: Image.network(
-                                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2F8DoZLvVpkbPZs1z1dBzXKLvgRNwgUrstA&s',
-                                        ).image)),
+                                            image: result[index]['ava_url'] ==
+                                                    null
+                                                ? Image.network(
+                                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2F8DoZLvVpkbPZs1z1dBzXKLvgRNwgUrstA&s',
+                                                  ).image
+                                                : Image.network(
+                                                    result[index]['ava_url'],
+                                                  ).image)),
                                   ),
                                   const SizedBox(width: 10),
                                   Column(
@@ -155,13 +179,16 @@ class _SearchResultState extends State<SearchResult> {
                                     children: [
                                       const SizedBox(height: 10),
                                       Text(
-                                        data[index],
+                                        '${result[index]['first_name']} ${result[index]['last_name']}',
                                         style: TextStyle(
                                             color: ColorPalette.deepBlue,
                                             fontSize: 20),
                                       ),
                                       const SizedBox(height: 5),
-                                      const Text('Dermato Genetics'),
+                                      Text(result[index]['specialization']
+                                          .toString()
+                                          .replaceAll('[', '')
+                                          .replaceAll(']', '')),
                                       const Spacer(),
                                       Container(
                                         width: 60.0, // Width of the button
