@@ -4,5 +4,5 @@ class Localfiles {
 
   static const String logo      = '${baseImageUrl}logo.png';
   static const String logoBlue  = '${baseImageUrl}logo_blue.png';
-  static const String defaultProfilePciture = '${baseImageUrl}patient/default_avatar.png';
+  static const String loading   = '${baseJsonUrl}loading.json';
 }

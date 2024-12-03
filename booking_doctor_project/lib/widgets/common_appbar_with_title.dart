@@ -1,6 +1,6 @@
-import 'package:booking_doctor_project/utils/themes.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/color_palette.dart';
 import '../utils/text_styles.dart';
 import 'tap_effect.dart';
 
@@ -46,11 +46,11 @@ class CommonAppBarWithTitle extends StatelessWidget {
                     onClick: onPrefixIconClick,
                     backgroundColor: backgroundColor ?? ColorPalette.whiteColor,
                     iconData: prefixIconData!,
-                    iconColor: ColorPalette.blueColor,
+                    iconColor: ColorPalette.deepBlue,
                     iconSize: iconSize) : const SizedBox(width: 40),
                 Text(title, style: TextStyles(context).getTitleStyle(
                   size: titleSize,
-                  color: ColorPalette.blueColor,
+                  color: ColorPalette.deepBlue,
                   fontWeight: FontWeight.w500
                 )),
                 suffixIconData != null
@@ -98,12 +98,6 @@ class AppBarButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor,
           shape: BoxShape.circle,
-          // boxShadow: <BoxShadow>[
-          //   BoxShadow(
-          //       color: Colors.grey.withOpacity(0.3),
-          //       offset: const Offset(2.0, 3.5),
-          //       blurRadius: 8),
-          // ],
         ),
         child: Center(
           child: Icon(iconData, color: iconColor, size: iconSize.toDouble()),

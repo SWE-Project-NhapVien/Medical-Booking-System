@@ -1,6 +1,7 @@
-import 'package:booking_doctor_project/screen/LoginScreen/login_screen.dart';
-import 'package:booking_doctor_project/screen/SignUpScreen/sign_up_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../LoginScreen/login_screen.dart';
+import '../SignUpScreen/sign_up_screen.dart';
 
 // ignore: must_be_immutable
 class LoginOrSignUpScreen extends StatefulWidget {
