@@ -7,7 +7,6 @@ import 'package:booking_doctor_project/widgets/custom_dropdown.dart';
 import 'package:booking_doctor_project/widgets/textfield_with_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../utils/color_palette.dart';
 import '../../../utils/text_styles.dart';
@@ -167,61 +166,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         }),
       ),
     );
-    // return Scaffold(
-    //     backgroundColor: ColorPalette.whiteColor,
-    //     body: SingleChildScrollView(
-    //       child: Padding(
-    //           padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-    //           child: Column(children: [
-    //             CommonAppBarWithTitle(
-    //               title: 'Create A Profile',
-    //               titleSize: 32,
-    //               topPadding: MediaQuery.of(context).padding.top,
-    //               prefixIconData: Icons.arrow_back_ios_new_rounded,
-    //               onPrefixIconClick: () {
-    //                 if (curStep == 0) {
-    //                   Navigator.pop(context);
-    //                 } else {
-    //                   setState(() {
-    //                     curStep -= 1;
-    //                   });
-    //                 }
-    //               },
-    //             ),
-    //             if (curStep == 0) _buildPersonalInformationForm(size),
-    //             if (curStep == 1) _buildHealthInformationForm(size),
-    //             Align(
-    //               alignment: Alignment.bottomCenter,
-    //               child: Padding(
-    //                 padding: const EdgeInsets.only(top: 8.0),
-    //                 child: CommonButton(
-    //                   buttonTextWidget: Text(
-    //                     curStep == 0 ? 'Next' : 'Complete',
-    //                     style: TextStyles(context).getTitleStyle(
-    //                       fontWeight: FontWeight.w400,
-    //                     ),
-    //                   ),
-    //                   onTap: () {
-    //                     if (curStep == 0) {
-    //                       if (validatePage1()) {
-    //                         setState(() {
-    //                           curStep += 1;
-    //                         });
-    //                       }
-    //                     } else {
-    //                       if (validatePage2()) {
-    //                         createProfile();
-    //                       }
-    //                     }
-    //                   },
-    //                   width: double.infinity,
-    //                   height: size.height * 0.06,
-    //                   radius: 30,
-    //                 ),
-    //               ),
-    //             ),
-    //           ])),
-    //     ));
   }
 
   Widget _buildPersonalInformationForm(Size size) {
@@ -607,53 +551,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
     setState(() {});
     return isValid;
-  }
-
-  String convertDateFormat(String date) {
-    final parts = date.split('/');
-    if (parts.length == 3) {
-      final day = parts[0].padLeft(2, '0');
-      final month = parts[1].padLeft(2, '0');
-      final year = parts[2];
-      return '$year-$month-$day';
-    }
-    return date;
-  }
-
-  Future<void> createProfile() async {
-    final userId = Supabase.instance.client.auth.currentUser?.id;
-    final userEmail = AuthServices().getCurruentUserEmail();
-
-    if (userId == null || userEmail == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to get user information')),
-      );
-      return;
-    }
-
-    try {
-      final formattedDateOfBirth =
-          convertDateFormat(dateOfBirthController.text);
-      final response =
-          await Supabase.instance.client.rpc('create_patient_profile', params: {
-        'p_first_name': firstNameController.text,
-        'p_last_name': lastNameController.text,
-        'p_email': userEmail,
-        'p_phone_number': phoneNumberController.text,
-        'p_date_of_birth': formattedDateOfBirth,
-        'p_blood_type': bloodController.text,
-        'p_gender': selectedGender,
-        'p_address': addressController.text,
-        'p_national_id': nationalIDController.text,
-      });
-
-      Dialogs(context).showAnimatedDialog(
-        title: 'Create Profile',
-        content: 'Profile has been created successfully.',
-      );
-    } catch (e) {
-      Dialogs(context).showErrorDialog(message: e.toString());
-    }
   }
 }
 

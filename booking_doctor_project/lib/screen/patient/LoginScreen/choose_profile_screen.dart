@@ -5,7 +5,6 @@ import 'package:booking_doctor_project/widgets/common_dialogs.dart';
 import 'package:booking_doctor_project/widgets/tap_effect.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../utils/color_palette.dart';
 import '../../../utils/text_styles.dart';
@@ -124,107 +123,6 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
                   ]))),
       ),
     );
-    // return Scaffold(
-    //   backgroundColor: ColorPalette.whiteColor,
-    //   body: SingleChildScrollView(
-    //       child: Padding(
-    //           padding: const EdgeInsets.all(16),
-    //           child: Column(
-    //               crossAxisAlignment: CrossAxisAlignment.start,
-    //               children: [
-    //                 CommonAppBarWithTitle(
-    //                   title: 'Choose Your Profile',
-    //                   titleSize: 32,
-    //                   topPadding: MediaQuery.of(context).padding.top,
-    //                   prefixIconData: Icons.arrow_back_ios_new_rounded,
-    //                   onPrefixIconClick: () {
-    //                     Navigator.pop(context);
-    //                   },
-    //                 ),
-    //                 Text(
-    //                   'Your Family',
-    //                   style: TextStyles(context).getTitleStyle(
-    //                       size: 20,
-    //                       fontWeight: FontWeight.w500,
-    //                       color: ColorPalette.deepBlue),
-    //                 ),
-    //                 ListView.builder(
-    //                   shrinkWrap: true,
-    //                   physics: const NeverScrollableScrollPhysics(),
-    //                   itemCount: profiles.length,
-    //                   itemBuilder: (context, index) {
-    //                     return Column(
-    //                       children: [
-    //                         TapEffect(
-    //                           onClick: () {
-    //                             //
-    //                           },
-    //                           child: ProfileAccount(
-    //                             profileName: profiles[index]['last_name'] +
-    //                                 " " +
-    //                                 profiles[index]['first_name'],
-    //                             profilePicture: profiles[index]['ava_url'] ??
-    //                                 Localfiles.defaultProfilePicture,
-    //                             isDefaultImage: profiles[index]['ava_url'] == null,
-    //                           ),
-    //                         ),
-    //                         SizedBox(
-    //                           height: size.height * 0.02,
-    //                         ),
-    //                       ],
-    //                     );
-    //                   },
-    //                 ),
-    //                 SizedBox(
-    //                   height: size.height * 0.02,
-    //                 ),
-    //                 GestureDetector(
-    //                   onTap: () {
-    //                     NavigationServices(context).pushCompleteProfileScreen();
-    //                   },
-    //                   child: Row(
-    //                     children: [
-    //                       CircleAvatar(
-    //                         radius: 30,
-    //                         backgroundColor: ColorPalette.whiteColor,
-    //                         child: Icon(
-    //                           Icons.add,
-    //                           size: 50,
-    //                           color: ColorPalette.deepBlue,
-    //                         ),
-    //                       ),
-    //                       SizedBox(
-    //                         width: size.width * 0.05,
-    //                       ),
-    //                       Text(
-    //                         'Add Member',
-    //                         style: TextStyles(context)
-    //                             .getRegularStyle(color: ColorPalette.deepBlue),
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 ),
-    //               ]))),
-    // );
-  }
-
-  Future<void> fetchProfiles() async {
-    try {
-      final response = await Supabase.instance.client
-          .rpc('read_patient_profiles_by_patient_account');
-
-      print('Response: $response');
-      setState(() {
-        profiles = List<Map<String, dynamic>>.from(response);
-        print('Profiles: $profiles');
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      Dialogs(context).showErrorDialog(message: e.toString());
-    }
   }
 }
 
