@@ -3,7 +3,6 @@ import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -13,15 +12,23 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  TextEditingController dateController = TextEditingController();
-  TextEditingController searchController = TextEditingController();
+  late TextEditingController dateController;
+  late TextEditingController searchController;
   List<String> data = ['Dr. Alexander Bennett, Ph.D.', 'Dr. John Doe, M.D.'];
-  final supabase = Supabase.instance.client;
 
   @override
   void initState() {
     // Call BLoC to fetch data here
+    dateController = TextEditingController();
+    searchController = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    dateController.dispose();
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -109,17 +116,14 @@ class _SearchScreenState extends State<SearchScreen> {
                     const Spacer(),
                     GestureDetector(
                       onTap: () async {
-                        final query = searchController.text;
-                        final result = await searchDoctors(
-                            searchQuery: query,
-                            dateQuery: dateController.text != ''
-                                ? dateController.text
-                                : null);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => SearchResult(
-                              searchResult: result,
+                              searchQuery: searchController.text,
+                              dateQuery: dateController.text == ''
+                                  ? null
+                                  : dateController.text,
                             ),
                           ),
                         );
@@ -208,24 +212,6 @@ class _SearchScreenState extends State<SearchScreen> {
       setState(() {
         dateController.text = picked.toString().split(" ")[0];
       });
-    }
-  }
-
-  Future searchDoctors({String? searchQuery, String? dateQuery}) async {
-    try {
-      String? formattedDate;
-      if (dateQuery != null) {
-        DateTime parsedDate = DateTime.parse(dateQuery);
-        formattedDate = '${parsedDate.day.toString().padLeft(2, '0')}-'
-            '${parsedDate.month.toString().padLeft(2, '0')}-'
-            '${parsedDate.year}';
-      }
-      final response = await supabase.rpc('search_doctors',
-          params: {'search_query': searchQuery, 'date_query': formattedDate});
-      return response;
-    } catch (e) {
-      print('Error fetching doctors: $e');
-      return [];
     }
   }
 }
