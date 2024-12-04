@@ -5,7 +5,6 @@ import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SearchResult extends StatefulWidget {
   final String? searchQuery;
@@ -19,14 +18,11 @@ class SearchResult extends StatefulWidget {
 
 class _SearchResultState extends State<SearchResult> {
   late int chosenFilterOption;
-  late SupabaseClient supabase;
-  late List searchResult;
 
   @override
   void initState() {
     // Call BLoC to fetch data here
     chosenFilterOption = 0;
-    supabase = Supabase.instance.client;
     super.initState();
   }
 
