@@ -107,7 +107,7 @@ class _AppointmentDetailState extends State<AppointmentDetail> {
       children: [
         Text(
           title,
-          style: TextStyles(context).getRegularStyle(fontSize: 12),
+          style: TextStyles(context).getRegularStyle(size: 12),
         ),
         const SizedBox(height: 6),
         Container(
@@ -120,7 +120,7 @@ class _AppointmentDetailState extends State<AppointmentDetail> {
           child: Text(
             info,
             style: TextStyles(context).getRegularStyle(
-                fontSize: 12,
+                size: 12,
                 color: const Color(0xFF809CFF)), // đưa color này vào themes nhé
           ),
         ),
@@ -142,7 +142,7 @@ class _AppointmentDetailState extends State<AppointmentDetail> {
       ),
       child: Text(
         note,
-        style: TextStyles(context).getRegularStyle(fontSize: 12),
+        style: TextStyles(context).getRegularStyle(size: 12),
       ),
     );
   }

@@ -41,12 +41,13 @@ class TextStyles {
   }
 
   TextStyle getRegularStyle(
-      {FontWeight fontWeight = FontWeight.w400,
+      { double size = 18.0,
+        FontWeight fontWeight = FontWeight.w400,
       Color color = const Color.fromARGB(255, 0, 0, 0)}) {
     return getTextStyle(
         FontFamilyType.LeagueSpartan,
         Theme.of(context).textTheme.bodyLarge!.copyWith(
-              fontSize: 18,
+              fontSize: size,
               fontWeight: fontWeight,
               color: color,
             ));

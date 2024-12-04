@@ -4,6 +4,7 @@ import 'package:booking_doctor_project/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+
 class Dialogs {
   final BuildContext context;
   Dialogs(this.context);

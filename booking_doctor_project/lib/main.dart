@@ -1,5 +1,7 @@
+import 'package:booking_doctor_project/bloc/patient/FetchProfile/fetch_profile_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/ForgotPassword/forgot_password_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/LogIn/log_in_bloc.dart';
+import 'package:booking_doctor_project/bloc/patient/ResetPassword/reset_password_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/SignUp/sign_up_bloc.dart';
 import 'package:booking_doctor_project/bloc_observer.dart';
 import 'package:booking_doctor_project/medical_booking_app.dart';
@@ -49,6 +51,10 @@ Widget _setAllProviders() {
       ),
       BlocProvider<ForgotPasswordBloc>(
           create: (context) => ForgotPasswordBloc()),
+      BlocProvider<ResetPasswordBloc>(
+          create: (context) => ResetPasswordBloc()),
+      BlocProvider<FetchProfileBloc>(
+          create: (context) => FetchProfileBloc()),
     ],
     child: const MyApp(),
   );

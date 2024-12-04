@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/bloc/patient/CreateProfile/create_profile_bloc.dart';
 import 'package:booking_doctor_project/services/authentication/auth_services.dart';
 import 'package:booking_doctor_project/widgets/common_date_field.dart';
 import 'package:booking_doctor_project/widgets/common_dialogs.dart';
@@ -5,6 +6,7 @@ import 'package:booking_doctor_project/widgets/common_textfield.dart';
 import 'package:booking_doctor_project/widgets/custom_dropdown.dart';
 import 'package:booking_doctor_project/widgets/textfield_with_label.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../utils/color_palette.dart';
@@ -69,61 +71,157 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
+    return BlocProvider(
+      create: (context) => CreateProfileBloc(),
+      child: Scaffold(
         backgroundColor: ColorPalette.whiteColor,
-        body: SingleChildScrollView(
-          child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Column(children: [
-                CommonAppBarWithTitle(
-                  title: 'Create A Profile',
-                  titleSize: 32,
-                  topPadding: MediaQuery.of(context).padding.top,
-                  prefixIconData: Icons.arrow_back_ios_new_rounded,
-                  onPrefixIconClick: () {
-                    if (curStep == 0) {
-                      Navigator.pop(context);
-                    } else {
-                      setState(() {
-                        curStep -= 1;
-                      });
-                    }
-                  },
-                ),
-                if (curStep == 0) _buildPersonalInformationForm(size),
-                if (curStep == 1) _buildHealthInformationForm(size),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: CommonButton(
-                      buttonTextWidget: Text(
-                        curStep == 0 ? 'Next' : 'Complete',
-                        style: TextStyles(context).getTitleStyle(
-                          fontWeight: FontWeight.w400,
+        body: BlocConsumer<CreateProfileBloc, CreateProfileState>(
+            listener: (context, state) {
+          if (state is CreateProfileProcess) {
+           Dialogs(context).showLoadingDialog();
+          } else if (state is CreateProfileSuccess) {
+            Navigator.pop(context);
+            Dialogs(context).showAnimatedDialog(
+              title: 'Create Profile',
+              content: 'Profile has been created successfully.',
+            );
+          } else if (state is CreateProfileFailure) {
+            Navigator.pop(context);
+            Dialogs(context).showErrorDialog(message: state.error);
+          }
+        }, builder: (context, state) {
+          return SingleChildScrollView(
+            child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: Column(children: [
+                  CommonAppBarWithTitle(
+                    title: 'Create A Profile',
+                    titleSize: 32,
+                    topPadding: MediaQuery.of(context).padding.top,
+                    prefixIconData: Icons.arrow_back_ios_new_rounded,
+                    onPrefixIconClick: () {
+                      if (curStep == 0) {
+                        Navigator.pop(context);
+                      } else {
+                        setState(() {
+                          curStep -= 1;
+                        });
+                      }
+                    },
+                  ),
+                  if (curStep == 0) _buildPersonalInformationForm(size),
+                  if (curStep == 1) _buildHealthInformationForm(size),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: CommonButton(
+                        buttonTextWidget: Text(
+                          curStep == 0 ? 'Next' : 'Complete',
+                          style: TextStyles(context).getTitleStyle(
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
+                        onTap: () {
+                          if (curStep == 0) {
+                            if (validatePage1()) {
+                              setState(() {
+                                curStep += 1;
+                              });
+                            }
+                          } else {
+                            if (validatePage2()) {
+                              final userEmail =
+                                  AuthServices().getCurruentUserEmail();
+                              context
+                                  .read<CreateProfileBloc>()
+                                  .add(CreateProfileRequired(
+                                    firstName: firstNameController.text,
+                                    lastName: lastNameController.text,
+                                    email: userEmail ?? '',
+                                    phoneNumber: phoneNumberController.text,
+                                    dateOfBirth: dateOfBirthController.text,
+                                    bloodType: bloodController.text,
+                                    gender: selectedGender,
+                                    address: addressController.text,
+                                    nationalID: nationalIDController.text,
+                                    height: double.parse(heightController.text),
+                                    weight: double.parse(weightController.text),
+                                    emergencyContact: [
+                                      restrictedEmergencyContactController.text,
+                                      ...emergencyContactsControllers
+                                          .map((controller) => controller.text)
+                                    ],
+                                  ));
+                            }
+                          }
+                        },
+                        width: double.infinity,
+                        height: size.height * 0.06,
+                        radius: 30,
                       ),
-                      onTap: () {
-                        if (curStep == 0) {
-                          if (validatePage1()) {
-                            setState(() {
-                              curStep += 1;
-                            });
-                          }
-                        } else {
-                          if (validatePage2()) {
-                            createProfile();
-                          }
-                        }
-                      },
-                      width: double.infinity,
-                      height: size.height * 0.06,
-                      radius: 30,
                     ),
                   ),
-                ),
-              ])),
-        ));
+                ])),
+          );
+        }),
+      ),
+    );
+    // return Scaffold(
+    //     backgroundColor: ColorPalette.whiteColor,
+    //     body: SingleChildScrollView(
+    //       child: Padding(
+    //           padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+    //           child: Column(children: [
+    //             CommonAppBarWithTitle(
+    //               title: 'Create A Profile',
+    //               titleSize: 32,
+    //               topPadding: MediaQuery.of(context).padding.top,
+    //               prefixIconData: Icons.arrow_back_ios_new_rounded,
+    //               onPrefixIconClick: () {
+    //                 if (curStep == 0) {
+    //                   Navigator.pop(context);
+    //                 } else {
+    //                   setState(() {
+    //                     curStep -= 1;
+    //                   });
+    //                 }
+    //               },
+    //             ),
+    //             if (curStep == 0) _buildPersonalInformationForm(size),
+    //             if (curStep == 1) _buildHealthInformationForm(size),
+    //             Align(
+    //               alignment: Alignment.bottomCenter,
+    //               child: Padding(
+    //                 padding: const EdgeInsets.only(top: 8.0),
+    //                 child: CommonButton(
+    //                   buttonTextWidget: Text(
+    //                     curStep == 0 ? 'Next' : 'Complete',
+    //                     style: TextStyles(context).getTitleStyle(
+    //                       fontWeight: FontWeight.w400,
+    //                     ),
+    //                   ),
+    //                   onTap: () {
+    //                     if (curStep == 0) {
+    //                       if (validatePage1()) {
+    //                         setState(() {
+    //                           curStep += 1;
+    //                         });
+    //                       }
+    //                     } else {
+    //                       if (validatePage2()) {
+    //                         createProfile();
+    //                       }
+    //                     }
+    //                   },
+    //                   width: double.infinity,
+    //                   height: size.height * 0.06,
+    //                   radius: 30,
+    //                 ),
+    //               ),
+    //             ),
+    //           ])),
+    //     ));
   }
 
   Widget _buildPersonalInformationForm(Size size) {
@@ -420,7 +518,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     if (firstNameController.text.isEmpty) {
       errors['firstName'] = 'First name is required.';
       isValid = false;
-    } else if (!RegExp(r"^[a-zA-Z]+$").hasMatch(firstNameController.text)) {
+    } else if (!RegExp(r"^[a-zA-Z\s\t]+$").hasMatch(firstNameController.text)) {
       errors['firstName'] = 'Must not contain numbers or special characters.';
       isValid = false;
     }
@@ -428,7 +526,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     if (lastNameController.text.isEmpty) {
       errors['lastName'] = 'Last name is required.';
       isValid = false;
-    } else if (!RegExp(r"^[a-zA-Z]+$").hasMatch(lastNameController.text)) {
+    } else if (!RegExp(r"^[a-zA-Z\s\t]+$").hasMatch(lastNameController.text)) {
       errors['lastName'] = 'Must not contain numbers or special characters.';
       isValid = false;
     }
@@ -512,15 +610,15 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   }
 
   String convertDateFormat(String date) {
-  final parts = date.split('/');
-  if (parts.length == 3) {
-    final day = parts[0].padLeft(2, '0');
-    final month = parts[1].padLeft(2, '0');
-    final year = parts[2];
-    return '$year-$month-$day';
+    final parts = date.split('/');
+    if (parts.length == 3) {
+      final day = parts[0].padLeft(2, '0');
+      final month = parts[1].padLeft(2, '0');
+      final year = parts[2];
+      return '$year-$month-$day';
+    }
+    return date;
   }
-  return date;
-}
 
   Future<void> createProfile() async {
     final userId = Supabase.instance.client.auth.currentUser?.id;
@@ -534,10 +632,10 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     }
 
     try {
-      final formattedDateOfBirth = convertDateFormat(dateOfBirthController.text);
+      final formattedDateOfBirth =
+          convertDateFormat(dateOfBirthController.text);
       final response =
           await Supabase.instance.client.rpc('create_patient_profile', params: {
-        'p_user_id': userId,
         'p_first_name': firstNameController.text,
         'p_last_name': lastNameController.text,
         'p_email': userEmail,
@@ -548,10 +646,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         'p_address': addressController.text,
         'p_national_id': nationalIDController.text,
       });
-
-      if (response.error != null) {
-        throw response.error!;
-      }
 
       Dialogs(context).showAnimatedDialog(
         title: 'Create Profile',

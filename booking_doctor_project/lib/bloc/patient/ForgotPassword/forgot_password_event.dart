@@ -15,3 +15,5 @@ class ForgotPasswordRequired extends ForgotPasswordEvent {
   @override
   List<Object> get props => [email];
 }
+
+class ForgotPasswordReset extends ForgotPasswordEvent {}

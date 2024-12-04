@@ -31,53 +31,59 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
+  final emailAccountController = TextEditingController(); //Forgot Pass
   bool obscurePassword = true;
   String emailError = '';
   String passwordError = '';
   String error = '';
 
   late LogInBloc logInBloc;
+  late ForgotPasswordBloc forgotPasswordBloc;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     logInBloc = BlocProvider.of<LogInBloc>(context);
+    forgotPasswordBloc = BlocProvider.of<ForgotPasswordBloc>(context);
   }
 
   @override
   void dispose() {
     logInBloc.add(const LogInReset());
+    forgotPasswordBloc.add(ForgotPasswordReset());
     passwordController.dispose();
+    emailAccountController.dispose();
     emailController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return BlocConsumer<LogInBloc, LogInState>(listener: (context, state) {
-      if (state is LogInSuccess) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const ChooseProfileScreen()),
-        );
-      } else if (state is LogInFailure) {
-        setState(() {
-          error = state.error;
-        });
-      }
-    }, builder: (context, state) {
-      if (state is LogInProcess) {
-        return AlertDialog(
-            backgroundColor: Colors.transparent,
-            content: Lottie.asset(
-              Localfiles.loading,
-              width: size.width * 0.2,
-            ));
-      }
-      return Scaffold(
-        backgroundColor: ColorPalette.whiteColor,
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: ColorPalette.whiteColor,
+      body: BlocConsumer<LogInBloc, LogInState>(listener: (context, state) {
+        if (state is LogInSuccess) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const ChooseProfileScreen()),
+          );
+        } else if (state is LogInFailure) {
+          setState(() {
+            error = state.error;
+          });
+        }
+      }, builder: (context, state) {
+        if (state is LogInProcess) {
+          return AlertDialog(
+              backgroundColor: Colors.transparent,
+              content: Lottie.asset(
+                Localfiles.loading,
+                width: size.width * 0.2,
+              ));
+        }
+        return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -185,9 +191,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ),
-        ),
-      );
-    });
+        );
+      }),
+    );
   }
 
   void _validateAndLogin() {
@@ -223,104 +229,109 @@ class _LoginScreenState extends State<LoginScreen> {
       password: password,
     ));
   }
-}
 
-Future<dynamic> forgotPasswordBottomSheet(BuildContext context) {
-  final emailAccountController = TextEditingController();
-  return showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: ColorPalette.whiteColor,
-    builder: (context) {
-      return Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                LabelAndTextField(
-                    context: context,
-                    label: 'Email',
-                    hintText: 'example@gmail.com',
-                    controller: emailAccountController,
-                    errorText: ''),
-                CommonButton(
-                  buttonTextWidget: Text(
-                    'Send',
-                    style: TextStyles(context).getTitleStyle(
-                      fontWeight: FontWeight.w400,
+  Future<dynamic> forgotPasswordBottomSheet(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: ColorPalette.whiteColor,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LabelAndTextField(
+                      context: context,
+                      label: 'Email',
+                      hintText: 'example@gmail.com',
+                      controller: emailAccountController,
+                      errorText: ''),
+                  CommonButton(
+                    buttonTextWidget: Text(
+                      'Send',
+                      style: TextStyles(context).getTitleStyle(
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
+                    textColor: ColorPalette.whiteColor,
+                    fontSize: 16,
+                    radius: 30,
+                    onTap: () {
+                      final email = emailAccountController.text;
+                      context
+                          .read<ForgotPasswordBloc>()
+                          .add(ForgotPasswordRequired(email: email));
+                    },
                   ),
-                  textColor: ColorPalette.whiteColor,
-                  fontSize: 16,
-                  radius: 30,
-                  onTap: () {
-                    final email = emailAccountController.text;
-                    context
-                        .read<ForgotPasswordBloc>()
-                        .add(ForgotPasswordRequired(email: email));
-                  },
-                ),
-                BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
-                  builder: (context, state) {
-                    if (state is ForgotPasswordProcess) {
-                      return Center(
-                        child: AlertDialog(
-                          backgroundColor: Colors.transparent,
-                          content: Lottie.asset(
-                            Localfiles.loading,
-                            width: 100,
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+                    builder: (context, state) {
+                      if (state is ForgotPasswordProcess) {
+                        return Center(
+                          child: AlertDialog(
+                            backgroundColor: Colors.transparent,
+                            content: Lottie.asset(
+                              Localfiles.loading,
+                              width: 100,
+                            ),
                           ),
-                        ),
-                      );
-                    } else if (state is ForgotPasswordSuccess) {
-                      emailAccountController.clear();
-                      return const Center(
-                          child:
-                              Text('Password reset email sent successfully.'));
-                    } else if (state is ForgotPasswordFailure) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) {
-                            return SingleChildScrollView(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).viewInsets.bottom,
-                                ),
-                                child: AlertDialog(
-                                  title: const Text('Error'),
-                                  content: Text(state.error),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
                         );
-                      });
-                    }
-                    return Container();
-                  },
-                ),
-              ],
+                      } else if (state is ForgotPasswordSuccess) {
+                        return Center(
+                            child: Text(
+                          'Password reset email sent successfully.',
+                          style: TextStyles(context)
+                              .getRegularStyle(color: ColorPalette.redColor),
+                        ));
+                      } else if (state is ForgotPasswordFailure) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return SingleChildScrollView(
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
+                                  child: AlertDialog(
+                                    title: const Text('Error'),
+                                    content: Text(state.error),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        });
+                      }
+                      return Container();
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    },
-  );
+        );
+      },
+    );
+  }
 }

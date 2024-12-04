@@ -28,6 +28,7 @@ class NavigationServices {
   }
 
   void popUntilLoginScreen() {
-    Navigator.popUntil(context, ModalRoute.withName('/login'));
+    Navigator.of(context).popUntil((route) => route.settings.name == '/login');
+    // Navigator.popUntil(context, ModalRoute.withName('/login'));
   }
 }
