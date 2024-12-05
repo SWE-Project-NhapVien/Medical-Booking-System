@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/bloc/patient/CreateProfile/create_profile_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/FetchProfile/fetch_profile_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/ForgotPassword/forgot_password_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/LogIn/log_in_bloc.dart';
@@ -43,18 +44,13 @@ class MyApp extends StatelessWidget {
 Widget _setAllProviders() {
   return MultiBlocProvider(
     providers: [
-      BlocProvider<LogInBloc>(
-        create: (context) => LogInBloc(),
-      ),
-      BlocProvider<SignUpBloc>(
-        create: (context) => SignUpBloc(),
-      ),
+      BlocProvider<LogInBloc>(create: (context) => LogInBloc()),
+      BlocProvider<SignUpBloc>(create: (context) => SignUpBloc()),
       BlocProvider<ForgotPasswordBloc>(
           create: (context) => ForgotPasswordBloc()),
-      BlocProvider<ResetPasswordBloc>(
-          create: (context) => ResetPasswordBloc()),
-      BlocProvider<FetchProfileBloc>(
-          create: (context) => FetchProfileBloc()),
+      BlocProvider<FetchProfileBloc>(create: (context) => FetchProfileBloc()),
+      BlocProvider<CreateProfileBloc>(create: (context) => CreateProfileBloc()),
+      BlocProvider<ResetPasswordBloc>(create: (context) => ResetPasswordBloc()),
     ],
     child: const MyApp(),
   );

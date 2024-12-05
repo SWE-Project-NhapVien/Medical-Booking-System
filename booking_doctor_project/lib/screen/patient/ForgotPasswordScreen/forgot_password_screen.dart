@@ -25,17 +25,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   bool newPassObscure = true;
   bool confirmPassObscure = true;
 
-  late ResetPasswordBloc resetPasswordBloc;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    resetPasswordBloc = BlocProvider.of<ResetPasswordBloc>(context);
-  }
-
   @override
   void dispose() {
-    resetPasswordBloc.add(ResetPasswordReset());
     newPasswordController.dispose();
     confirmPasswordController.dispose();
     super.dispose();
@@ -56,7 +47,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Navigator.of(context).pop();
               await Dialogs(context).showAnimatedDialog(
                 title: 'Reset Password',
-                content: 'Please check your email to reset password.',
+                content: 'Your password has been reset successfully.',
               );
               Navigator.of(context).popUntil((route) => route.isFirst);
             } else if (state is ResetPasswordFailure) {
@@ -77,7 +68,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       prefixIconData: Icons.arrow_back_ios_new_rounded,
                       onPrefixIconClick: () {
                         Navigator.of(context)
-                            .popUntil((route) => route.isFirst);
+                            .popUntil((route) => route.settings.name == '/login');
                       },
                     ),
                     SizedBox(

@@ -70,101 +70,98 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return BlocProvider(
-      create: (context) => CreateProfileBloc(),
-      child: Scaffold(
-        backgroundColor: ColorPalette.whiteColor,
-        body: BlocConsumer<CreateProfileBloc, CreateProfileState>(
-            listener: (context, state) {
-          if (state is CreateProfileProcess) {
-           Dialogs(context).showLoadingDialog();
-          } else if (state is CreateProfileSuccess) {
-            Navigator.pop(context);
-            Dialogs(context).showAnimatedDialog(
-              title: 'Create Profile',
-              content: 'Profile has been created successfully.',
-            );
-          } else if (state is CreateProfileFailure) {
-            Navigator.pop(context);
-            Dialogs(context).showErrorDialog(message: state.error);
-          }
-        }, builder: (context, state) {
-          return SingleChildScrollView(
-            child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                child: Column(children: [
-                  CommonAppBarWithTitle(
-                    title: 'Create A Profile',
-                    titleSize: 32,
-                    topPadding: MediaQuery.of(context).padding.top,
-                    prefixIconData: Icons.arrow_back_ios_new_rounded,
-                    onPrefixIconClick: () {
-                      if (curStep == 0) {
-                        Navigator.pop(context);
-                      } else {
-                        setState(() {
-                          curStep -= 1;
-                        });
-                      }
-                    },
-                  ),
-                  if (curStep == 0) _buildPersonalInformationForm(size),
-                  if (curStep == 1) _buildHealthInformationForm(size),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: CommonButton(
-                        buttonTextWidget: Text(
-                          curStep == 0 ? 'Next' : 'Complete',
-                          style: TextStyles(context).getTitleStyle(
-                            fontWeight: FontWeight.w400,
-                          ),
+    return Scaffold(
+      backgroundColor: ColorPalette.whiteColor,
+      body: BlocConsumer<CreateProfileBloc, CreateProfileState>(
+          listener: (context, state) {
+        if (state is CreateProfileProcess) {
+          Dialogs(context).showLoadingDialog();
+        } else if (state is CreateProfileSuccess) {
+          Navigator.pop(context);
+          Dialogs(context).showAnimatedDialog(
+            title: 'Create Profile',
+            content: 'Profile has been created successfully.',
+          );
+        } else if (state is CreateProfileFailure) {
+          Navigator.pop(context);
+          Dialogs(context).showErrorDialog(message: state.error);
+        }
+      }, builder: (context, state) {
+        return SingleChildScrollView(
+          child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: Column(children: [
+                CommonAppBarWithTitle(
+                  title: 'Create A Profile',
+                  titleSize: 32,
+                  topPadding: MediaQuery.of(context).padding.top,
+                  prefixIconData: Icons.arrow_back_ios_new_rounded,
+                  onPrefixIconClick: () {
+                    if (curStep == 0) {
+                      Navigator.pop(context);
+                    } else {
+                      setState(() {
+                        curStep -= 1;
+                      });
+                    }
+                  },
+                ),
+                if (curStep == 0) _buildPersonalInformationForm(size),
+                if (curStep == 1) _buildHealthInformationForm(size),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: CommonButton(
+                      buttonTextWidget: Text(
+                        curStep == 0 ? 'Next' : 'Complete',
+                        style: TextStyles(context).getTitleStyle(
+                          fontWeight: FontWeight.w400,
                         ),
-                        onTap: () {
-                          if (curStep == 0) {
-                            if (validatePage1()) {
-                              setState(() {
-                                curStep += 1;
-                              });
-                            }
-                          } else {
-                            if (validatePage2()) {
-                              final userEmail =
-                                  AuthServices().getCurruentUserEmail();
-                              context
-                                  .read<CreateProfileBloc>()
-                                  .add(CreateProfileRequired(
-                                    firstName: firstNameController.text,
-                                    lastName: lastNameController.text,
-                                    email: userEmail ?? '',
-                                    phoneNumber: phoneNumberController.text,
-                                    dateOfBirth: dateOfBirthController.text,
-                                    bloodType: bloodController.text,
-                                    gender: selectedGender,
-                                    address: addressController.text,
-                                    nationalID: nationalIDController.text,
-                                    height: double.parse(heightController.text),
-                                    weight: double.parse(weightController.text),
-                                    emergencyContact: [
-                                      restrictedEmergencyContactController.text,
-                                      ...emergencyContactsControllers
-                                          .map((controller) => controller.text)
-                                    ],
-                                  ));
-                            }
-                          }
-                        },
-                        width: double.infinity,
-                        height: size.height * 0.06,
-                        radius: 30,
                       ),
+                      onTap: () {
+                        if (curStep == 0) {
+                          if (validatePage1()) {
+                            setState(() {
+                              curStep += 1;
+                            });
+                          }
+                        } else {
+                          if (validatePage2()) {
+                            final userEmail =
+                                AuthServices().getCurruentUserEmail();
+                            context
+                                .read<CreateProfileBloc>()
+                                .add(CreateProfileRequired(
+                                  firstName: firstNameController.text,
+                                  lastName: lastNameController.text,
+                                  email: userEmail ?? '',
+                                  phoneNumber: phoneNumberController.text,
+                                  dateOfBirth: dateOfBirthController.text,
+                                  bloodType: bloodController.text,
+                                  gender: selectedGender,
+                                  address: addressController.text,
+                                  nationalID: nationalIDController.text,
+                                  height: double.parse(heightController.text),
+                                  weight: double.parse(weightController.text),
+                                  emergencyContact: [
+                                    restrictedEmergencyContactController.text,
+                                    ...emergencyContactsControllers
+                                        .map((controller) => controller.text)
+                                  ],
+                                ));
+                          }
+                        }
+                      },
+                      width: double.infinity,
+                      height: size.height * 0.06,
+                      radius: 30,
                     ),
                   ),
-                ])),
-          );
-        }),
-      ),
+                ),
+              ])),
+        );
+      }),
     );
   }
 

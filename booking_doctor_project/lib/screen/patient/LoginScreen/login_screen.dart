@@ -37,20 +37,15 @@ class _LoginScreenState extends State<LoginScreen> {
   String passwordError = '';
   String error = '';
 
-  late LogInBloc logInBloc;
-  late ForgotPasswordBloc forgotPasswordBloc;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    logInBloc = BlocProvider.of<LogInBloc>(context);
-    forgotPasswordBloc = BlocProvider.of<ForgotPasswordBloc>(context);
+    context.read<ForgotPasswordBloc>().add(ForgotPasswordReset());
+    context.read<LogInBloc>().add(const LogInReset());
   }
 
   @override
   void dispose() {
-    logInBloc.add(const LogInReset());
-    forgotPasswordBloc.add(ForgotPasswordReset());
     passwordController.dispose();
     emailAccountController.dispose();
     emailController.dispose();
@@ -288,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       } else if (state is ForgotPasswordSuccess) {
                         return Center(
                             child: Text(
-                          'Password reset email sent successfully.',
+                          'Please check your email to reset password.',
                           style: TextStyles(context)
                               .getRegularStyle(color: ColorPalette.redColor),
                         ));
