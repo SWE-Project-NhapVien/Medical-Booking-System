@@ -1,5 +1,5 @@
 // doctor_state.dart
-abstract class SearchState {}
+sealed class SearchState {}
 
 class SearchInitial extends SearchState {}
 
