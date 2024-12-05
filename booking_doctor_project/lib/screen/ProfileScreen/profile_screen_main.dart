@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:developer';
+import 'package:booking_doctor_project/screen/ProfileScreen/edit_profile.dart';
 
 //Width = 360
 //height = 800
@@ -16,36 +16,43 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool _showLogoutCard = false;
+
+  void _toggleLogoutCard() {
+    setState(() {
+      _showLogoutCard = !_showLogoutCard;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
       children: [
-        backButton(),
+        _backButton(),
 
         // My Profile
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.373,
-            MediaQuery.of(context).size.height * 0.07,
-            0,
-            0,
-          ),
-          child: 
-            const Text(
-              "My Profile",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Color(0xFF2260FF), fontWeight: FontWeight.bold, fontSize: 24),
+        Align(
+          alignment: Alignment.topCenter,
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.07
             ),
-          ),
+            child: 
+              const Text(
+                "My Profile",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Color(0xFF2260FF), fontWeight: FontWeight.bold, fontSize: 24),
+              )
+            )
+        ),
 
         // ImageProfile and EditIcon
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.373,
-            MediaQuery.of(context).size.height * 0.13321,
-            0,
-            0,
+        Align(
+          alignment: Alignment.topCenter,
+          child: Padding(
+          padding: EdgeInsets.only(
+            top: MediaQuery.of(context).size.height * 0.13321
           ),
           child: 
             Stack(
@@ -60,25 +67,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Positioned(
                   bottom: -MediaQuery.of(context).size.height * 0.013,
                   right: -MediaQuery.of(context).size.width * 0.021,
-                  child: editButton()
+                  child: _editButton()
                 )
-              ],
+              ]
             )
+          )
         ),
 
         // Name
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.373,
-            MediaQuery.of(context).size.height * 0.28,
-            0,
-            0,
-          ),
-          child: const Text(
-            'John Doe',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        Align(
+          alignment: Alignment.topCenter,
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.28
+            ),
+            child: const Text(
+              'John Doe',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            )
           )
-        ),
+        ),  
 
         // Profile Info, Policy, Help, Switch Profile, Logout
         Padding(
@@ -93,46 +101,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
-                onTap:() => profileInfoLayoutEvent(),
-                child: profileInfoLayout()
+                onTap:() => profileInfoLayoutEvent(context),
+                child: _profileInfoLayout()
               ),
 
               SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
 
               GestureDetector(
                 onTap: () => policyLayoutEvent(),
-                child: policyLayout()
+                child: _policyLayout()
               ),
 
               SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
 
               GestureDetector(
                 onTap: () => helpLayoutEvent(),
-                child: helpLayout()
+                child: _helpLayout()
               ),
 
               SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
 
               GestureDetector(
                 onTap: () => switchProfileLayoutEvent(),
-                child: switchProfileLayout()
+                child: _switchProfileLayout()
               ),
 
               SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
 
               GestureDetector(
                 onTap: () => logoutLayoutEvent(),
-                child: logoutLayout()
+                child: _logoutLayout()
               ),
             ],
           )
-        )
+        ),
+      
+        if (_showLogoutCard) 
+          GestureDetector(
+            onTap: _toggleLogoutCard, // Dismiss card on tap outside
+            child: Container(
+              color: const Color.fromARGB(255, 34, 96, 255).withOpacity(0.54), // Background overlay
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: _logoutCard()
+              ),
+            ),
+          ),
       ],
     ));
   }
 
   // Back button
-  Widget backButton() {
+  Widget _backButton() {
   return Padding(
           padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.03889,
@@ -154,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   //Edit button
-  Widget editButton() {
+  Widget _editButton() {
     return IconButton(
       icon: Image.asset(
         'assets/images/edit_icon.png', 
@@ -170,7 +190,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   //Profile Info Layout
-  Widget profileInfoLayout() {
+  Widget _profileInfoLayout() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -185,14 +205,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ]);
   }
 
-  void profileInfoLayoutEvent() {
+  void profileInfoLayoutEvent(BuildContext context) {
     // Handle on tap event here.
     //TO-DO IMPLEMENT
-    debugPrint("Profile Info layout clicked");
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const EditProfile(),
+      )
+    );
   }
 
   //Policy Layout
-  Widget policyLayout() {
+  Widget _policyLayout() {
     return Row(
       children: [
         Image.asset('assets/images/privacy_policy.png', fit: BoxFit.none),
@@ -213,7 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   //Help Layout
-  Widget helpLayout() {
+  Widget _helpLayout() {
     return Row(
       children: [
         Image.asset('assets/images/help_icon.png', fit: BoxFit.none),
@@ -234,7 +259,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   //Switch profile Layout
-  Widget switchProfileLayout() {
+  Widget _switchProfileLayout() {
     return Row(
       children: [
         Image.asset('assets/images/switches.png', fit: BoxFit.none),
@@ -255,12 +280,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   //Logout Layout
-  Widget logoutLayout() {
+  Widget _logoutLayout() {
     return Row(
       children: [
         Image.asset('assets/images/logout.png', fit: BoxFit.none),
         SizedBox(width: MediaQuery.of(context).size.width * 0.07778,), //Spacing
-        const Text("Switch Profile", style: TextStyle(fontFamily: "League Spartan", fontSize: 20)),
+        const Text("Logout", style: TextStyle(fontFamily: "League Spartan", fontSize: 20)),
         const Spacer(),
         Padding(
           padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.0861111),
@@ -270,8 +295,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void logoutLayoutEvent() {
+    _toggleLogoutCard();
+  }
+
+  Widget _logoutCard() {
+    return Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Logout',
+                style: TextStyle(
+                    fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF2260FF)),
+              ),
+              const SizedBox(height: 10),
+              const Text('Are you sure you want to log out?'),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                    style: const ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Color(0xFFCAD6FF)),
+                      minimumSize: WidgetStatePropertyAll(Size(143, 41))
+                    ),
+
+                    onPressed: _toggleLogoutCard,
+
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(color: Color(0xFF2260FF), fontFamily: "League Spartan", fontSize: 20, fontWeight: FontWeight.bold)
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: const ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Color(0xFF2260FF)),
+                      minimumSize: WidgetStatePropertyAll(Size(143, 41))
+                    ),
+                    onPressed: () => logoutCardEvent(),
+                    child: const Text(
+                      'Yes, Logout',
+                      style: TextStyle(color: Colors.white, fontFamily: "League Spartan", fontSize: 20, fontWeight: FontWeight.bold)
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+  }
+
+  void logoutCardEvent() {
     // Handle on tap event here.
     //TO-DO IMPLEMENT
-    debugPrint("Logout Layout clicked");
   }
 }
