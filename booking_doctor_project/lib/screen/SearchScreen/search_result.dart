@@ -174,7 +174,7 @@ class ResultsView extends StatelessWidget {
     return BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
       if (state is SearchLoading) {
         return const CircularProgressIndicator();
-      } else if (state is SearchLoaded) {
+      } else if (state is SearchSuccess) {
         List result = [];
         if (chosenFilterOption == 1) {
           for (var i = 0; i < state.doctors.length; i++) {

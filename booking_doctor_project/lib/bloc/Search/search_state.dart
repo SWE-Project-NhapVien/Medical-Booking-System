@@ -7,7 +7,7 @@ class SearchLoading extends SearchState {}
 
 class SearchSuccess extends SearchState {
   final List doctors;
-  SearchLoaded(this.doctors);
+  SearchSuccess(this.doctors);
 }
 
 class SearchError extends SearchState {

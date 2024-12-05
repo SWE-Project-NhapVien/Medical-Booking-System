@@ -28,7 +28,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         'date_query': formattedDate,
       });
 
-      emit(SearchLoaded(response));
+      emit(SearchSuccess(response));
     } catch (e) {
       emit(SearchError('Error fetching doctors: $e'));
     }
