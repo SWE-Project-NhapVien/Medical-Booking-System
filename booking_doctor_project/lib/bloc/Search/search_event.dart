@@ -1,5 +1,5 @@
 // doctor_event.dart
-abstract class SearchEvent {}
+sealed class SearchEvent {}
 
 class SearchDoctorsEvent extends SearchEvent {
   final String? searchQuery;
