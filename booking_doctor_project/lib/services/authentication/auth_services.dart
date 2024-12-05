@@ -50,6 +50,8 @@ class AuthServices {
   Future<void> updatePassword({required String password}) async {
     try {
       await _supabase.auth.updateUser(UserAttributes(password: password));
+    } on AuthException catch (e) {
+      throw Exception('Failed to sign up: ${e.message}');
     } catch (e) {
       throw Exception('Failed to update password: $e');
     }

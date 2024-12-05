@@ -91,144 +91,141 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return BlocProvider(
-      create: (context) => SignUpBloc(),
-      child: Scaffold(
-          backgroundColor: ColorPalette.whiteColor,
-          body: BlocConsumer<SignUpBloc, SignUpState>(
-              listener: (context, state) async {
-            if (state is SignUpSuccess) {
-              await Dialogs(context).showAnimatedDialog(
-                title: 'Sign Up Successful',
-                content: 'Please complete your profile to continue.',
-              );
-              NavigationServices(context).pushCompleteProfileScreen();
-            } else if (state is SignUpFailure) {
-              Dialogs(context).showErrorDialog(message: state.error);
-            }
-          }, builder: (context, state) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    CommonAppBarWithTitle(
-                      title: 'New Account',
-                      titleSize: 32,
-                      topPadding: MediaQuery.of(context).padding.top,
-                      prefixIconData: Icons.arrow_back_ios_new_rounded,
-                      onPrefixIconClick: () {
-                        Navigator.pop(context);
-                      },
+    return Scaffold(
+        backgroundColor: ColorPalette.whiteColor,
+        body: BlocConsumer<SignUpBloc, SignUpState>(
+            listener: (context, state) async {
+          if (state is SignUpSuccess) {
+            await Dialogs(context).showAnimatedDialog(
+              title: 'Sign Up Successful',
+              content: 'Please complete your profile to continue.',
+            );
+            NavigationServices(context).pushCompleteProfileScreen();
+          } else if (state is SignUpFailure) {
+            Dialogs(context).showErrorDialog(message: state.error);
+          }
+        }, builder: (context, state) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  CommonAppBarWithTitle(
+                    title: 'New Account',
+                    titleSize: 32,
+                    topPadding: MediaQuery.of(context).padding.top,
+                    prefixIconData: Icons.arrow_back_ios_new_rounded,
+                    onPrefixIconClick: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  LabelAndTextField(
+                    context: context,
+                    label: 'Email Or Phone Number',
+                    hintText: 'example@example.com',
+                    controller: emailController,
+                    errorText: emailError ?? '',
+                  ),
+                  LabelAndTextField(
+                    context: context,
+                    label: 'Password',
+                    hintText: '********',
+                    controller: passwordController,
+                    errorText: passwordError ?? '',
+                    suffixIconData: CupertinoIcons.eye_slash_fill,
+                    selectedIconData: CupertinoIcons.eye_fill,
+                    isObscured: obscurePassword,
+                  ),
+                  LabelAndTextField(
+                    context: context,
+                    label: 'Confirm Password',
+                    hintText: '********',
+                    controller: confirmPasswordController,
+                    errorText: confirmPasswordError ?? '',
+                    suffixIconData: CupertinoIcons.eye_slash_fill,
+                    selectedIconData: CupertinoIcons.eye_fill,
+                    isObscured: obscureConfirmPassword,
+                  ),
+                  Text('By continuing, you agree to',
+                      style: TextStyles(context).getRegularStyle(
+                        fontWeight: FontWeight.w300,
+                      )),
+                  Text.rich(TextSpan(children: [
+                    TextSpan(
+                      text: 'Terms of Service',
+                      style: TextStyles(context).getRegularStyle(
+                        color: ColorPalette.deepBlue,
+                      ),
                     ),
-                    SizedBox(
-                      height: size.height * 0.03,
-                    ),
-                    LabelAndTextField(
-                      context: context,
-                      label: 'Email Or Phone Number',
-                      hintText: 'example@example.com',
-                      controller: emailController,
-                      errorText: emailError ?? '',
-                    ),
-                    LabelAndTextField(
-                      context: context,
-                      label: 'Password',
-                      hintText: '********',
-                      controller: passwordController,
-                      errorText: passwordError ?? '',
-                      suffixIconData: CupertinoIcons.eye_slash_fill,
-                      selectedIconData: CupertinoIcons.eye_fill,
-                      isObscured: obscurePassword,
-                    ),
-                    LabelAndTextField(
-                      context: context,
-                      label: 'Confirm Password',
-                      hintText: '********',
-                      controller: confirmPasswordController,
-                      errorText: confirmPasswordError ?? '',
-                      suffixIconData: CupertinoIcons.eye_slash_fill,
-                      selectedIconData: CupertinoIcons.eye_fill,
-                      isObscured: obscureConfirmPassword,
-                    ),
-                    Text('By continuing, you agree to',
+                    TextSpan(
+                        text: ' and ',
                         style: TextStyles(context).getRegularStyle(
                           fontWeight: FontWeight.w300,
                         )),
-                    Text.rich(TextSpan(children: [
-                      TextSpan(
-                        text: 'Terms of Service',
-                        style: TextStyles(context).getRegularStyle(
-                          color: ColorPalette.deepBlue,
-                        ),
-                      ),
-                      TextSpan(
-                          text: ' and ',
-                          style: TextStyles(context).getRegularStyle(
-                            fontWeight: FontWeight.w300,
-                          )),
-                      TextSpan(
-                        text: 'Privacy Policy',
-                        style: TextStyles(context).getRegularStyle(
-                          color: ColorPalette.deepBlue,
-                        ),
-                      ),
-                    ])),
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
-                    Center(
-                      child: CommonButton(
-                        buttonTextWidget: Text(
-                          'Sign Up',
-                          style: TextStyles(context).getTitleStyle(
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        onTap: () {
-                          _onSignUp(context);
-                        },
-                        width: size.width / 2,
-                        height: size.height * 0.06,
-                        radius: 30,
+                    TextSpan(
+                      text: 'Privacy Policy',
+                      style: TextStyles(context).getRegularStyle(
+                        color: ColorPalette.deepBlue,
                       ),
                     ),
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Already have an account? ',
-                          style: TextStyles(context)
-                              .getRegularStyle(fontWeight: FontWeight.w200),
+                  ])),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  Center(
+                    child: CommonButton(
+                      buttonTextWidget: Text(
+                        'Sign Up',
+                        style: TextStyles(context).getTitleStyle(
+                          fontWeight: FontWeight.w400,
                         ),
-                        TapEffect(
-                          onClick: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginOrSignUpScreen(
-                                  showLoginScreen: true,
-                                ),
+                      ),
+                      onTap: () {
+                        _onSignUp(context);
+                      },
+                      width: size.width / 2,
+                      height: size.height * 0.06,
+                      radius: 30,
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Already have an account? ',
+                        style: TextStyles(context)
+                            .getRegularStyle(fontWeight: FontWeight.w200),
+                      ),
+                      TapEffect(
+                        onClick: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginOrSignUpScreen(
+                                showLoginScreen: true,
                               ),
-                            );
-                          },
-                          child: Text(
-                            'Log In',
-                            style: TextStyles(context).getRegularStyle(
-                              color: ColorPalette.deepBlue,
                             ),
+                          );
+                        },
+                        child: Text(
+                          'Log In',
+                          style: TextStyles(context).getRegularStyle(
+                            color: ColorPalette.deepBlue,
                           ),
                         ),
-                      ],
-                    )
-                  ],
-                ),
+                      ),
+                    ],
+                  )
+                ],
               ),
-            );
-          })),
-    );
+            ),
+          );
+        }));
   }
 }

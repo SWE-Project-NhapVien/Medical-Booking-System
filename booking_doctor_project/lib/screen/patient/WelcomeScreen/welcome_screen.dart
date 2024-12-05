@@ -1,10 +1,10 @@
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/utils/text_styles.dart';
 import 'package:booking_doctor_project/widgets/common_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/color_palette.dart';
-import '../LoginAndSignUp/login_and_signup_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -65,12 +65,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            LoginOrSignUpScreen(showLoginScreen: true)),
-                  );
+                  NavigationServices(context).pushLogInScreen();
                 },
                 width: size.width / 2,
                 height: size.height * 0.06,
@@ -88,12 +83,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            LoginOrSignUpScreen(showLoginScreen: false)),
-                  );
+                  NavigationServices(context).pushSignUpScreen();
                 },
                 width: size.width / 2,
                 height: size.height * 0.06,

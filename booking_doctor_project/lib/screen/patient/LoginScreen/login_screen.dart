@@ -285,38 +285,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                           'Please check your email to reset password.',
                           style: TextStyles(context)
-                              .getRegularStyle(color: ColorPalette.redColor),
+                              .getRegularStyle(color: ColorPalette.deepBlue),
                         ));
                       } else if (state is ForgotPasswordFailure) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return SingleChildScrollView(
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom,
-                                  ),
-                                  child: AlertDialog(
-                                    title: const Text('Error'),
-                                    content: Text(state.error),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('OK'),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        });
+                        return Center(
+                            child: Text(
+                          state.error,
+                          style: TextStyles(context)
+                              .getRegularStyle(color: ColorPalette.redColor),
+                        ));
                       }
                       return Container();
                     },

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:booking_doctor_project/services/authentication/auth_services.dart';
 import 'package:equatable/equatable.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'forgot_password_event.dart';
 part 'forgot_password_state.dart';

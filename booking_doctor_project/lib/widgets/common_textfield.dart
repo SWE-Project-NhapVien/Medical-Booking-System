@@ -56,13 +56,13 @@ class _CommonTextFieldState extends State<CommonTextField> {
   void initState() {
     super.initState();
     _focusNode = FocusNode();
-    _iconColor = widget.initialIconColor ?? ColorPalette.blackColor;
+    _iconColor = widget.initialIconColor ?? ColorPalette.greyColor;
     if (widget.isObscureText) _focusNode.addListener(_handleFocusChange);
   }
 
   void _handleFocusChange() {
     setState(() {
-      _iconColor = _focusNode.hasFocus ? widget.focusColor : ColorPalette.blackColor;
+      _iconColor = _focusNode.hasFocus ? widget.focusColor : ColorPalette.greyColor;
     });
   }
 

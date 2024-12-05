@@ -32,15 +32,6 @@ void main() async {
       .then((_) => runApp(_setAllProviders()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MedicalBookingApp();
-  }
-}
-
 Widget _setAllProviders() {
   return MultiBlocProvider(
     providers: [
@@ -52,6 +43,6 @@ Widget _setAllProviders() {
       BlocProvider<CreateProfileBloc>(create: (context) => CreateProfileBloc()),
       BlocProvider<ResetPasswordBloc>(create: (context) => ResetPasswordBloc()),
     ],
-    child: const MyApp(),
+    child: const MedicalBookingApp(),
   );
 }

@@ -26,9 +26,4 @@ class NavigationServices {
   Future<dynamic> pushCompleteProfileScreen() async {
     return _pushMaterialPageRoute(const CreateProfileScreen());
   }
-
-  void popUntilLoginScreen() {
-    Navigator.of(context).popUntil((route) => route.settings.name == '/login');
-    // Navigator.popUntil(context, ModalRoute.withName('/login'));
-  }
 }

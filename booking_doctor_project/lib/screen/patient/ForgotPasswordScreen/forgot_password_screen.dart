@@ -1,4 +1,5 @@
 import 'package:booking_doctor_project/bloc/patient/ResetPassword/reset_password_bloc.dart';
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/text_styles.dart';
 import 'package:booking_doctor_project/widgets/common_appbar_with_title.dart';
@@ -67,8 +68,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       topPadding: MediaQuery.of(context).padding.top,
                       prefixIconData: Icons.arrow_back_ios_new_rounded,
                       onPrefixIconClick: () {
-                        Navigator.of(context)
-                            .popUntil((route) => route.settings.name == '/login');
+                        Navigator.of(context).pop();
                       },
                     ),
                     SizedBox(
