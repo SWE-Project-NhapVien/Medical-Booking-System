@@ -66,7 +66,18 @@ class _SearchScreenState extends State<SearchScreen> {
                           hintStyle: TextStyle(color: ColorPalette.deepBlue),
                           fillColor: ColorPalette.mediumBlue,
                           filled: true,
-                          suffixIcon: const Icon(Icons.arrow_drop_down),
+                          suffixIcon: dateController.text == ''
+                              ? const Icon(Icons.arrow_drop_down)
+                              : GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      dateController.clear();
+                                    });
+                                  },
+                                  child: Icon(Icons.clear,
+                                      color: ColorPalette.deepBlue),
+                                ),
+
                           suffixIconColor: ColorPalette.deepBlue,
                           border: OutlineInputBorder(
                             borderRadius:
