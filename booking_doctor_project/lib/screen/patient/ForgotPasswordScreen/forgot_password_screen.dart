@@ -1,5 +1,4 @@
 import 'package:booking_doctor_project/bloc/patient/ResetPassword/reset_password_bloc.dart';
-import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/text_styles.dart';
 import 'package:booking_doctor_project/widgets/common_appbar_with_title.dart';
@@ -50,7 +49,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 title: 'Reset Password',
                 content: 'Your password has been reset successfully.',
               );
-              Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.of(context).pop();
             } else if (state is ResetPasswordFailure) {
               Navigator.of(context).pop();
               Dialogs(context).showErrorDialog(message: state.error);

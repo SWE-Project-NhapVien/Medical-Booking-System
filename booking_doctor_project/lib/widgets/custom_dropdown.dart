@@ -102,7 +102,7 @@ class _CustDropDownState extends State<CustDropDown>
                 showWhenUnlinked: false,
                 offset: dropDownOffset,
                 child: SizedBox(
-                  height: widget.maxListHeight,
+                  height: widget.maxListHeight + 10,
                   width: size.width,
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
@@ -112,7 +112,7 @@ class _CustDropDownState extends State<CustDropDown>
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
-                        child: Container(
+                        child: ConstrainedBox(
                           constraints: BoxConstraints(
                               maxHeight: widget.maxListHeight,
                               maxWidth: size.width),

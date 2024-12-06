@@ -25,13 +25,13 @@ class Dialogs {
     );
   }
 
-  Future<void> showErrorDialog({required String message}) {
+  Future<void> showErrorDialog({String title = 'Error', required String message, String buttonText = 'Got it!'}) {
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
               title: Text(
-                "Error",
+                title,
                 style: TextStyles(context).getTitleStyle(
                     size: 18,
                     fontWeight: FontWeight.w500,
@@ -52,7 +52,7 @@ class Dialogs {
                       Navigator.of(context).pop();
                     },
                     child: Text(
-                      "OK",
+                      buttonText,
                       style: TextStyles(context).getTitleStyle(
                         size: 18,
                         fontWeight: FontWeight.w500,

@@ -4,6 +4,7 @@ import 'package:booking_doctor_project/widgets/common_date_field.dart';
 import 'package:booking_doctor_project/widgets/common_dialogs.dart';
 import 'package:booking_doctor_project/widgets/common_textfield.dart';
 import 'package:booking_doctor_project/widgets/custom_dropdown.dart';
+import 'package:booking_doctor_project/widgets/tap_effect.dart';
 import 'package:booking_doctor_project/widgets/textfield_with_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,14 +23,41 @@ class CreateProfileScreen extends StatefulWidget {
 
 class _CreateProfileScreenState extends State<CreateProfileScreen> {
   final List<String> genders = ["Male", "Female", "None"];
+  final List<String> allergies = [
+    "Egg",
+    "Milk",
+    "Soy",
+    "Tree nuts",
+    "Fish",
+    "Peanuts",
+    "Shellfish",
+    "Wheat",
+    "Sesame"
+  ];
+
+  final List<String> bloodTypes = [
+    "A+",
+    "A-",
+    "B+",
+    "B-",
+    "AB+",
+    "AB-",
+    "O+",
+    "O-",
+    "None"
+  ];
+
   String selectedGender = 'None';
+  String selectedBloodType = 'None';
+  final List<String> selectedAllergy = [];
+
+
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final nationalIDController = TextEditingController();
   final dateOfBirthController = TextEditingController();
   final addressController = TextEditingController();
-  final bloodController = TextEditingController();
   final weightController = TextEditingController();
   final heightController = TextEditingController();
 
@@ -37,7 +65,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
   final List<TextEditingController> emergencyContactsControllers = [];
   final List<TextEditingController> medicalHistoryControllers = [];
-  final List<TextEditingController> allergiesControllers = [];
 
   final Map<String, String> errors = {};
 
@@ -50,7 +77,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     phoneNumberController.dispose();
     nationalIDController.dispose();
     addressController.dispose();
-    bloodController.dispose();
     weightController.dispose();
     heightController.dispose();
     restrictedEmergencyContactController.dispose();
@@ -59,9 +85,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       element.dispose();
     }
     for (var element in medicalHistoryControllers) {
-      element.dispose();
-    }
-    for (var element in allergiesControllers) {
       element.dispose();
     }
     super.dispose();
@@ -96,10 +119,18 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   titleSize: 32,
                   topPadding: MediaQuery.of(context).padding.top,
                   prefixIconData: Icons.arrow_back_ios_new_rounded,
-                  onPrefixIconClick: () {
+                  onPrefixIconClick: () async {
                     if (curStep == 0) {
+                      await Dialogs(context).showErrorDialog(
+                        title: 'Unsaved Profile Changes',
+                        message: 'This profile will not be saved.',
+                      );
                       Navigator.pop(context);
                     } else {
+                      await Dialogs(context).showErrorDialog(
+                        title: 'Unsaved Profile Changes',
+                        message: 'This profile will not be saved.',
+                      );
                       setState(() {
                         curStep -= 1;
                       });
@@ -111,7 +142,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: const EdgeInsets.only(top: 16.0),
                     child: CommonButton(
                       buttonTextWidget: Text(
                         curStep == 0 ? 'Next' : 'Complete',
@@ -138,7 +169,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                   email: userEmail ?? '',
                                   phoneNumber: phoneNumberController.text,
                                   dateOfBirth: dateOfBirthController.text,
-                                  bloodType: bloodController.text,
+                                  bloodType: selectedBloodType,
                                   gender: selectedGender,
                                   address: addressController.text,
                                   nationalID: nationalIDController.text,
@@ -217,45 +248,48 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
           children: [
             Expanded(
               flex: 1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Gender',
-                    style: TextStyles(context).getTitleStyle(
-                      size: 20,
-                      fontWeight: FontWeight.w500,
-                      color: ColorPalette.blackColor,
+              child: SizedBox(
+                height: 91,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Gender',
+                      style: TextStyles(context).getTitleStyle(
+                        size: 20,
+                        fontWeight: FontWeight.w500,
+                        color: ColorPalette.blackColor,
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: size.height * 0.06,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: ColorPalette.blueFormColor,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: CustDropDown(
-                        items: List<CustDropdownMenuItem<String>>.generate(
-                          genders.length,
-                          (index) => CustDropdownMenuItem<String>(
-                            value: genders[index],
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                genders[index],
-                                style: TextStyles(context).getRegularStyle(),
+                    Container(
+                      height: size.height * 0.06,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: ColorPalette.blueFormColor,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: CustDropDown(
+                          items: List<CustDropdownMenuItem<String>>.generate(
+                            genders.length,
+                            (index) => CustDropdownMenuItem<String>(
+                              value: genders[index],
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
+                                  genders[index],
+                                  style: TextStyles(context).getRegularStyle(),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        borderRadius: 10,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedGender = value as String;
-                          });
-                        }),
-                  ),
-                ],
+                          borderRadius: 10,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedGender = value as String;
+                            });
+                          }),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(width: size.width * 0.02),
@@ -277,10 +311,12 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             context: context,
             label: 'Emergency Contacts',
             hintText: '',
+            height: 105,
             controller: restrictedEmergencyContactController,
             errorText: errors['restrictedEmergencyContact'] ?? '',
             isRestricted: true),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ...List.generate(emergencyContactsControllers.length, (index) {
               return AdditionTextField(
@@ -292,26 +328,27 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 },
               );
             }),
-            SizedBox(
-              height: size.height * 0.01,
-            ),
-            CommonButton(
-              buttonTextWidget: Text(
-                '+\tAdd',
-                style: TextStyles(context).getTitleStyle(
-                  fontWeight: FontWeight.w400,
+            if (emergencyContactsControllers.isNotEmpty)
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+            Align(
+              alignment: Alignment.topRight,
+              child: TapEffect(
+                onClick: () {
+                  setState(() {
+                    emergencyContactsControllers.add(TextEditingController());
+                  });
+                }, 
+                child: Text(
+                  '+\tAdd',
+                  textAlign: TextAlign.right,
+                  style: TextStyles(context).getRegularStyle(
+                    fontWeight: FontWeight.w400,
+                    color: ColorPalette.deepBlue
+                  ),
                 ),
               ),
-              onTap: () {
-                setState(() {
-                  emergencyContactsControllers.add(TextEditingController());
-                });
-              },
-              width: double.infinity,
-              height: size.height * 0.06,
-              radius: 15,
-              backgroundColor: ColorPalette.lightBlueTextColor,
-              bordeColor: ColorPalette.lightBlueTextColor,
             ),
           ],
         ),
@@ -327,12 +364,51 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: LabelAndTextField(
-                context: context,
-                label: 'Blood',
-                hintText: '',
-                controller: bloodController,
-                errorText: '',
+              child: SizedBox(
+                height: 111,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Blood',
+                      style: TextStyles(context).getTitleStyle(
+                        size: 20,
+                        fontWeight: FontWeight.w500,
+                        color: ColorPalette.blackColor,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: Container(
+                        height: size.height * 0.067,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: ColorPalette.blueFormColor,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: CustDropDown(
+                            items: List<CustDropdownMenuItem<String>>.generate(
+                              bloodTypes.length,
+                              (index) => CustDropdownMenuItem<String>(
+                                value: bloodTypes[index],
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                    bloodTypes[index],
+                                    style: TextStyles(context).getRegularStyle(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            borderRadius: 10,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedBloodType = value as String;
+                              });
+                            }),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(width: size.width * 0.02),
@@ -342,7 +418,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   label: 'Weight',
                   hintText: '',
                   controller: weightController,
-                  errorText: '',
+                  errorText: errors['weight'] ?? '',
                   suffixText: 'kg',
                   isRestricted: true),
             ),
@@ -353,7 +429,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   label: 'Height',
                   hintText: '',
                   controller: heightController,
-                  errorText: '',
+                  errorText: errors['height'] ?? '',
                   suffixText: 'cm',
                   isRestricted: true),
             )
@@ -395,7 +471,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                 });
               },
               width: double.infinity,
-              height: size.height * 0.06,
+              height: size.height * 0.055,
               radius: 15,
               backgroundColor: ColorPalette.lightBlueTextColor,
               bordeColor: ColorPalette.lightBlueTextColor,
@@ -415,18 +491,62 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         ),
         Column(
           children: [
-            ...List.generate(allergiesControllers.length, (index) {
-              return AdditionTextField(
-                controller: allergiesControllers[index],
-                onRemove: () {
-                  setState(() {
-                    allergiesControllers.removeAt(index);
-                  });
-                },
+            ...List.generate(selectedAllergy.length, (index) {
+              return Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: size.height * 0.06,
+                          decoration: BoxDecoration(
+                              color: ColorPalette.blueFormColor,
+                              borderRadius: BorderRadius.circular(15)),
+                          child: CustDropDown(
+                              items: List<CustDropdownMenuItem<String>>.generate(
+                                allergies.length,
+                                (index) => CustDropdownMenuItem<String>(
+                                  value: allergies[index],
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      allergies[index],
+                                      style: TextStyles(context).getRegularStyle(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              borderRadius: 10,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedAllergy[index] = value as String;
+                                });
+                              }),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedAllergy.removeAt(index);
+                          });
+                        },
+                        padding: const EdgeInsets.all(0),
+                        icon: Icon(
+                          Icons.close,
+                          color: ColorPalette.deepBlue,
+                          size: 15,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * 0.01,
+                  )
+                ],
               );
             }),
             SizedBox(
-              height: size.height * 0.01,
+              height: size.height * 0.005,
             ),
             CommonButton(
               buttonTextWidget: Text(
@@ -437,11 +557,11 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
               ),
               onTap: () {
                 setState(() {
-                  allergiesControllers.add(TextEditingController());
+                  selectedAllergy.add('');
                 });
               },
               width: double.infinity,
-              height: size.height * 0.06,
+              height: size.height * 0.055,
               radius: 15,
               backgroundColor: ColorPalette.lightBlueTextColor,
               bordeColor: ColorPalette.lightBlueTextColor,
@@ -478,6 +598,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     } else if (!RegExp(r"^\d+$").hasMatch(phoneNumberController.text)) {
       errors['phoneNumber'] = 'Phone number must be numeric.';
       isValid = false;
+    } else if (phoneNumberController.text.trim().length != 10) {
+      errors['phoneNumber'] = 'Phone number must be 10 digits.';
+      isValid = false;
     }
 
     if (nationalIDController.text.isEmpty) {
@@ -490,11 +613,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       isValid = false;
     }
 
-    if (addressController.text.isEmpty) {
-      errors['address'] = 'Address is required.';
-      isValid = false;
-    }
-
     if (restrictedEmergencyContactController.text.isEmpty) {
       errors['restrictedEmergencyContact'] =
           'At least one emergency contact is required.';
@@ -504,6 +622,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       errors['restrictedEmergencyContact'] =
           'Emergency contact must be numeric.';
       isValid = false;
+    } else if (restrictedEmergencyContactController.text.trim().length != 10) {
+      errors['restrictedEmergencyContact'] =
+          'Emergency contact must be 10 digits.';
     }
 
     for (var i = 0; i < emergencyContactsControllers.length; i++) {
@@ -513,6 +634,9 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
         isValid = false;
       } else if (!RegExp(r"^\d+$").hasMatch(contact)) {
         errors['emergencyContact$i'] = 'Emergency contact must be numeric.';
+        isValid = false;
+      } else if (contact.trim().length != 10) {
+        errors['emergencyContact$i'] = 'Emergency contact must be 10 digits.';
         isValid = false;
       }
     }
@@ -524,11 +648,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   bool validatePage2() {
     bool isValid = true;
     errors.clear();
-
-    if (bloodController.text.isEmpty) {
-      errors['blood'] = 'Blood is required.';
-      isValid = false;
-    }
 
     if (weightController.text.isEmpty) {
       errors['weight'] = 'Weight is required.';

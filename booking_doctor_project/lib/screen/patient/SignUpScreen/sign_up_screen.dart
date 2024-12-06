@@ -58,6 +58,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } else if (passwordController.text.length < 6) {
       passwordError = 'Password must be at least 6 characters';
       isValid = false;
+    } else if (!passwordController.text.contains(RegExp(r'[0-9]')) ||
+        !passwordController.text.contains(RegExp(r'[A-Z]')) ||
+        !passwordController.text.contains(RegExp(r'[a-z]'))) {
+      passwordError =
+          'Password must contain at least 1 uppercase, 1 lowercase letter and a number';
+      isValid = false;
     }
 
     if (confirmPasswordController.text.isEmpty) {
