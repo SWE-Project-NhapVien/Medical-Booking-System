@@ -51,7 +51,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   String selectedBloodType = 'None';
   final List<String> selectedAllergy = [];
 
-
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final phoneNumberController = TextEditingController();
@@ -68,7 +67,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
   final Map<String, String> errors = {};
 
-  int curStep = 0;
+  int curStep = 1;
 
   @override
   void dispose() {
@@ -339,14 +338,13 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   setState(() {
                     emergencyContactsControllers.add(TextEditingController());
                   });
-                }, 
+                },
                 child: Text(
                   '+\tAdd',
                   textAlign: TextAlign.right,
                   style: TextStyles(context).getRegularStyle(
-                    fontWeight: FontWeight.w400,
-                    color: ColorPalette.deepBlue
-                  ),
+                      fontWeight: FontWeight.w400,
+                      color: ColorPalette.deepBlue),
                 ),
               ),
             ),
@@ -394,7 +392,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                   padding: const EdgeInsets.only(left: 8.0),
                                   child: Text(
                                     bloodTypes[index],
-                                    style: TextStyles(context).getRegularStyle(),
+                                    style:
+                                        TextStyles(context).getRegularStyle(),
                                   ),
                                 ),
                               ),
@@ -458,23 +457,22 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             SizedBox(
               height: size.height * 0.01,
             ),
-            CommonButton(
-              buttonTextWidget: Text(
-                '+\tAdd',
-                style: TextStyles(context).getTitleStyle(
-                  fontWeight: FontWeight.w400,
+            Align(
+              alignment: Alignment.topRight,
+              child: TapEffect(
+                onClick: () {
+                  setState(() {
+                    medicalHistoryControllers.add(TextEditingController());
+                  });
+                },
+                child: Text(
+                  '+\tAdd',
+                  textAlign: TextAlign.right,
+                  style: TextStyles(context).getRegularStyle(
+                      fontWeight: FontWeight.w400,
+                      color: ColorPalette.deepBlue),
                 ),
               ),
-              onTap: () {
-                setState(() {
-                  medicalHistoryControllers.add(TextEditingController());
-                });
-              },
-              width: double.infinity,
-              height: size.height * 0.055,
-              radius: 15,
-              backgroundColor: ColorPalette.lightBlueTextColor,
-              bordeColor: ColorPalette.lightBlueTextColor,
             ),
           ],
         ),
@@ -503,7 +501,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                               color: ColorPalette.blueFormColor,
                               borderRadius: BorderRadius.circular(15)),
                           child: CustDropDown(
-                              items: List<CustDropdownMenuItem<String>>.generate(
+                              items:
+                                  List<CustDropdownMenuItem<String>>.generate(
                                 allergies.length,
                                 (index) => CustDropdownMenuItem<String>(
                                   value: allergies[index],
@@ -511,7 +510,8 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                     padding: const EdgeInsets.only(left: 8.0),
                                     child: Text(
                                       allergies[index],
-                                      style: TextStyles(context).getRegularStyle(),
+                                      style:
+                                          TextStyles(context).getRegularStyle(),
                                     ),
                                   ),
                                 ),
@@ -548,23 +548,22 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             SizedBox(
               height: size.height * 0.005,
             ),
-            CommonButton(
-              buttonTextWidget: Text(
-                '+\tAdd',
-                style: TextStyles(context).getTitleStyle(
-                  fontWeight: FontWeight.w400,
+            Align(
+              alignment: Alignment.topRight,
+              child: TapEffect(
+                onClick: () {
+                  setState(() {
+                    selectedAllergy.add('');
+                  });
+                },
+                child: Text(
+                  '+\tAdd',
+                  textAlign: TextAlign.right,
+                  style: TextStyles(context).getRegularStyle(
+                      fontWeight: FontWeight.w400,
+                      color: ColorPalette.deepBlue),
                 ),
               ),
-              onTap: () {
-                setState(() {
-                  selectedAllergy.add('');
-                });
-              },
-              width: double.infinity,
-              height: size.height * 0.055,
-              radius: 15,
-              backgroundColor: ColorPalette.lightBlueTextColor,
-              bordeColor: ColorPalette.lightBlueTextColor,
             ),
           ],
         ),
