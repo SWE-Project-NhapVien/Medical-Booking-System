@@ -1,4 +1,4 @@
-import 'package:booking_doctor_project/screen/SplashScreen/splash_screen.dart';
+import 'package:booking_doctor_project/screen/ProfileScreen/profile_screen_main.dart';
 import 'package:flutter/material.dart';
 
 class MedicalBookingApp extends StatefulWidget {
@@ -39,7 +39,7 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
-      '/': (BuildContext context) => const SplashScreen(),
+      '/': (BuildContext context) => const ProfileScreen(),
     };
   }
 }

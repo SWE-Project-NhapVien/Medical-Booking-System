@@ -1,5 +1,6 @@
+import 'package:booking_doctor_project/screen/ProfileScreen/policy_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:booking_doctor_project/screen/ProfileScreen/edit_profile.dart';
+import 'package:booking_doctor_project/screen/ProfileScreen/edit_profile_screen.dart';
 
 //Width = 360
 //height = 800
@@ -29,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       body: Stack(
       children: [
-        _backButton(),
+        _backButton(context),
 
         // My Profile
         Align(
@@ -108,8 +109,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
 
               GestureDetector(
-                onTap: () => policyLayoutEvent(),
-                child: _policyLayout()
+                onTap: () => policyLayoutEvent(context),
+                child: _policyLayout(context)
               ),
 
               SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
@@ -122,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
 
               GestureDetector(
-                onTap: () => switchProfileLayoutEvent(),
+                onTap: () => switchProfileLayoutEvent(context),
                 child: _switchProfileLayout()
               ),
 
@@ -152,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // Back button
-  Widget _backButton() {
+  Widget _backButton(BuildContext context) {
   return Padding(
           padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.03889,
@@ -162,15 +163,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: Image.asset(
               'assets/images/back_icon.png', 
               fit: BoxFit.none),
-            onPressed: () => backButtonEvent(),
+            onPressed: () => backButtonEvent(context),
           )
         );
   }
 
-  void backButtonEvent() {
+  void backButtonEvent(BuildContext context) {
     // Handle back button click event here.
     //TO-DO IMPLEMENT
-    debugPrint("Back button clicked");
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Back button clicked")));
   }
 
   //Edit button
@@ -217,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   //Policy Layout
-  Widget _policyLayout() {
+  Widget _policyLayout(BuildContext context) {
     return Row(
       children: [
         Image.asset('assets/images/privacy_policy.png', fit: BoxFit.none),
@@ -231,10 +232,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ]);
   }
 
-  void policyLayoutEvent() {
+  void policyLayoutEvent(BuildContext context) {
     // Handle on tap event here.
-    //TO-DO IMPLEMENT
-    debugPrint("Policy layout clicked");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const PolicyScreen())  
+    );
   }
 
   //Help Layout
@@ -273,10 +276,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ]);
   }
 
-  void switchProfileLayoutEvent() {
+  void switchProfileLayoutEvent(BuildContext context) {
     // Handle on tap event here.
-    //TO-DO IMPLEMENT
-    debugPrint("Switch Profile Layout clicked");
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Switch Profile")));
   }
 
   //Logout Layout
