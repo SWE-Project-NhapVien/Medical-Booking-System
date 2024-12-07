@@ -54,7 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: [
                     SizedBox(
                       width: 140,
-                      height: 40,
+                      height: 36,
                       child: TextField(
                         controller: dateController,
                         style: TextStyle(color: ColorPalette.deepBlue),
@@ -90,41 +90,40 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width -
-                          MediaQuery.of(context).size.width * 0.1 -
-                          200,
-                      height: 40,
-                      child: TextField(
-                        controller: searchController,
-                        style: TextStyle(color: ColorPalette.deepBlue),
-                        cursorColor: ColorPalette.deepBlue,
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(
-                              left: 14.0), // Padding inside the text field
-                          hintText: 'Doctor name or specialization',
-                          hintStyle: TextStyle(color: ColorPalette.deepBlue),
-                          fillColor: ColorPalette.mediumBlue,
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(20.0), // Rounded border
-                            borderSide: BorderSide.none,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(20.0), // Rounded border
-                            borderSide: BorderSide.none,
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(20.0), // Rounded border
-                            borderSide: BorderSide.none,
+                    Expanded(
+                      child: SizedBox(
+                        height: 36,
+                        child: TextField(
+                          controller: searchController,
+                          style: TextStyle(color: ColorPalette.deepBlue),
+                          cursorColor: ColorPalette.deepBlue,
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.only(
+                                left: 14.0), // Padding inside the text field
+                            hintText: 'Doctor name or specialization',
+                            hintStyle: TextStyle(color: ColorPalette.deepBlue),
+                            fillColor: ColorPalette.mediumBlue,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(20.0), // Rounded border
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(20.0), // Rounded border
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(20.0), // Rounded border
+                              borderSide: BorderSide.none,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () async {
                         Navigator.push(
@@ -140,9 +139,9 @@ class _SearchScreenState extends State<SearchScreen> {
                         );
                       },
                       child: Container(
-                        width: 40.0, // Width of the button
+                        width: 36.0, // Width of the button
                         height:
-                            40.0, // Height of the button (same as width for circular shape)
+                            36.0, // Height of the button (same as width for circular shape)
                         decoration: BoxDecoration(
                           color: ColorPalette.deepBlue, // Blue background
                           shape: BoxShape.circle, // Circular shape
