@@ -15,12 +15,12 @@ class CreateProfileRequired extends CreateProfileEvent {
   final String phoneNumber;
   final String dateOfBirth;
   final String bloodType;
-  String? gender;
-  String? address;
-  final String nationalID;
-  final double height;
-  final double weight;
+  String gender;
+  String address;
+  double? height;
+  double? weight;
   final List<String> emergencyContact;
+  final String? relationship;
 
   CreateProfileRequired({
     required this.firstName,
@@ -31,10 +31,10 @@ class CreateProfileRequired extends CreateProfileEvent {
     required this.bloodType,
     this.gender = '',
     this.address = '',
-    required this.nationalID,
-    required this.height,
-    required this.weight,
+    this.height,
+    this.weight,
     required this.emergencyContact,
+    this.relationship,
   });
 
   @override
@@ -45,9 +45,6 @@ class CreateProfileRequired extends CreateProfileEvent {
         phoneNumber,
         dateOfBirth,
         bloodType,
-        nationalID,
-        height,
-        weight,
         emergencyContact,
       ];
 }

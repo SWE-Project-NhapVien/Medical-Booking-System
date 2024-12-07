@@ -54,7 +54,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final phoneNumberController = TextEditingController();
-  final nationalIDController = TextEditingController();
+  final relationshipController = TextEditingController();
   final dateOfBirthController = TextEditingController();
   final addressController = TextEditingController();
   final weightController = TextEditingController();
@@ -67,14 +67,14 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
   final Map<String, String> errors = {};
 
-  int curStep = 1;
+  int curStep = 0;
 
   @override
   void dispose() {
     firstNameController.dispose();
     lastNameController.dispose();
     phoneNumberController.dispose();
-    nationalIDController.dispose();
+    relationshipController.dispose();
     addressController.dispose();
     weightController.dispose();
     heightController.dispose();
@@ -171,7 +171,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                   bloodType: selectedBloodType,
                                   gender: selectedGender,
                                   address: addressController.text,
-                                  nationalID: nationalIDController.text,
                                   height: double.parse(heightController.text),
                                   weight: double.parse(weightController.text),
                                   emergencyContact: [
@@ -179,6 +178,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                     ...emergencyContactsControllers
                                         .map((controller) => controller.text)
                                   ],
+                                  relationship: relationshipController.text,
                                 ));
                           }
                         }
@@ -231,11 +231,10 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             isRestricted: true),
         LabelAndTextField(
             context: context,
-            label: 'National ID',
+            label: 'Relationship',
             hintText: '',
-            controller: nationalIDController,
-            errorText: errors['nationalID'] ?? '',
-            isRestricted: true),
+            controller: relationshipController,
+            errorText: '',),
         LabelAndTextField(
           context: context,
           label: 'Address',
@@ -248,7 +247,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             Expanded(
               flex: 1,
               child: SizedBox(
-                height: 91,
+                height: 101,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -310,7 +309,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             context: context,
             label: 'Emergency Contacts',
             hintText: '',
-            height: 105,
+            height: 111,
             controller: restrictedEmergencyContactController,
             errorText: errors['restrictedEmergencyContact'] ?? '',
             isRestricted: true),
@@ -320,6 +319,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             ...List.generate(emergencyContactsControllers.length, (index) {
               return AdditionTextField(
                 controller: emergencyContactsControllers[index],
+                errorText: errors['emergencyContact$index'] ?? '',
                 onRemove: () {
                   setState(() {
                     emergencyContactsControllers.removeAt(index);
@@ -329,7 +329,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             }),
             if (emergencyContactsControllers.isNotEmpty)
               SizedBox(
-                height: size.height * 0.01,
+                height: size.height * 0.00,
               ),
             Align(
               alignment: Alignment.topRight,
@@ -418,8 +418,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   hintText: '',
                   controller: weightController,
                   errorText: errors['weight'] ?? '',
-                  suffixText: 'kg',
-                  isRestricted: true),
+                  suffixText: 'kg'),
             ),
             SizedBox(width: size.width * 0.02),
             Expanded(
@@ -429,8 +428,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                   hintText: '',
                   controller: heightController,
                   errorText: errors['height'] ?? '',
-                  suffixText: 'cm',
-                  isRestricted: true),
+                  suffixText: 'cm'),
             )
           ],
         ),
@@ -447,6 +445,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             ...List.generate(medicalHistoryControllers.length, (index) {
               return AdditionTextField(
                 controller: medicalHistoryControllers[index],
+                errorText: '',
                 onRemove: () {
                   setState(() {
                     medicalHistoryControllers.removeAt(index);
@@ -602,10 +601,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       isValid = false;
     }
 
-    if (nationalIDController.text.isEmpty) {
-      errors['nationalID'] = 'National ID is required.';
-      isValid = false;
-    }
 
     if (dateOfBirthController.text.isEmpty) {
       errors['dateOfBirth'] = 'Date of birth is required.';
@@ -648,18 +643,12 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     bool isValid = true;
     errors.clear();
 
-    if (weightController.text.isEmpty) {
-      errors['weight'] = 'Weight is required.';
-      isValid = false;
-    } else if (!RegExp(r"^\d+$").hasMatch(weightController.text)) {
+    if (!RegExp(r"^\d+$").hasMatch(weightController.text)) {
       errors['weight'] = 'Weight must be numeric.';
       isValid = false;
     }
 
-    if (heightController.text.isEmpty) {
-      errors['height'] = 'Height is required.';
-      isValid = false;
-    } else if (!RegExp(r"^\d+$").hasMatch(heightController.text)) {
+    if (!RegExp(r"^\d+$").hasMatch(heightController.text)) {
       errors['height'] = 'Height must be numeric.';
       isValid = false;
     }
@@ -673,33 +662,34 @@ class AdditionTextField extends StatelessWidget {
   const AdditionTextField({
     super.key,
     required this.controller,
+    required this.errorText,
     required this.onRemove,
   });
 
   final TextEditingController controller;
   final VoidCallback onRemove;
+  final String errorText;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Row(
       children: [
-        CommonTextField(
-          textEditingController: controller,
-          contentPadding: const EdgeInsets.all(14),
-          textFieldPadding: const EdgeInsets.only(top: 5, bottom: 2),
-          radius: 15,
-          hintText: '',
+        Expanded(
+          child: CommonTextField(
+            textEditingController: controller,
+            contentPadding: const EdgeInsets.all(14),
+            textFieldPadding: const EdgeInsets.only(top: 5, bottom: 2),
+            radius: 15,
+            hintText: '',
+            errorText: errorText,
+          ),
         ),
-        Positioned(
-          right: 0,
-          top: 5,
-          child: IconButton(
-            onPressed: onRemove,
-            icon: Icon(
-              Icons.close,
-              color: ColorPalette.deepBlue,
-              size: 15,
-            ),
+        IconButton(
+          onPressed: onRemove,
+          icon: Icon(
+            Icons.close,
+            color: ColorPalette.deepBlue,
+            size: 15,
           ),
         ),
       ],

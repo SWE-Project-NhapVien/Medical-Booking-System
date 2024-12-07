@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:booking_doctor_project/services/authentication/auth_services.dart';
 import 'package:equatable/equatable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -21,7 +20,7 @@ class CreateProfileBloc extends Bloc<CreateProfileEvent, CreateProfileState> {
           'p_blood_type': event.bloodType,
           'p_gender': event.gender,
           'p_address': event.address,
-          'p_national_id': event.nationalID,
+          'p_relationship': event.relationship
         });
         emit(CreateProfileSuccess());
       } catch (e) {

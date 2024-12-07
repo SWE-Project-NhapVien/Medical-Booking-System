@@ -26,7 +26,7 @@ class DateOfBirthPickerState extends State<DateOfBirthPicker> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return SizedBox(
-      height: 91,
+      height: 101,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
