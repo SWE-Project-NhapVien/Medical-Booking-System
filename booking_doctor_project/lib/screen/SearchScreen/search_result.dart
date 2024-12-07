@@ -239,22 +239,50 @@ class ResultsView extends StatelessWidget {
                                   .replaceAll('[', '')
                                   .replaceAll(']', '')),
                               const Spacer(),
-                              Container(
-                                width: 60.0, // Width of the button
-                                height:
-                                    28.0, // Height of the button (same as width for circular shape)
-                                decoration: BoxDecoration(
-                                  color: ColorPalette.deepBlue,
-                                  borderRadius: BorderRadius.circular(
-                                      20.0), // Circular shape
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Info',
-                                    style: TextStyle(
-                                        color: ColorPalette.whiteColor),
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: Container(
+                                      width: 60.0, // Width of the button
+                                      height:
+                                          28.0, // Height of the button (same as width for circular shape)
+                                      decoration: BoxDecoration(
+                                        color: ColorPalette.deepBlue,
+                                        borderRadius: BorderRadius.circular(
+                                            20.0), // Circular shape
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Info',
+                                          style: TextStyle(
+                                              color: ColorPalette.whiteColor),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(width: 10),
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: Container(
+                                      width: 160, // Width of the button
+                                      height:
+                                          28.0, // Height of the button (same as width for circular shape)
+                                      decoration: BoxDecoration(
+                                        color: ColorPalette.deepBlue,
+                                        borderRadius: BorderRadius.circular(
+                                            20.0), // Circular shape
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Book Appointment',
+                                          style: TextStyle(
+                                              color: ColorPalette.whiteColor),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 10),
                             ],

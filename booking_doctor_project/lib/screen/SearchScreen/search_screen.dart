@@ -102,7 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.only(
                               left: 14.0), // Padding inside the text field
-                          hintText: 'Search by doctor name or specialty',
+                          hintText: 'Doctor name or specialization',
                           hintStyle: TextStyle(color: ColorPalette.deepBlue),
                           fillColor: ColorPalette.mediumBlue,
                           filled: true,
