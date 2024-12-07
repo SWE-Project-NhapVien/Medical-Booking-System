@@ -10,4 +10,5 @@ class ColorPalette {
   static Color get lightBlue => const Color(0xFFECF1FF);
   static Color get completeButtonColor => const Color(0xFF8AFF73);
   static Color get cancelledButtonColor => const Color(0xFFFF9898);
+  static Color get superDeepBlue => const Color(0xFF00278C);
 }
