@@ -26,4 +26,8 @@ class NavigationServices {
   Future<dynamic> pushCompleteProfileScreen() async {
     return _pushMaterialPageRoute(const CreateProfileScreen());
   }
+
+  // Future<dynamic> pushNotificationScreen(List notiList) async {
+  //   return _pushMaterialPageRoute(NotificationScreen(notiList: notiList));
+  // }
 }
