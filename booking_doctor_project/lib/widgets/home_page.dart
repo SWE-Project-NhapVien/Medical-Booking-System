@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int myCurrentIndex = 0;
   List pages = const [
-    HomeScreen(),
+    HomeScreenTmp(),
     ChatScreen1(),
     ChatScreen2(),
     ChatScreen3(),

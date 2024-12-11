@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/screen/Notification/notification_screen.dart';
 import 'package:booking_doctor_project/screen/patient/CreateProfileScreen/create_profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class NavigationServices {
     return _pushMaterialPageRoute(const CreateProfileScreen());
   }
 
-  // Future<dynamic> pushNotificationScreen(List notiList) async {
-  //   return _pushMaterialPageRoute(NotificationScreen(notiList: notiList));
-  // }
+  Future<dynamic> pushNotificationScreen(List<String> notiList) async {
+    return _pushMaterialPageRoute(NotificationScreen(notiId: notiList));
+  }
 }

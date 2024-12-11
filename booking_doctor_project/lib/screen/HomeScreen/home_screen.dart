@@ -4,6 +4,7 @@ import 'package:booking_doctor_project/bloc/Appointment/SpecificAppointment/spec
 import 'package:booking_doctor_project/bloc/patient/ProfileInfo/profile_info_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/ProfileInfo/profile_info_event.dart';
 import 'package:booking_doctor_project/bloc/patient/ProfileInfo/profile_info_state.dart';
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:lottie/lottie.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreenTmp extends StatelessWidget {
+  const HomeScreenTmp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +26,24 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class HomeScreenView extends StatelessWidget {
+class HomeScreenView extends StatefulWidget {
   final String profileId;
   const HomeScreenView({super.key, required this.profileId});
 
   @override
-  Widget build(BuildContext context) {
-    final bloc = context.read<GetProfileInfoBloc>();
-    bloc.add(GetProfileInfoEvent(profileId: profileId));
+  State<HomeScreenView> createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreenView> {
+  @override
+  void didChangeDependencies() {
+    context.read<GetProfileInfoBloc>().add(
+        GetProfileInfoEvent(profileId: 'ef48f364-1e9a-4c86-b490-57883ffcbc59'));
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<GetProfileInfoBloc, GetProfileInfoState>(
         builder: (context, state) {
       if (state is GetProfileInfoLoading) {
@@ -57,14 +67,9 @@ class HomeScreenView extends StatelessWidget {
           }
         }
 
-        List notiList = [];
+        List<String> notiList = [];
         for (int i = 0; i < state.profileInfo.length; i++) {
-          List tmp = [];
-          tmp.add(state.profileInfo[i]['notification_title']);
-          tmp.add(state.profileInfo[i]['notification_content']);
-          tmp.add(state.profileInfo[i]['notification_time']);
-          tmp.add(state.profileInfo[i]['notification_read_status']);
-          notiList.add(tmp);
+          notiList.add(state.profileInfo[i]['notification_id']);
         }
 
         return Padding(
@@ -109,8 +114,12 @@ class HomeScreenView extends StatelessWidget {
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      // NavigationServices(context)
-                      //     .pushNotificationScreen(notiList);
+                      NavigationServices(context)
+                          .pushNotificationScreen(notiList)
+                          .then((_) => context.read<GetProfileInfoBloc>().add(
+                              GetProfileInfoEvent(
+                                  profileId:
+                                      'ef48f364-1e9a-4c86-b490-57883ffcbc59')));
                     },
                     child: Container(
                       width: 36.0, // Width of the button
@@ -277,7 +286,7 @@ class UpcomingAppointmentView extends StatelessWidget {
         return Column(
           children: [
             Container(
-              height: 160,
+              height: 170,
               decoration: BoxDecoration(
                 color: ColorPalette.mediumBlue,
                 borderRadius: BorderRadius.circular(20),
@@ -328,7 +337,7 @@ class UpcomingAppointmentView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(
-                      height: 5,
+                      height: 10,
                     ),
                     Row(
                       children: [
@@ -394,7 +403,7 @@ class UpcomingAppointmentView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(
-                      height: 5,
+                      height: 10,
                     ),
                     Row(
                       children: [

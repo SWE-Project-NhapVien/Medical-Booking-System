@@ -6,10 +6,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class GetProfileInfoBloc
     extends Bloc<GetProfileInfoEvent, GetProfileInfoState> {
   GetProfileInfoBloc() : super(GetProfileInfoInitial()) {
-    on<GetProfileInfoEvent>(_onFetchProfileInfo);
+    on<GetProfileInfoEvent>(onFetchProfileInfo);
   }
 
-  Future<void> _onFetchProfileInfo(
+  Future<void> onFetchProfileInfo(
       GetProfileInfoEvent event, Emitter<GetProfileInfoState> emit) async {
     emit(GetProfileInfoLoading());
     try {
