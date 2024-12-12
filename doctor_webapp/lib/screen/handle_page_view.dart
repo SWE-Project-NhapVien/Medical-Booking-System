@@ -5,17 +5,18 @@ import 'package:booking_doctor_project/utils/enum.dart';
 import 'package:booking_doctor_project/utils/local_files.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lottie/lottie.dart';
 
-import '../screen/profile/profile_screen.dart';
+import 'profile/profile_screen.dart';
 
-class CommonNavigationBar extends StatefulWidget {
-  const CommonNavigationBar({super.key});
+class HandlePageView extends StatefulWidget {
+  const HandlePageView({super.key});
 
   @override
-  State<CommonNavigationBar> createState() => _CommonNavigationBarState();
+  State<HandlePageView> createState() => _HandlePageViewState();
 }
 
-class _CommonNavigationBarState extends State<CommonNavigationBar> {
+class _HandlePageViewState extends State<HandlePageView> {
   late Widget _screen;
 
   late double _sideBarHeight;
@@ -36,11 +37,24 @@ class _CommonNavigationBarState extends State<CommonNavigationBar> {
 
   late NavigatorType _navigatorType;
 
+  late bool isFirstTime;
+
   @override
   void initState() {
     _navigatorType = NavigatorType.home;
-    _screen = const HomeScreen();
+    isFirstTime = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      starLoadingScreen();
+    });
     super.initState();
+  }
+
+  Future starLoadingScreen() async {
+    await Future.delayed(const Duration(milliseconds: 400));
+    setState(() {
+      isFirstTime = false;
+      _screen = const HomeScreen();
+    });
   }
 
   @override
@@ -65,16 +79,28 @@ class _CommonNavigationBarState extends State<CommonNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    double lottieSize = MediaQuery.of(context).size.width * 0.6;
     return Scaffold(
         body: Row(
       children: [
         _buildSideBar(),
-        Expanded(
-          child: _screen,
-        ),
+        isFirstTime
+            ? Center(
+                child: AlertDialog(
+                  backgroundColor: Colors.transparent,
+                  content: Lottie.asset(
+                    Localfiles.loading,
+                    width: lottieSize,
+                  ),
+                ),
+              )
+            : Expanded(
+                child: _screen,
+              ),
       ],
     ));
   }
+
   Widget _buildSideBar() {
     return Stack(
       children: [
