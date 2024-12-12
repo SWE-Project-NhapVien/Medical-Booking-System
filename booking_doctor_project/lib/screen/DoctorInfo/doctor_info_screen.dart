@@ -2,10 +2,12 @@ import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_bloc.dart';
 import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_event.dart';
 import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_state.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
+import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:booking_doctor_project/widgets/comon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 class DoctorInfoScreen extends StatelessWidget {
   final String doctorId;
@@ -47,8 +49,14 @@ class DoctorInfoView extends StatelessWidget {
     return BlocBuilder<GetDoctorInfoBloc, GetDoctorInfoState>(
       builder: (context, state) {
         if (state is GetDoctorInfoLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: AlertDialog(
+              backgroundColor: Colors.transparent,
+              content: Lottie.asset(
+                Localfiles.loading,
+                width: 100,
+              ),
+            ),
           );
         } else if (state is GetDoctorInfoSuccess) {
           return Padding(
@@ -149,36 +157,16 @@ class DoctorInfoView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text(
-                  'Education & Certification',
-                  style: TextStyle(
-                    color: ColorPalette.deepBlue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-                Text(state.doctorInfo[0]['education']),
-                const SizedBox(height: 10),
-                Text(
-                  'Career Path',
-                  style: TextStyle(
-                    color: ColorPalette.deepBlue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-                Text(state.doctorInfo[0]['career']),
-                const SizedBox(height: 10),
-                Text(
-                  'General description',
-                  style: TextStyle(
-                    color: ColorPalette.deepBlue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-                Text(state.doctorInfo[0]['description']),
-                const SizedBox(height: 40),
+                SectionView(
+                    title: 'Education & Certification',
+                    content: state.doctorInfo[0]['education']),
+                SectionView(
+                    title: 'Career Path',
+                    content: state.doctorInfo[0]['career']),
+                SectionView(
+                    title: 'General description',
+                    content: state.doctorInfo[0]['description']),
+                const SizedBox(height: 30),
                 Center(
                   child: SizedBox(
                     width: 180,
@@ -215,6 +203,31 @@ class DoctorInfoView extends StatelessWidget {
         }
         return const SizedBox.shrink();
       },
+    );
+  }
+}
+
+class SectionView extends StatelessWidget {
+  final String title;
+  final String content;
+  const SectionView({super.key, required this.title, required this.content});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            color: ColorPalette.deepBlue,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        Text(content),
+        const SizedBox(height: 10),
+      ],
     );
   }
 }
