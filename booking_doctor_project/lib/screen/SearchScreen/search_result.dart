@@ -191,6 +191,15 @@ class ResultsView extends StatelessWidget {
         } else {
           result = state.doctors;
         }
+        if (result.isEmpty) {
+          return Center(
+            child: Text(
+              'No results found',
+              style: TextStyle(color: ColorPalette.greyColor),
+            ),
+          );
+        }
+
         return SizedBox(
             height: MediaQuery.of(context).size.height - 300,
             child: ListView.builder(
