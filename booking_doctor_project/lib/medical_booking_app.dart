@@ -46,7 +46,8 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
-      '/': (BuildContext context) => const SplashScreen(),
+      '/': (BuildContext context) => const DoctorInfoScreen(
+          doctorId: '00000000-0000-0000-0000-000000000002'),
     };
   }
 }
