@@ -248,7 +248,7 @@ class ResultsView extends StatelessWidget {
                                       height:
                                           28.0, // Height of the button (same as width for circular shape)
                                       decoration: BoxDecoration(
-                                        color: ColorPalette.deepBlue,
+                                        color: ColorPalette.whiteColor,
                                         borderRadius: BorderRadius.circular(
                                             20.0), // Circular shape
                                       ),
@@ -256,7 +256,7 @@ class ResultsView extends StatelessWidget {
                                         child: Text(
                                           'Info',
                                           style: TextStyle(
-                                              color: ColorPalette.whiteColor),
+                                              color: ColorPalette.deepBlue),
                                         ),
                                       ),
                                     ),
