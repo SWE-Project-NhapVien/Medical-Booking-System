@@ -1,3 +1,5 @@
+import 'package:booking_doctor_project/screen/Payment/payment.dart';
+import 'package:booking_doctor_project/screen/Payment/payment_succesful.dart';
 import 'package:booking_doctor_project/screen/Payment/ready_payment.dart';
 import 'package:booking_doctor_project/screen/patient/CreateProfileScreen/create_profile_screen.dart';
 import 'package:booking_doctor_project/screen/patient/ForgotPasswordScreen/forgot_password_screen.dart';
@@ -46,7 +48,7 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
-      '/': (BuildContext context) => const ReadyPaymentScreen(),
+      '/': (BuildContext context) => const PaymentSuccesfulScreen(),
     };
   }
 }

@@ -1,5 +1,6 @@
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/text_styles.dart';
+import 'package:booking_doctor_project/widgets/common_button.dart';
 import 'package:flutter/material.dart';
 
 class ReadyPaymentScreen extends StatelessWidget {
@@ -93,7 +94,77 @@ class ReadyPaymentScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                        const Spacer(),
+                        Container(
+                          height: 28,
+                          width: 28,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: ColorPalette.lightBlue,
+                          ),
+                          child: Icon(
+                            Icons.star,
+                            color: ColorPalette.deepBlue,
+                          ),
+                        ),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Divider(
+                      color: ColorPalette.deepBlue,
+                      thickness: 2,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        const SizedBox(width: 10),
+                        Text('Date / Hour',
+                            style: TextStyle(color: ColorPalette.deepBlue)),
+                        const Spacer(),
+                        Text('Month 24, Year / 10:00 AM',
+                            style: TextStyle(color: ColorPalette.blackColor)),
+                        const SizedBox(width: 10),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        const SizedBox(width: 10),
+                        Text('Duration',
+                            style: TextStyle(color: ColorPalette.deepBlue)),
+                        const Spacer(),
+                        Text('30 minutes',
+                            style: TextStyle(color: ColorPalette.blackColor)),
+                        const SizedBox(width: 10),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Divider(
+                      color: ColorPalette.deepBlue,
+                      thickness: 2,
+                    ),
+                    const SizedBox(
+                      height: 80,
+                    ),
+                    CommonButton(
+                      height: 48,
+                      onTap: () {},
+                      backgroundColor: ColorPalette.deepBlue,
+                      buttonTextWidget: Text(
+                        'Pay Now',
+                        style: TextStyle(
+                          color: ColorPalette.whiteColor,
+                          fontSize: 24,
+                        ),
+                      ),
                     ),
                   ],
                 ),
