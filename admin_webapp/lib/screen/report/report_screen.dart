@@ -1,6 +1,7 @@
 import 'package:booking_doctor_project/bloc/report/report_event.dart';
+import 'package:booking_doctor_project/screen/report/BarChart/bar_chart_weekly_appointment.dart';
 import 'package:booking_doctor_project/screen/report/NumberIterm/card_item.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:booking_doctor_project/screen/report/RecentAppointments/recent_appointment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -27,7 +28,7 @@ class ReportScreen extends StatelessWidget {
           create: (context) => ReportBloc(
             reportRepository: context.read<ReportRepository>(),
           ),
-          child: ReportScreenHelper(),
+          child: const ReportScreenHelper(),
         ));
   }
 }
@@ -119,32 +120,30 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
                             ),
                           ],
                         ),
-
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // line
                             Expanded(
                               flex: 2,
-                              child: Container(
-                                color: Colors.blue,
-                                width: 80,
-                                height: 100,
+                              child: Column(
+                                children: [
+                                  BarChartWeeklyAppointment(
+                                    appointment: report.appointments,
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  RecentAppointment(
+                                      appointmentList: report.appointments),
+                                ],
                               ),
                             ),
-
-                            //pie
                             Expanded(
+                              flex: 1,
                               child: PieChartOrderStatus(
                                 appointments: report.appointments,
                               ),
                             )
-                            // Expanded(
-                            //   child: Container(
-                            //     color: Colors.black,
-                            //     height: 150,
-                            //     width: 100,
-                            //   ),
-                            // ),
                           ],
                         ),
 
