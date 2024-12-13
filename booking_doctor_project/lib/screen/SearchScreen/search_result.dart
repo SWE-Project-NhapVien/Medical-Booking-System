@@ -191,14 +191,6 @@ class ResultsView extends StatelessWidget {
         } else {
           result = state.doctors;
         }
-        if (result.isEmpty) {
-          return Center(
-            child: Text(
-              'No results found',
-              style: TextStyle(color: ColorPalette.greyColor),
-            ),
-          );
-        }
 
         return SizedBox(
             height: MediaQuery.of(context).size.height - 300,
@@ -301,6 +293,13 @@ class ResultsView extends StatelessWidget {
                     ),
                   );
                 }));
+      } else if (state is SearchError) {
+        return Center(
+          child: Text(
+            'No results found',
+            style: TextStyle(color: ColorPalette.greyColor),
+          ),
+        );
       }
       return const SizedBox.shrink();
     });
