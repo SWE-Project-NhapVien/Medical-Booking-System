@@ -1,5 +1,7 @@
-import 'package:booking_doctor_project/screen/ProfileScreen/profile_screen_main.dart';
+import 'package:booking_doctor_project/screen/patient/ProfileScreen/profile_screen_main.dart';
 import 'package:flutter/material.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MedicalBookingApp extends StatefulWidget {
   const MedicalBookingApp({super.key});
@@ -16,6 +18,7 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
         title: 'Medical Booking App',
         debugShowCheckedModeBanner: false,
         routes: _buildRoutes(),
+        navigatorKey: navigatorKey,
         builder: (BuildContext context, Widget? child) {
           return Directionality(
               textDirection: TextDirection.ltr,
