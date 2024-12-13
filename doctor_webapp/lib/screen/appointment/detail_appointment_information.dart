@@ -1,4 +1,5 @@
 import 'package:booking_doctor_project/utils/color_palette.dart';
+import 'package:booking_doctor_project/utils/fixed_web_component.dart';
 import 'package:flutter/material.dart';
 
 class DetailAppointmentInformation extends StatelessWidget {
@@ -16,11 +17,11 @@ class DetailAppointmentInformation extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage(''), // Replace with your image
+              backgroundImage: NetworkImage(FixedWebComponent.defaultPatientAvatar), // Replace with your image
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               "Appointment name",
               style: TextStyle(

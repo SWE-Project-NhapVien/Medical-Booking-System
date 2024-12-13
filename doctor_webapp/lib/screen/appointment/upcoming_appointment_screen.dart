@@ -6,7 +6,7 @@ import 'package:lottie/lottie.dart';
 
 import '../../bloc/Appointment/appointment_bloc.dart';
 import '../../bloc/Appointment/appointment_event.dart';
-import '../../utils/local_files.dart';
+import '../../utils/fixed_web_component.dart';
 
 class UpcomingAppointmentScreen extends StatefulWidget {
   const UpcomingAppointmentScreen({super.key});
@@ -35,7 +35,7 @@ class _UpcomingAppointmentScreenState extends State<UpcomingAppointmentScreen> {
           child: AlertDialog(
             backgroundColor: Colors.transparent,
             content: Lottie.asset(
-              Localfiles.loading,
+              FixedWebComponent.loading,
               width: lottieSize,
             ),
           ),
@@ -51,7 +51,8 @@ class _UpcomingAppointmentScreenState extends State<UpcomingAppointmentScreen> {
                   patientFullName: e.patientFullName,
                   date: e.date,
                   time: e.time,
-                  patientAvatarURL: '',
+                  patientAvatarURL: e.patientAvatarURL ??
+                      FixedWebComponent.defaultPatientAvatar,
                   onTap: () {},
                 ))
             .toList();
