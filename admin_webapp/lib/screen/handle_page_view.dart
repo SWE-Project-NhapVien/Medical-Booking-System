@@ -2,11 +2,9 @@ import 'package:booking_doctor_project/screen/report/report_screen.dart';
 import 'package:booking_doctor_project/screen/schedule/schedule_screen.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/enum.dart';
-import 'package:booking_doctor_project/utils/local_files.dart';
+import 'package:booking_doctor_project/utils/fixed_web_component.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
-
 import 'home/home_screen.dart';
 
 class HandlePageView extends StatefulWidget {
@@ -117,7 +115,7 @@ class _HandlePageViewState extends State<HandlePageView> {
             top: _topPadding,
             left: _leftPaddingComponent,
             child: _topPadding > 6
-                ? Image.asset(
+                ? Image.network(
                     FixedWebComponent.logo,
                     height: _sideBarComponentHeight,
                     width: _sideBarComponentWidth,
@@ -153,17 +151,17 @@ class _HandlePageViewState extends State<HandlePageView> {
         Positioned(
           top: _topMainComponentPadding + _mainComponentDistance * 2,
           left: _leftPaddingComponent - 2,
-          child: _buildSideBarComponent(
-              icon: Icons.data_exploration,
-              isSelected: _navigatorType == NavigatorType.report,
-              onClick: () {
-                if (_navigatorType != NavigatorType.report) {
-                  setState(() {
-                    _screen = const ReportScreen();
-                    _navigatorType = NavigatorType.report;
-                  });
-                }
-              }),
+          child:  _buildSideBarComponent(
+                  icon: Icons.data_exploration,
+                  isSelected: _navigatorType == NavigatorType.report,
+                  onClick: () {
+                    if (_navigatorType != NavigatorType.report) {
+                      setState(() {
+                        _screen = const ReportScreen();
+                        _navigatorType = NavigatorType.report;
+                      });
+                    }
+                  }),
         ),
         Positioned(
           left: _leftPaddingComponent,

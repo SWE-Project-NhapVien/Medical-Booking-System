@@ -7,9 +7,9 @@ class Appointment {
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
-      status: json['status'],
+      status: json['appointment_status'],
       price: json['price'],
-      date: json['date'],
+      date: json['created_at'] as String,
     );
   }
 }

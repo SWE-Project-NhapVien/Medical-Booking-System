@@ -6,8 +6,8 @@ import '../../class/appointment.dart';
 class ReportRepository {
   final ReportDataProvider _ReportDataProvider;
 
-  ReportRepository({required ReportDataProvider ReportDataProvider})
-      : _ReportDataProvider = ReportDataProvider;
+  ReportRepository({required ReportDataProvider reportDataProvider})
+      : _ReportDataProvider = reportDataProvider;
 
   Future<Report> getReportData() async {
     try {

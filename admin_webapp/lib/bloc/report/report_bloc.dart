@@ -6,10 +6,10 @@ import 'report_event.dart';
 import 'report_state.dart';
 
 class ReportBloc extends Bloc<ReportEvent, ReportState> {
-  final ReportRepository _ReportRepository;
+  final ReportRepository _reportRepository;
 
-  ReportBloc({required ReportRepository ReportRepository})
-      : _ReportRepository = ReportRepository,
+  ReportBloc({required ReportRepository reportRepository})
+      : _reportRepository = reportRepository,
         super(InitReportState()) {
     on<RequestReportEvent>(_requestReportEvent);
   }
@@ -18,7 +18,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
       RequestReportEvent event, Emitter<ReportState> emit) async {
     emit(LoadingReportState());
     try {
-      final Report reportData = await _ReportRepository.getReportData();
+      final Report reportData = await _reportRepository.getReportData();
       emit(SucessReportState(report: reportData));
     } catch (e) {
       emit(ErrorReportState(message: e.toString()));
