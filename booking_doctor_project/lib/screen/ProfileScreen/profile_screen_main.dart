@@ -197,7 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         Image.asset('assets/images/profile_info.png', fit: BoxFit.none),
         const SizedBox(width: 32), //Spacing
-        const Text("Profile Info", style: TextStyle(fontFamily: "League Spartan", fontSize: 20)),
+        const Text("Edit Profile", style: TextStyle(fontFamily: "League Spartan", fontSize: 20)),
         const Spacer(),
         Padding(
           padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.0861111),

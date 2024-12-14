@@ -114,7 +114,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Column(children: [
                 CommonAppBarWithTitle(
-                  title: 'Edit A Profile',
+                  title: 'Edit Profile',
                   titleSize: 32,
                   topPadding: MediaQuery.of(context).padding.top,
                   prefixIconData: Icons.arrow_back_ios_new_rounded,
