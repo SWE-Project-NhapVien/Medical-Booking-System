@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/widgets/home_page.dart';
 import 'package:booking_doctor_project/screen/patient/SplashScreen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
