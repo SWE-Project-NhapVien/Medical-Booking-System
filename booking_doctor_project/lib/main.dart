@@ -1,6 +1,8 @@
+import 'package:booking_doctor_project/bloc/patient/CancelAppointment/cancel_appointment_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/CreateProfile/create_profile_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/FetchProfile/fetch_profile_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/ForgotPassword/forgot_password_bloc.dart';
+import 'package:booking_doctor_project/bloc/patient/GetAProfile/get_a_profile_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/LogIn/log_in_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/ResetPassword/reset_password_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/SignUp/sign_up_bloc.dart';
@@ -42,6 +44,9 @@ Widget _setAllProviders() {
       BlocProvider<FetchProfileBloc>(create: (context) => FetchProfileBloc()),
       BlocProvider<CreateProfileBloc>(create: (context) => CreateProfileBloc()),
       BlocProvider<ResetPasswordBloc>(create: (context) => ResetPasswordBloc()),
+      BlocProvider<GetAProfileBloc>(create: (context) => GetAProfileBloc()),
+      BlocProvider<CancelAppointmentBloc>(
+            create: (context) => CancelAppointmentBloc()),
     ],
     child: const MedicalBookingApp(),
   );

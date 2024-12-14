@@ -1,3 +1,6 @@
+import 'package:booking_doctor_project/class/appointment.dart';
+import 'package:booking_doctor_project/screen/AppointmentScreen/appointment_detail.dart';
+import 'package:booking_doctor_project/screen/AppointmentScreen/appointment_screen.dart';
 import 'package:booking_doctor_project/screen/patient/CreateProfileScreen/create_profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -25,5 +28,13 @@ class NavigationServices {
 
   Future<dynamic> pushCompleteProfileScreen() async {
     return _pushMaterialPageRoute(const CreateProfileScreen());
+  }
+
+  Future<dynamic> pushAppointmentDetail({required Appointment appointment}) async {
+    return _pushMaterialPageRoute(AppointmentDetail(appointment: appointment,));
+  }
+
+  Future<dynamic> pushAppointmentScreen() async {
+    return _pushMaterialPageRoute(const AppointmentScreen());
   }
 }

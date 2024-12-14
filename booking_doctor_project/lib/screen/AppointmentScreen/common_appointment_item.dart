@@ -1,6 +1,9 @@
+import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/utils/text_styles.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
+import 'package:booking_doctor_project/widgets/tap_effect.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AppointmentCard extends StatelessWidget {
   final String doctorName;
@@ -8,9 +11,10 @@ class AppointmentCard extends StatelessWidget {
   final String date;
   final String time;
   final String doctorImage;
+  String price;
   final VoidCallback onTap;
 
-  const AppointmentCard({
+  AppointmentCard({
     super.key,
     required this.doctorName,
     required this.appointmentName,
@@ -18,47 +22,56 @@ class AppointmentCard extends StatelessWidget {
     required this.time,
     required this.onTap,
     required this.doctorImage,
+    this.price = '',
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onTap(),
+    final size = MediaQuery.of(context).size;
+    return TapEffect(
+      onClick: () => onTap(),
       child: Card(
         color: ColorPalette.mediumBlue,
         margin: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.height * 0.02,
-          horizontal: MediaQuery.of(context).size.width * 0.02,
+          vertical: size.height * 0.02,
+          horizontal: size.width * 0.02,
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Padding(
-          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.008),
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.03, vertical: size.height * 0.02),
           child: Column(
             children: [
               Row(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 32,
-                    backgroundImage:
-                        AssetImage(''), // Replace with a valid image
+                    backgroundImage: doctorImage.isNotEmpty
+                        ? NetworkImage(doctorImage)
+                        : const AssetImage(Localfiles.defaultProfilePicture),
                   ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.008),
+                  SizedBox(width: size.width * 0.03),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         doctorName,
-                        style: TextStyles(context).getBoldStyle(
-                            fontSize: 16, color: ColorPalette.deepBlue),
+                        style: TextStyles(context).getTitleStyle(
+                            size: 20,
+                            fontWeight: FontWeight.w500,
+                            color: ColorPalette.deepBlue),
                       ),
-                      Text(appointmentName),
+                      Text(
+                        appointmentName,
+                        style: TextStyles(context)
+                            .getRegularStyle(fontWeight: FontWeight.w300),
+                      ),
                     ],
                   ),
                 ],
               ),
               Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.width * 0.008),
+                padding: EdgeInsets.only(top: size.height * 0.02),
                 child: Row(
                   children: [
                     _schedule(
@@ -68,6 +81,10 @@ class AppointmentCard extends StatelessWidget {
                     _schedule(
                         iconData: Icons.access_time,
                         info: time,
+                        context: context),
+                    _schedule(
+                        iconData: Icons.money_off_csred_rounded,
+                        info: price.isNotEmpty ? formatPrice(price) : '',
                         context: context),
                   ],
                 ),
@@ -90,15 +107,23 @@ class AppointmentCard extends StatelessWidget {
         color: ColorPalette.whiteColor,
         borderRadius: BorderRadius.circular(13.0),
       ),
-      child: Row(
-        children: [
-          Icon(iconData, color: ColorPalette.deepBlue, size: 12.0),
-          const SizedBox(width: 6.0),
-          Text(info,
-              style: TextStyles(context)
-                  .getRegularStyle(size: 12, color: ColorPalette.deepBlue)),
-        ],
+      child: Center(
+        child: Row(
+          children: [
+            Icon(iconData, color: ColorPalette.deepBlue, size: 12.0),
+            const SizedBox(width: 6.0),
+            Text(info,
+                style: TextStyles(context)
+                    .getRegularStyle(size: 14, color: ColorPalette.deepBlue)),
+          ],
+        ),
       ),
     );
   }
+}
+
+String formatPrice(String price) {
+  if (price.isEmpty) return '';
+  final formatter = NumberFormat('#,##0', 'en_US');
+  return '${formatter.format(int.parse(price))} VND';
 }

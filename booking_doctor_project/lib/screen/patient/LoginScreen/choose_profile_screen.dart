@@ -1,4 +1,6 @@
 import 'package:booking_doctor_project/bloc/patient/FetchProfile/fetch_profile_bloc.dart';
+import 'package:booking_doctor_project/bloc/patient/GetAProfile/get_a_profile_bloc.dart';
+import 'package:booking_doctor_project/class/global_profile.dart';
 import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/widgets/common_dialogs.dart';
@@ -32,95 +34,119 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: ColorPalette.whiteColor,
-      body: BlocListener<FetchProfileBloc, FetchProfileState>(
-        listener: (context, state) {
-          if (state is FetchProfileSuccess) {
-            setState(() {
-              profiles = state.profiles;
-            });
-          } else if (state is FetchProfileError) {
-            Dialogs(context).showErrorDialog(message: state.error);
-          }
-        },
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<FetchProfileBloc, FetchProfileState>(
+            listener: (context, state) {
+              if (state is FetchProfileSuccess) {
+                setState(() {
+                  profiles = state.profiles;
+                });
+              } else if (state is FetchProfileError) {
+                Dialogs(context).showErrorDialog(message: state.error);
+              }
+            },
+          ),
+          BlocListener<GetAProfileBloc, GetAProfileState>(
+            listener: (context, state) {
+              if (state is GetAProfileSuccess) {
+                print(state.profile);
+                NavigationServices(context).pushAppointmentScreen();
+              } else if (state is GetAProfileError) {
+                Dialogs(context).showErrorDialog(message: state.error);
+              }
+            },
+          ),
+        ],
         child: SingleChildScrollView(
-          child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CommonAppBarWithTitle(
-                      title: 'Choose Your Profile',
-                      titleSize: 32,
-                      topPadding: MediaQuery.of(context).padding.top,
-                      prefixIconData: Icons.arrow_back_ios_new_rounded,
-                      onPrefixIconClick: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    Text(
-                      'Your Family',
-                      style: TextStyles(context).getTitleStyle(
-                          size: 20,
-                          fontWeight: FontWeight.w500,
-                          color: ColorPalette.deepBlue),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: profiles.length,
-                      itemBuilder: (context, index) {
-                        return Column(
+            child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CommonAppBarWithTitle(
+                        title: 'Choose Your Profile',
+                        titleSize: 32,
+                        topPadding: MediaQuery.of(context).padding.top,
+                        prefixIconData: Icons.arrow_back_ios_new_rounded,
+                        onPrefixIconClick: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      Text(
+                        'Your Family',
+                        style: TextStyles(context).getTitleStyle(
+                            size: 20,
+                            fontWeight: FontWeight.w500,
+                            color: ColorPalette.deepBlue),
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: profiles.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              TapEffect(
+                                onClick: () {
+                                  final selectedProfileId =
+                                      profiles[index]['profile_id'];
+                                  GlobalProfile().profileId = selectedProfileId;
+                                  // ----------------------------------
+                                  // ------- PUSH HOME SCREEN ---------
+                                  // ----------------------------------
+                                  context.read<GetAProfileBloc>().add(
+                                      GetAProfileRequired(
+                                          profileId: selectedProfileId));
+                                },
+                                child: ProfileAccount(
+                                  profileName: profiles[index]['last_name'] +
+                                      " " +
+                                      profiles[index]['first_name'],
+                                  profilePicture: profiles[index]['ava_url'] ??
+                                      Localfiles.defaultProfilePicture,
+                                  isDefaultImage:
+                                      profiles[index]['ava_url'] == null,
+                                ),
+                              ),
+                              SizedBox(
+                                height: size.height * 0.02,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: size.height * 0.02,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          NavigationServices(context)
+                              .pushCompleteProfileScreen();
+                        },
+                        child: Row(
                           children: [
-                            TapEffect(
-                              onClick: () {
-                                //
-                              },
-                              child: ProfileAccount(
-                                profileName: profiles[index]['last_name'] +
-                                    " " +
-                                    profiles[index]['first_name'],
-                                profilePicture: profiles[index]['ava_url'] ??
-                                    Localfiles.defaultProfilePicture,
-                                isDefaultImage: profiles[index]['ava_url'] == null,
+                            CircleAvatar(
+                              radius: 30,
+                              backgroundColor: ColorPalette.whiteColor,
+                              child: Icon(
+                                Icons.add,
+                                size: 50,
+                                color: ColorPalette.deepBlue,
                               ),
                             ),
                             SizedBox(
-                              height: size.height * 0.02,
+                              width: size.width * 0.05,
+                            ),
+                            Text(
+                              'Add Member',
+                              style: TextStyles(context).getRegularStyle(
+                                  color: ColorPalette.deepBlue),
                             ),
                           ],
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        NavigationServices(context).pushCompleteProfileScreen();
-                      },
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: ColorPalette.whiteColor,
-                            child: Icon(
-                              Icons.add,
-                              size: 50,
-                              color: ColorPalette.deepBlue,
-                            ),
-                          ),
-                          SizedBox(
-                            width: size.width * 0.05,
-                          ),
-                          Text(
-                            'Add Member',
-                            style: TextStyles(context)
-                                .getRegularStyle(color: ColorPalette.deepBlue),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ]))),
+                    ]))),
       ),
     );
   }
@@ -160,8 +186,8 @@ class ProfileAccount extends StatelessWidget {
         ),
         Text(
           profileName,
-          style:
-              TextStyles(context).getTitleStyle(fontWeight: FontWeight.w500, color: ColorPalette.deepBlue),
+          style: TextStyles(context).getTitleStyle(
+              fontWeight: FontWeight.w500, color: ColorPalette.deepBlue),
         ),
       ],
     );
