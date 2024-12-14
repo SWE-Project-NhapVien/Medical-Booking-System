@@ -1,12 +1,11 @@
-import 'package:booking_doctor_project/screen/appointment/appointment_screen.dart';
-import 'package:booking_doctor_project/screen/home/home_screen.dart';
+import 'package:booking_doctor_project/screen/report/report_screen.dart';
+import 'package:booking_doctor_project/screen/schedule/schedule_screen.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/enum.dart';
 import 'package:booking_doctor_project/utils/fixed_web_component.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
-import 'profile/profile_screen.dart';
+import 'home/home_screen.dart';
 
 class HandlePageView extends StatefulWidget {
   const HandlePageView({super.key});
@@ -138,25 +137,31 @@ class _HandlePageViewState extends State<HandlePageView> {
           top: _topMainComponentPadding + _mainComponentDistance,
           left: _leftPaddingComponent - 2,
           child: _buildSideBarComponent(
-            icon: Icons.calendar_month,
-            isSelected: _navigatorType == NavigatorType.appointment,
-            onClick: () => setState(() {
-              _screen = const AppointmentScreen();
-              _navigatorType = NavigatorType.appointment;
-            }),
-          ),
+              icon: Icons.calendar_month,
+              isSelected: _navigatorType == NavigatorType.schedule,
+              onClick: () {
+                if (_navigatorType != NavigatorType.schedule) {
+                  setState(() {
+                    _screen = const ScheduleScreen();
+                    _navigatorType = NavigatorType.schedule;
+                  });
+                }
+              }),
         ),
         Positioned(
           top: _topMainComponentPadding + _mainComponentDistance * 2,
           left: _leftPaddingComponent - 2,
-          child: _buildSideBarComponent(
-            icon: Icons.person,
-            isSelected: _navigatorType == NavigatorType.profile,
-            onClick: () => setState(() {
-              _screen = const ProfileScreen();
-              _navigatorType = NavigatorType.profile;
-            }),
-          ),
+          child:  _buildSideBarComponent(
+                  icon: Icons.data_exploration,
+                  isSelected: _navigatorType == NavigatorType.report,
+                  onClick: () {
+                    if (_navigatorType != NavigatorType.report) {
+                      setState(() {
+                        _screen = const ReportScreen();
+                        _navigatorType = NavigatorType.report;
+                      });
+                    }
+                  }),
         ),
         Positioned(
           left: _leftPaddingComponent,
