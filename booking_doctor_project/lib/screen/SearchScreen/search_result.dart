@@ -1,10 +1,13 @@
 import 'package:booking_doctor_project/bloc/Search/search_bloc.dart';
 import 'package:booking_doctor_project/bloc/Search/search_event.dart';
 import 'package:booking_doctor_project/bloc/Search/search_state.dart';
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
+import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 class SearchResult extends StatefulWidget {
   final String? searchQuery;
@@ -173,7 +176,15 @@ class ResultsView extends StatelessWidget {
         SearchDoctorsEvent(searchQuery: searchQuery, dateQuery: dateQuery));
     return BlocBuilder<SearchBloc, SearchState>(builder: (context, state) {
       if (state is SearchLoading) {
-        return const CircularProgressIndicator();
+        return Center(
+          child: AlertDialog(
+            backgroundColor: Colors.transparent,
+            content: Lottie.asset(
+              Localfiles.loading,
+              width: 100,
+            ),
+          ),
+        );
       } else if (state is SearchSuccess) {
         List result = [];
         if (chosenFilterOption == 1) {
@@ -243,7 +254,11 @@ class ResultsView extends StatelessWidget {
                               Row(
                                 children: [
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      NavigationServices(context)
+                                          .pushDoctorInfoScreen(
+                                              result[index]['doctor_id']);
+                                    },
                                     child: Container(
                                       width: 60.0, // Width of the button
                                       height:

@@ -1,4 +1,4 @@
-import 'package:booking_doctor_project/screen/SearchScreen/search_result.dart';
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:flutter/material.dart';
@@ -128,17 +128,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       const SizedBox(width: 10),
                       GestureDetector(
                         onTap: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SearchResult(
-                                searchQuery: searchController.text,
-                                dateQuery: dateController.text == ''
-                                    ? null
-                                    : dateController.text,
-                              ),
-                            ),
-                          );
+                          NavigationServices(context).pushSearchResultScreen(
+                              dateController.text == ''
+                                  ? null
+                                  : dateController.text,
+                              searchController.text);
                         },
                         child: Container(
                           width: 36.0, // Width of the button

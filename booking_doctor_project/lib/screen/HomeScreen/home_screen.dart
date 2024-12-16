@@ -198,26 +198,33 @@ class _HomeScreenState extends State<HomeScreenView> {
                           ),
                         ),
                         readOnly: true,
-                        onTap: () {},
+                        onTap: () {
+                          NavigationServices(context).pushSearchScreen();
+                        },
                       ),
                     ),
                   ),
                   const SizedBox(
                     width: 10,
                   ),
-                  Container(
-                    width: 36.0, // Width of the button
-                    height:
-                        36.0, // Height of the button (same as width for circular shape)
-                    decoration: BoxDecoration(
-                      color: ColorPalette.deepBlue, // Blue background
-                      shape: BoxShape.circle, // Circular shape
+                  GestureDetector(
+                    child: Container(
+                      width: 36.0, // Width of the button
+                      height:
+                          36.0, // Height of the button (same as width for circular shape)
+                      decoration: BoxDecoration(
+                        color: ColorPalette.deepBlue, // Blue background
+                        shape: BoxShape.circle, // Circular shape
+                      ),
+                      child: const Icon(
+                        Icons.search, // Magnifying glass icon
+                        color: Colors.white, // White color for the icon
+                        size: 20.0, // Icon size
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.search, // Magnifying glass icon
-                      color: Colors.white, // White color for the icon
-                      size: 20.0, // Icon size
-                    ),
+                    onTap: () {
+                      NavigationServices(context).pushSearchScreen();
+                    },
                   ),
                 ],
               ),
