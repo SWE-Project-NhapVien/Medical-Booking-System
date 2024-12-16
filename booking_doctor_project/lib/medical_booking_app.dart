@@ -43,6 +43,7 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
       '/': (BuildContext context) => const HomePage(),
+
     };
   }
 }
