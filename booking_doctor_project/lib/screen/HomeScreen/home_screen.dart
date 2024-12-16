@@ -69,7 +69,8 @@ class _HomeScreenState extends State<HomeScreenView> {
 
         List<String> notiList = [];
         for (int i = 0; i < state.profileInfo.length; i++) {
-          notiList.add(state.profileInfo[i]['notification_id']);
+          state.profileInfo[i]['notification_id'] ??
+              notiList.add(state.profileInfo[i]['notification_id']);
         }
 
         return Padding(
@@ -247,7 +248,8 @@ class _HomeScreenState extends State<HomeScreenView> {
               BlocProvider(
                 create: (_) => GetSpecificAppointmentDataBloc(),
                 child: UpcomingAppointmentView(
-                    appointmentId: state.profileInfo[0]['appointment_id']),
+                    appointmentId:
+                        state.profileInfo[0]['appointment_id'] ?? ''),
               )
             ],
           ),
@@ -438,7 +440,10 @@ class UpcomingAppointmentView extends StatelessWidget {
         );
       } else if (state is GetSpecificAppointmentDataError) {
         return Center(
-          child: Text(state.message),
+          child: Text(
+            'No upcoming appointment',
+            style: TextStyle(color: ColorPalette.greyColor),
+          ),
         );
       }
       return const SizedBox.shrink();

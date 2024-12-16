@@ -1,5 +1,4 @@
 import 'package:booking_doctor_project/widgets/home_page.dart';
-import 'package:booking_doctor_project/screen/patient/SplashScreen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -43,7 +42,7 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
-      '/': (BuildContext context) => const SplashScreen(),
+      '/': (BuildContext context) => const HomePage(),
     };
   }
 }
