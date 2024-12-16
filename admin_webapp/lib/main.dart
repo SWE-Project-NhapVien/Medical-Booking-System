@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/screen/handle_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -20,12 +21,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Admin Webapp',
-      home: Scaffold(
-        body: Center(
-          child: Text('Admin Webapp'),
-        ),
-      ),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Admin Webapp',
+        home: HandlePageView());
   }
 }
