@@ -1,13 +1,10 @@
-import 'package:booking_doctor_project/screen/ProfileScreen/policy_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:booking_doctor_project/screen/ProfileScreen/edit_profile_screen.dart';
+import 'package:booking_doctor_project/screen/ProfileScreen/policy_screen.dart';
 
-//Width = 360
-//height = 800
-
-//Test phone
-//Width = 392.7272
-//Height = 783.2727
+// Replace this with your actual global patient ID source
+String globalPatientId = "ef48f364-1e9a-4c86-b490-57883ffcbc59"; 
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -17,7 +14,30 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  Map<String, dynamic>? patientData; // Store fetched patient data
   bool _showLogoutCard = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchPatientProfile();
+  }
+
+  Future<void> _fetchPatientProfile() async {
+    final response = await Supabase.instance.client
+        .from('patientprofiles')
+        .select()
+        .eq('user_id', globalPatientId)
+        .single(); // Fetch single row
+
+    if (response != null) {
+      setState(() {
+        patientData = response;
+      });
+    } else {
+      debugPrint('No data found for patient ID: $globalPatientId');
+    }
+  }
 
   void _toggleLogoutCard() {
     setState(() {
@@ -28,151 +48,135 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    // Display loading until patient data is fetched
+    if (patientData == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       body: Stack(
-      children: [
-        _backButton(context),
+        children: [
+          _backButton(context),
 
-        // My Profile
-        Align(
-          alignment: Alignment.topCenter,
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * 0.07
-            ),
-            child: 
-              const Text(
+          // My Profile
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: EdgeInsets.only(top: size.height * 0.07),
+              child: const Text(
                 "My Profile",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Color(0xFF2260FF), fontWeight: FontWeight.bold, fontSize: 24),
-              )
-            )
-        ),
-
-        // ImageProfile and EditIcon
-        Align(
-          alignment: Alignment.topCenter,
-          child: Padding(
-          padding: EdgeInsets.only(
-            top: size.height * 0.13321
-          ),
-          child: 
-            Stack(
-              children: [
-                Image.asset(
-                  'assets/images/test_profile_image.png',
-                  fit:BoxFit.none
+                style: TextStyle(
+                  color: Color(0xFF2260FF),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
                 ),
-
-                // Edit icon
-                Positioned(
-                  bottom: -size.height*0.009,
-                  right: -size.width*0.005,
-                  child: _editButton()
-                )
-              ]
-            )
-          )
-        ),
-
-        // Name
-        Align(
-          alignment: Alignment.topCenter,
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: size.height * 0.28
+              ),
             ),
-            child: const Text(
-              'John Doe',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-            )
-          )
-        ),  
-
-        // Profile Info, Policy, Help, Switch Profile, Logout
-        Padding(
-          padding:EdgeInsets.fromLTRB(
-            size.width * 0.08333,
-            size.height * 0.37,
-            0,
-            0,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap:() => profileInfoLayoutEvent(context),
-                child: _profileInfoLayout()
+
+          // ImageProfile and EditIcon
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: EdgeInsets.only(top: size.height * 0.133),
+              child: Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 60,
+                    backgroundImage: patientData!['ava_url'] != null
+                        ? NetworkImage(patientData!['ava_url'])
+                        : const AssetImage('assets/images/default_profile.png')
+                            as ImageProvider,
+                  ),
+                  Positioned(
+                    bottom: -size.height * 0.009,
+                    right: -size.width * 0.005,
+                    child: _editButton(),
+                  )
+                ],
               ),
+            ),
+          ),
 
-              SizedBox(height: size.height * 0.02,),
-
-              GestureDetector(
-                onTap: () => policyLayoutEvent(context),
-                child: _policyLayout(size)
+          // Name
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: EdgeInsets.only(top: size.height * 0.28),
+              child: Text(
+                '${patientData!['first_name']} ${patientData!['last_name']}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
               ),
+            ),
+          ),
 
-              SizedBox(height: size.height * 0.02,),
+          // Profile Info, Policy, Switch Profile, Logout
+          _buildMenuOptions(size),
+          if (_showLogoutCard) _buildLogoutOverlay(size),
+        ],
+      ),
+    );
+  }
 
-              GestureDetector(
-                onTap: () => switchProfileLayoutEvent(context),
-                child: _switchProfileLayout()
-              ),
-
-              SizedBox(height: size.height * 0.02,),
-
-              GestureDetector(
-                onTap: () => logoutLayoutEvent(),
-                child: _logoutLayout()
-              ),
-            ],
-          )
-        ),
-      
-        if (_showLogoutCard) 
+  Widget _buildMenuOptions(Size size) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        size.width * 0.083,
+        size.height * 0.37,
+        0,
+        0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           GestureDetector(
-            onTap: _toggleLogoutCard, // Dismiss card on tap outside
-            child: Container(
-              color: const Color.fromARGB(255, 34, 96, 255).withOpacity(0.54), // Background overlay
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: _logoutCard(size)
-              ),
-            ),
+            onTap: () => profileInfoLayoutEvent(context),
+            child: _profileInfoLayout(),
           ),
-      ],
-    ));
+          SizedBox(height: size.height * 0.02),
+          GestureDetector(
+            onTap: () => policyLayoutEvent(context),
+            child: _policyLayout(size),
+          ),
+          SizedBox(height: size.height * 0.02),
+          GestureDetector(
+            onTap: () => switchProfileLayoutEvent(context),
+            child: _switchProfileLayout(),
+          ),
+          SizedBox(height: size.height * 0.02),
+          GestureDetector(
+            onTap: () => logoutLayoutEvent(),
+            child: _logoutLayout(),
+          ),
+        ],
+      ),
+    );
   }
 
   // Back button
   Widget _backButton(BuildContext context) {
-  return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.03889,
-            vertical: MediaQuery.of(context).size.height * 0.06125,
-          ),
-          child: IconButton(
-            icon: Image.asset(
-              'assets/images/back_icon.png', 
-              fit: BoxFit.none),
-            onPressed: () => backButtonEvent(context),
-          )
-        );
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: MediaQuery.of(context).size.width * 0.038,
+        vertical: MediaQuery.of(context).size.height * 0.061,
+      ),
+      child: IconButton(
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
+        onPressed: () => Navigator.pop(context),
+      ),
+    );
   }
 
-  void backButtonEvent(BuildContext context) {
-    // Handle back button click event here.
-    //TO-DO IMPLEMENT
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Back button clicked")));
-  }
-
-  //Edit button
+  // Edit button
   Widget _editButton() {
     return IconButton(
-      icon: Image.asset(
-        'assets/images/edit_icon.png', 
-        fit: BoxFit.none),
+      icon: const Icon(Icons.edit, color: Color(0xFF2260FF)),
       onPressed: () => editButtonEvent(),
     );
   }
@@ -210,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  //Policy Layout
+  // Policy Layout
   Widget _policyLayout(Size size) {
     return Row(
       children: [
@@ -274,7 +278,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Switch Profile")));
   }
 
-  //Logout Layout
+  // Logout Layout
   Widget _logoutLayout() {
     return Row(
       children: [
@@ -291,6 +295,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void logoutLayoutEvent() {
     _toggleLogoutCard();
+  }
+
+  Widget _buildLogoutOverlay(Size size) {
+    return Positioned.fill(
+      child: Container(
+        color: Colors.black54,
+        child: Center(
+          child: _logoutCard(size),
+        ),
+      ),
+    );
   }
 
   Widget _logoutCard(Size size) {
@@ -351,9 +366,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ],
-          ),
         ),
-      );
+      ),
+    );
   }
 
   void logoutCardEvent() {
