@@ -1,6 +1,10 @@
 import 'package:booking_doctor_project/class/appointment.dart';
 import 'package:booking_doctor_project/screen/AppointmentScreen/appointment_detail.dart';
 import 'package:booking_doctor_project/screen/AppointmentScreen/appointment_screen.dart';
+import 'package:booking_doctor_project/screen/DoctorInfo/doctor_info_screen.dart';
+import 'package:booking_doctor_project/screen/Notification/notification_screen.dart';
+import 'package:booking_doctor_project/screen/SearchScreen/search_result.dart';
+import 'package:booking_doctor_project/screen/SearchScreen/search_screen.dart';
 import 'package:booking_doctor_project/screen/patient/CreateProfileScreen/create_profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -36,5 +40,26 @@ class NavigationServices {
 
   Future<dynamic> pushAppointmentScreen() async {
     return _pushMaterialPageRoute(const AppointmentScreen());
+    
+  Future<dynamic> pushNotificationScreen(List<String> notiList) async {
+    return _pushMaterialPageRoute(NotificationScreen(notiId: notiList));
+  }
+
+  Future<dynamic> pushSearchScreen() async {
+    return _pushMaterialPageRoute(const SearchScreen());
+  }
+
+  Future<dynamic> pushSearchResultScreen(
+      String? dateQuery, String? searchQuery) async {
+    return _pushMaterialPageRoute(SearchResult(
+      dateQuery: dateQuery,
+      searchQuery: searchQuery,
+    ));
+  }
+
+  Future<dynamic> pushDoctorInfoScreen(String doctorId) async {
+    return _pushMaterialPageRoute(DoctorInfoScreen(
+      doctorId: doctorId,
+    ));
   }
 }

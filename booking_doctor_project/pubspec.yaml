@@ -38,6 +38,7 @@ dependencies:
     flutter_dotenv: ^5.2.0
     flutter_bloc: ^8.1.3
     supabase_flutter: ^2.8.1
+    flutter_dash: ^1.0.0
     another_flutter_splash_screen: ^1.2.0
     equatable: ^2.0.5
     bloc: ^8.1.4
@@ -68,7 +69,7 @@ flutter:
     # the material Icons class.
     uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
+    # To add assets to your application, add an assets section, like this:
     assets:
         - assets/images/patient/
         - assets/images/
