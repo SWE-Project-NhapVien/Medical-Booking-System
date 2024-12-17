@@ -3,7 +3,7 @@ import 'package:booking_doctor_project/class/appointment.dart';
 import 'package:booking_doctor_project/class/patient_profile.dart';
 import 'package:booking_doctor_project/utils/text_styles.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
-import 'package:booking_doctor_project/widgets/common_appbar_with_title.dart';
+import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:booking_doctor_project/widgets/common_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,16 +53,13 @@ class _AppointmentDetailState extends State<AppointmentDetail> {
           child: Column(
             children: [
               // Custom AppBar
-              CommonAppBarWithTitle(
+              CommonAppBarView(
+                iconData: Icons.arrow_back_ios_new_rounded,
                 title: 'Appointment Detail',
-                titleSize: 32,
-                topPadding: MediaQuery.of(context).padding.top,
-                prefixIconData: Icons.arrow_back_ios_new_rounded,
-                onPrefixIconClick: () {
+                onBackClick: () {
                   Navigator.pop(context);
                 },
               ),
-              // Appointment Details
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: size.width * 0.05,

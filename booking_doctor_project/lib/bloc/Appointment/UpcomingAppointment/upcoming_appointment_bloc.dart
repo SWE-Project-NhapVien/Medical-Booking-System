@@ -28,14 +28,12 @@ class UpcomingAppointmentBloc
       emit(ErrorUpcomingAppointmentState(e.toString()));
     }
   }
-  
+
   List<Appointment> parseAppointments(dynamic data) {
     if (data is List) {
       return data.map<Appointment>((item) {
-        DateTime date = DateTime.parse(item['appointment_date']); 
+        DateTime date = DateTime.parse(item['appointment_date']);
         String formattedDate = DateFormat('MMMM d, y').format(date);
-        // DateTime dateTime = DateTime.parse(item['appointment_time']); 
-        // String formattedTime = DateFormat('hh:mm a').format(dateTime);
         return Appointment(
           appointmentDate: formattedDate,
           appointmentTime: item['appointment_time'].toString(),

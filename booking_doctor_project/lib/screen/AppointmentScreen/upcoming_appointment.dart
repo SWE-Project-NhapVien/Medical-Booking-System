@@ -29,13 +29,6 @@ class _UpcomingAppointmentState extends State<UpcomingAppointment> {
   }
 
   @override
-  void initState() {
-    // context.read<UpcomingAppointmentBloc>().add(
-    //     RequestUpcomingAppointmentEvent(profileId: GlobalProfile().profileId!));
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: ColorPalette.whiteColor,

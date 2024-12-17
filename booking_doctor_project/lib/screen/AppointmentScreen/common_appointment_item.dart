@@ -11,10 +11,10 @@ class AppointmentCard extends StatelessWidget {
   final String date;
   final String time;
   final String doctorImage;
-  String price;
+  final String price;
   final VoidCallback onTap;
 
-  AppointmentCard({
+  const AppointmentCard({
     super.key,
     required this.doctorName,
     required this.appointmentName,

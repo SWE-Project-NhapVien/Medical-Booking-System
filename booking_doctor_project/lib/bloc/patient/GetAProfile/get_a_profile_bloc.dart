@@ -28,27 +28,11 @@ class GetAProfileBloc extends Bloc<GetAProfileEvent, GetAProfileState> {
   }
 
   PatientProfile parseProfiles(dynamic data) {
-    // return data.map((item) {
-    //   return PatientProfile(
-    //       firstName: item['first_name'],
-    //       lastName: item['last_name'],
-    //       phoneNumber: item['phone_number'],
-    //       dob: item['date_of_birth'],
-    //       gender: item['gender'],
-    //       address: item['address'] ?? '',
-    //       bloodType: item['blood_type'] ?? '',
-    //       weight: item['weight'] ?? 0.0,
-    //       height: item['height'] ?? 0.0,
-    //       allergies: List<String>.from(item['allergies'] ?? []),
-    //       medicalHistory: List<String>.from(item['medical_history'] ?? []),
-    //       emergencyContacts: List<String>.from(item['emergency_contact'] ?? [])
-    //   );
-    // });
     if (data.isEmpty) {
       throw Exception('No profile data found.');
     }
 
-    final item = data.first; // Get the first item from the list
+    final item = data.first;
     return PatientProfile(
       firstName: item['first_name'],
       lastName: item['last_name'],

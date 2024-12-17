@@ -1,12 +1,11 @@
 import 'package:booking_doctor_project/bloc/Appointment/CancelledAppointment/cancelled_appointment_bloc.dart';
 import 'package:booking_doctor_project/bloc/Appointment/CompleteAppointment/complete_appointment_bloc.dart';
 import 'package:booking_doctor_project/bloc/Appointment/UpcomingAppointment/upcoming_appointment_bloc.dart';
-import 'package:booking_doctor_project/bloc/patient/CancelAppointment/cancel_appointment_bloc.dart';
 import 'package:booking_doctor_project/screen/AppointmentScreen/cancelled_appointment.dart';
 import 'package:booking_doctor_project/screen/AppointmentScreen/complete_appointment.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/localfiles.dart';
-import 'package:booking_doctor_project/widgets/common_appbar_with_title.dart';
+import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -73,15 +72,13 @@ class _AppointmentScreenState extends State<AppointmentScreen>
                   width: size.width * 0.2,
                 ))
             : Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
                 child: Column(
                   children: [
-                    CommonAppBarWithTitle(
+                    CommonAppBarView(
+                      iconData: Icons.arrow_back_ios_new_rounded,
                       title: 'All Appointments',
-                      titleSize: 32,
-                      topPadding: MediaQuery.of(context).padding.top,
-                      prefixIconData: Icons.arrow_back_ios_new_rounded,
-                      onPrefixIconClick: () {
+                      onBackClick: () {
                         Navigator.pop(context);
                       },
                     ),
