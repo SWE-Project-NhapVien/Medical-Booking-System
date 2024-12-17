@@ -88,7 +88,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     radius: 60,
                     backgroundImage: patientData!['ava_url'] != null
                         ? NetworkImage(patientData!['ava_url'])
-                        : const AssetImage('assets/images/default_profile.png')
+                        : const AssetImage('assets/images/patient/default_avatar.png')
                             as ImageProvider,
                   ),
                   Positioned(
