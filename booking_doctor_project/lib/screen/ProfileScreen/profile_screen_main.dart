@@ -116,13 +116,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(height: size.height * 0.02,),
 
               GestureDetector(
-                onTap: () => helpLayoutEvent(),
-                child: _helpLayout()
-              ),
-
-              SizedBox(height: size.height * 0.02,),
-
-              GestureDetector(
                 onTap: () => switchProfileLayoutEvent(context),
                 child: _switchProfileLayout()
               ),
