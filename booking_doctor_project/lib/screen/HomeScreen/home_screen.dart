@@ -4,6 +4,7 @@ import 'package:booking_doctor_project/bloc/Appointment/SpecificAppointment/spec
 import 'package:booking_doctor_project/bloc/patient/ProfileInfo/profile_info_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/ProfileInfo/profile_info_event.dart';
 import 'package:booking_doctor_project/bloc/patient/ProfileInfo/profile_info_state.dart';
+import 'package:booking_doctor_project/class/global_profile.dart';
 import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/localfiles.dart';
@@ -12,16 +13,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:lottie/lottie.dart';
 
-class HomeScreenTmp extends StatelessWidget {
-  const HomeScreenTmp({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: BlocProvider(
       create: (_) => GetProfileInfoBloc(),
-      child: const HomeScreenView(
-          profileId: 'ef48f364-1e9a-4c86-b490-57883ffcbc59'),
+      child: HomeScreenView(profileId: GlobalProfile().profileId!),
     ));
   }
 }
@@ -37,8 +37,9 @@ class HomeScreenView extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreenView> {
   @override
   void didChangeDependencies() {
-    context.read<GetProfileInfoBloc>().add(
-        GetProfileInfoEvent(profileId: 'ef48f364-1e9a-4c86-b490-57883ffcbc59'));
+    context
+        .read<GetProfileInfoBloc>()
+        .add(GetProfileInfoEvent(profileId: GlobalProfile().profileId!));
     super.didChangeDependencies();
   }
 

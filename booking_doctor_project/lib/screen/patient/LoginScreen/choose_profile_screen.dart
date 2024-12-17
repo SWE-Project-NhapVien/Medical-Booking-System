@@ -50,8 +50,7 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
           BlocListener<GetAProfileBloc, GetAProfileState>(
             listener: (context, state) {
               if (state is GetAProfileSuccess) {
-                print(state.profile);
-                NavigationServices(context).pushAppointmentScreen();
+                NavigationServices(context).pushHomeScreen();
               } else if (state is GetAProfileError) {
                 Dialogs(context).showErrorDialog(message: state.error);
               }
@@ -92,9 +91,6 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
                                   final selectedProfileId =
                                       profiles[index]['profile_id'];
                                   GlobalProfile().profileId = selectedProfileId;
-                                  // ----------------------------------
-                                  // ------- PUSH HOME SCREEN ---------
-                                  // ----------------------------------
                                   context.read<GetAProfileBloc>().add(
                                       GetAProfileRequired(
                                           profileId: selectedProfileId));

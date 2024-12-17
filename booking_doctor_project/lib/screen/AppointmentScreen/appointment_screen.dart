@@ -11,14 +11,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../utils/enum.dart';
-// import '../../../widgets/bottom_move_top_animation.dart'; // nho them nay nua nhe
 import 'tab_button.dart';
 import 'upcoming_appointment.dart';
 
 // ignore: must_be_immutable
 class AppointmentScreen extends StatefulWidget {
-  // AnimationController animationController;
-  // AppointmentScreen({super.key, required this.animationController}); // nho them nay nua nhe
   const AppointmentScreen({super.key});
 
   @override

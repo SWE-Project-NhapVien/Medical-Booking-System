@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/screen/AppointmentScreen/appointment_screen.dart';
 import 'package:booking_doctor_project/screen/ChatScreen/chat_screen.dart';
 import 'package:booking_doctor_project/screen/HomeScreen/home_screen.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
@@ -14,10 +15,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int myCurrentIndex = 0;
   List pages = const [
-    HomeScreenTmp(),
+    HomeScreen(),
     ChatScreen1(),
-    ChatScreen2(),
     ChatScreen3(),
+    AppointmentScreen(),
   ];
 
   @override
