@@ -1,3 +1,6 @@
+import 'package:booking_doctor_project/class/appointment.dart';
+import 'package:booking_doctor_project/screen/AppointmentScreen/appointment_detail.dart';
+import 'package:booking_doctor_project/screen/AppointmentScreen/appointment_screen.dart';
 import 'package:booking_doctor_project/screen/DoctorInfo/doctor_info_screen.dart';
 import 'package:booking_doctor_project/screen/Notification/notification_screen.dart';
 import 'package:booking_doctor_project/screen/SearchScreen/search_result.dart';
@@ -31,6 +34,13 @@ class NavigationServices {
     return _pushMaterialPageRoute(const CreateProfileScreen());
   }
 
+  Future<dynamic> pushAppointmentDetail({required Appointment appointment}) async {
+    return _pushMaterialPageRoute(AppointmentDetail(appointment: appointment,));
+  }
+
+  Future<dynamic> pushAppointmentScreen() async {
+    return _pushMaterialPageRoute(const AppointmentScreen());
+    
   Future<dynamic> pushNotificationScreen(List<String> notiList) async {
     return _pushMaterialPageRoute(NotificationScreen(notiId: notiList));
   }
