@@ -46,6 +46,7 @@ class GetAProfileBloc extends Bloc<GetAProfileEvent, GetAProfileState> {
       allergies: List<String>.from(item['allergies'] ?? []),
       medicalHistory: List<String>.from(item['medical_history'] ?? []),
       emergencyContacts: List<String>.from(item['emergency_contact'] ?? []),
+      avaUrl: item['ava_url'] ?? '',
     );
   }
 }

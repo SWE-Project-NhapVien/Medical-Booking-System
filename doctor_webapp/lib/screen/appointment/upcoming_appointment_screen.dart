@@ -1,5 +1,5 @@
-import 'package:booking_doctor_project/bloc/Appointment/appointment_state.dart';
-import 'package:booking_doctor_project/screen/appointment/common_appointment_card.dart';
+import 'package:doctor_webapp/bloc/Appointment/appointment_state.dart';
+import 'package:doctor_webapp/screen/appointment/common_appointment_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';

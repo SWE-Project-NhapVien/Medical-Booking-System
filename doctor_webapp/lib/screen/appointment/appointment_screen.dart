@@ -1,7 +1,7 @@
-import 'package:booking_doctor_project/DataLayer/data/appointment_data_provider.dart';
-import 'package:booking_doctor_project/bloc/Appointment/appointment_bloc.dart';
-import 'package:booking_doctor_project/screen/appointment/completed_appointment_screen.dart';
-import 'package:booking_doctor_project/screen/appointment/upcoming_appointment_screen.dart';
+import 'package:doctor_webapp/DataLayer/data/appointment_data_provider.dart';
+import 'package:doctor_webapp/bloc/Appointment/appointment_bloc.dart';
+import 'package:doctor_webapp/screen/appointment/completed_appointment_screen.dart';
+import 'package:doctor_webapp/screen/appointment/upcoming_appointment_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
