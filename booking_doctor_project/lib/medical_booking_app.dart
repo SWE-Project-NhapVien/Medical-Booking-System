@@ -1,4 +1,3 @@
-import 'package:booking_doctor_project/screen/patient/SplashScreen/splash_screen.dart';
 import 'package:booking_doctor_project/screen/patient/ScheduleScreen/schedule_screen.dart';
 import 'package:flutter/material.dart';
 
