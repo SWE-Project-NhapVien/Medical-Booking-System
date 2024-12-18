@@ -2,9 +2,8 @@ import 'package:booking_doctor_project/screen/appointment/appointment_screen.dar
 import 'package:booking_doctor_project/screen/home/home_screen.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/enum.dart';
-import 'package:booking_doctor_project/utils/local_files.dart';
+import 'package:booking_doctor_project/utils/fixed_web_component.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 
 import 'profile/profile_screen.dart';
@@ -88,8 +87,8 @@ class _HandlePageViewState extends State<HandlePageView> {
             ? Center(
                 child: AlertDialog(
                   backgroundColor: Colors.transparent,
-                  content: Lottie.asset(
-                    Localfiles.loading,
+                  content: Lottie.network(
+                    FixedWebComponent.loading,
                     width: lottieSize,
                   ),
                 ),
@@ -117,8 +116,8 @@ class _HandlePageViewState extends State<HandlePageView> {
             top: _topPadding,
             left: _leftPaddingComponent,
             child: _topPadding > 6
-                ? Image.asset(
-                    Localfiles.logo,
+                ? Image.network(
+                    FixedWebComponent.logo,
                     height: _sideBarComponentHeight,
                     width: _sideBarComponentWidth,
                   )
