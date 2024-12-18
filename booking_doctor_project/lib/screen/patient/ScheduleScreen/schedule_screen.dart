@@ -1,12 +1,19 @@
+import 'package:booking_doctor_project/bloc/TimeSlot/timeslot_bloc.dart';
+import 'package:booking_doctor_project/bloc/TimeSlot/timeslot_event.dart';
+import 'package:booking_doctor_project/bloc/TimeSlot/timeslot_state.dart';
+import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:booking_doctor_project/widgets/common_dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../utils/color_palette.dart';
 import '../../../widgets/common_button.dart';
 
 class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({super.key});
+  final String doctorId;
+  const ScheduleScreen({super.key, required this.doctorId});
 
   @override
   State<ScheduleScreen> createState() => _ScheduleScreenState();
@@ -15,25 +22,9 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   late int selectedDate;
   late int selectedMonth;
-  late String selectedTime;
   late Map<int, List<String>> daysInWeekByMonth;
   late TextEditingController descriptionController;
   late ScrollController scrollController;
-
-  final List<String> timeSlots = [
-    '8:00 AM',
-    '8:30 AM',
-    '9:00 AM',
-    '9:30 AM',
-    '10:00 AM',
-    '10:30 AM',
-    '2:00 PM',
-    '2:30 PM',
-    '3:00 PM',
-    '3:30 PM',
-    '4:00 PM',
-    '4:30 PM'
-  ];
 
   @override
   void initState() {
@@ -42,7 +33,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     daysInWeekByMonth = generateDaysInWeekByMonth();
     descriptionController = TextEditingController();
     scrollController = ScrollController();
-    selectedTime = '';
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       scrollController.jumpTo((selectedDate - 1) * 70.0);
@@ -80,30 +70,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     },
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    0,
-                    AppBar().preferredSize.height,
-                    0,
-                    MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  child: SizedBox(
-                    width: 200,
-                    height: 40,
-                    child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24.8),
-                        ),
-                        color: ColorPalette.deepBlue,
-                        child: Center(
-                          child: Text(
-                            "Dr. Olivia Turner, M.D.",
-                            style: TextStyle(
-                                fontSize: 14, color: ColorPalette.whiteColor),
-                          ),
-                        )),
-                  ),
-                )
+                BlocProvider(
+                  create: (_) => GetTimeSlotDataBloc(),
+                  child: const DoctorNameView(),
+                ),
               ],
             ),
             Padding(
@@ -256,51 +226,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   const SizedBox(
                     height: 5,
                   ),
-                  SizedBox(
-                    height: 150,
-                    child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 6,
-                                crossAxisSpacing: 0,
-                                mainAxisSpacing: 0),
-                        itemCount: timeSlots.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedTime = timeSlots[index];
-                                });
-                              },
-                              child: Container(
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color:
-                                      timeSlots.indexOf(selectedTime) == index
-                                          ? ColorPalette.deepBlue
-                                          : ColorPalette.mediumBlue,
-                                ),
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    timeSlots[index],
-                                    style: TextStyle(
-                                        color:
-                                            timeSlots.indexOf(selectedTime) ==
-                                                    index
-                                                ? ColorPalette.whiteColor
-                                                : ColorPalette.blackColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        }),
+                  BlocProvider(
+                    create: (_) => GetTimeSlotDataBloc(),
+                    child: TimeSlotView(
+                        doctorId: widget.doctorId,
+                        date:
+                            '${DateTime.now().year}-$selectedDate-$selectedMonth'),
                   ),
                   const SizedBox(
                     height: 10,
@@ -482,5 +413,149 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     }
 
     return result;
+  }
+}
+
+class TimeSlotView extends StatefulWidget {
+  final String doctorId;
+  final String date;
+
+  const TimeSlotView({
+    super.key,
+    required this.doctorId,
+    required this.date,
+  });
+
+  @override
+  State<TimeSlotView> createState() => _TimeSlotViewState();
+}
+
+class _TimeSlotViewState extends State<TimeSlotView> {
+  late String selectedTime;
+
+  final List<String> timeSlots = [
+    '8:00 AM',
+    '8:30 AM',
+    '9:00 AM',
+    '9:30 AM',
+    '10:00 AM',
+    '10:30 AM',
+    '2:00 PM',
+    '2:30 PM',
+    '3:00 PM',
+    '3:30 PM',
+    '4:00 PM',
+    '4:30 PM'
+  ];
+
+  @override
+  void initState() {
+    selectedTime = '';
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<GetTimeSlotDataBloc>();
+    bloc.add(GetTimeSlotEvent(doctorId: widget.doctorId, date: widget.date));
+
+    return BlocBuilder<GetTimeSlotDataBloc, GetTimeSlotState>(
+        builder: (context, state) {
+      if (state is GetTimeSlotLoading) {
+        return Center(
+          child: AlertDialog(
+            backgroundColor: Colors.transparent,
+            content: Lottie.asset(
+              Localfiles.loading,
+              width: 100,
+            ),
+          ),
+        );
+      } else if (state is GetTimeSlotSuccess) {
+        return SizedBox(
+          height: 150,
+          child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 6, crossAxisSpacing: 0, mainAxisSpacing: 0),
+              itemCount: state.timeSlot.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedTime = timeSlots[index];
+                      });
+                    },
+                    child: Container(
+                      height: 20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: timeSlots.indexOf(selectedTime) == index
+                            ? ColorPalette.deepBlue
+                            : ColorPalette.mediumBlue,
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          timeSlots[index],
+                          style: TextStyle(
+                              color: timeSlots.indexOf(selectedTime) == index
+                                  ? ColorPalette.whiteColor
+                                  : ColorPalette.blackColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+        );
+      } else if (state is GetTimeSlotError) {
+        return Center(
+          child: Text(state.error),
+        );
+      }
+      return const SizedBox.shrink();
+    });
+  }
+}
+
+class DoctorNameView extends StatelessWidget {
+  const DoctorNameView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<GetTimeSlotDataBloc, GetTimeSlotState>(
+        builder: (context, state) {
+      if (state is GetTimeSlotSuccess) {
+        return Padding(
+          padding: EdgeInsets.fromLTRB(
+            0,
+            AppBar().preferredSize.height,
+            0,
+            MediaQuery.of(context).size.height * 0.01,
+          ),
+          child: SizedBox(
+            width: 200,
+            height: 40,
+            child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24.8),
+                ),
+                color: ColorPalette.deepBlue,
+                child: Center(
+                  child: Text(
+                    '${state.timeSlot[0]['first_name']} ${state.timeSlot[0]['last_name']}',
+                    style:
+                        TextStyle(fontSize: 14, color: ColorPalette.whiteColor),
+                  ),
+                )),
+          ),
+        );
+      }
+      return const SizedBox.shrink();
+    });
   }
 }

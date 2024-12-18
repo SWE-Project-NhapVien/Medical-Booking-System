@@ -279,7 +279,11 @@ class ResultsView extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 10),
                                   GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      NavigationServices(context)
+                                          .pushScheduleScreen(
+                                              result[index]['doctor_id']);
+                                    },
                                     child: Container(
                                       width: 160, // Width of the button
                                       height:
