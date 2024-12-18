@@ -1,6 +1,7 @@
 import 'package:booking_doctor_project/screen/patient/ForgotPasswordScreen/forgot_password_screen.dart';
 import 'package:booking_doctor_project/screen/patient/LoginAndSignUp/login_and_signup_screen.dart';
 import 'package:booking_doctor_project/screen/patient/SplashScreen/splash_screen.dart';
+
 import 'package:flutter/material.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
