@@ -1,7 +1,6 @@
 import 'package:booking_doctor_project/bloc/patient/ForgotPassword/forgot_password_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/LogIn/log_in_bloc.dart';
 import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
-import 'package:booking_doctor_project/screen/patient/LoginScreen/choose_profile_screen.dart';
 import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/widgets/common_dialogs.dart';
 import 'package:booking_doctor_project/widgets/textfield_with_label.dart';
@@ -59,11 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: ColorPalette.whiteColor,
       body: BlocConsumer<LogInBloc, LogInState>(listener: (context, state) {
         if (state is LogInSuccess) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const ChooseProfileScreen()),
-          );
+          NavigationServices(context).pushChooseProfileScreen();
         } else if (state is LogInFailure) {
           setState(() {
             error = state.error;

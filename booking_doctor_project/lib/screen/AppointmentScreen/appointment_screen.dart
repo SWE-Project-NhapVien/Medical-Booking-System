@@ -1,17 +1,21 @@
+import 'package:booking_doctor_project/bloc/Appointment/CancelledAppointment/cancelled_appointment_bloc.dart';
+import 'package:booking_doctor_project/bloc/Appointment/CompleteAppointment/complete_appointment_bloc.dart';
+import 'package:booking_doctor_project/bloc/Appointment/UpcomingAppointment/upcoming_appointment_bloc.dart';
 import 'package:booking_doctor_project/screen/AppointmentScreen/cancelled_appointment.dart';
 import 'package:booking_doctor_project/screen/AppointmentScreen/complete_appointment.dart';
+import 'package:booking_doctor_project/utils/color_palette.dart';
+import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../utils/enum.dart';
-// import '../../../widgets/bottom_move_top_animation.dart'; // nho them nay nua nhe
 import 'tab_button.dart';
 import 'upcoming_appointment.dart';
 
 // ignore: must_be_immutable
 class AppointmentScreen extends StatefulWidget {
-  // AnimationController animationController;
-  // AppointmentScreen({super.key, required this.animationController}); // nho them nay nua nhe
   const AppointmentScreen({super.key});
 
   @override
@@ -27,7 +31,7 @@ class _AppointmentScreenState extends State<AppointmentScreen>
   @override
   void initState() {
     isFirstTime = true;
-    appointmentType = AppointmentType.Complete;
+    appointmentType = AppointmentType.Upcoming;
     indexView = Container();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       starLoadingScreen();
@@ -39,78 +43,111 @@ class _AppointmentScreenState extends State<AppointmentScreen>
     await Future.delayed(const Duration(milliseconds: 400));
     setState(() {
       isFirstTime = false;
-      indexView = const CompleteAppointment();
+      indexView = const UpcomingAppointment();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: isFirstTime
-          ? Container(
-              child: const CircularProgressIndicator(
-                strokeWidth: 2,
+    final size = MediaQuery.of(context).size;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CompleteAppointmentBloc>(
+            create: (context) => CompleteAppointmentBloc()),
+        BlocProvider<CancelledAppointmentBloc>(
+            create: (context) => CancelledAppointmentBloc()),
+        BlocProvider<UpcomingAppointmentBloc>(
+            create: (context) => UpcomingAppointmentBloc()),
+      ],
+      child: Scaffold(
+        backgroundColor: ColorPalette.whiteColor,
+        body: isFirstTime
+            ? AlertDialog(
+                backgroundColor: Colors.transparent,
+                content: Lottie.asset(
+                  Localfiles.loading,
+                  width: size.width * 0.2,
+                ))
+            : Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                child: Column(
+                  children: [
+                    CommonAppBarView(
+                      iconData: Icons.arrow_back_ios_new_rounded,
+                      title: 'All Appointments',
+                      onBackClick: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    SizedBox(
+                      child: _buildTab(size),
+                    ),
+                    Expanded(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder:
+                            (Widget child, Animation<double> animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(1, 0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            ),
+                          );
+                        },
+                        child: indexView,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            )
-          : Column(
-              children: [
-                CommonAppBarView(
-                  iconData: Icons.arrow_back_ios,
-                  title: "All Appointments",
-                  onBackClick: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 16.0),
-                  child: _buildTab(),
-                ),
-                Expanded(
-                  child: indexView,
-                )
-              ],
-            ),
+      ),
     );
   }
 
-  Widget _buildTab() {
-    return Row(
-      children: [
-        TabButton(
-          isSelected: appointmentType == AppointmentType.Complete,
-          text: "Complete",
-          onTap: () {
-            _tabClick(AppointmentType.Complete);
-          },
-        ),
-        const SizedBox(
-          width: 16.0,
-        ),
-        TabButton(
-          isSelected: appointmentType == AppointmentType.Upcoming,
-          text: "Upcoming",
-          onTap: () {
-            _tabClick(AppointmentType.Upcoming);
-          },
-        ),
-        const SizedBox(
-          width: 16.0,
-        ),
-        TabButton(
-          isSelected: appointmentType == AppointmentType.Cancelled,
-          text: "Cancelled",
-          onTap: () {
-            _tabClick(AppointmentType.Cancelled);
-          },
-        ),
-      ],
+  Widget _buildTab(Size size) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: size.height * 0.02),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          TabButton(
+            isSelected: appointmentType == AppointmentType.Upcoming,
+            text: "Upcoming",
+            onTap: () {
+              _tabClick(AppointmentType.Upcoming);
+            },
+          ),
+          SizedBox(
+            width: size.width * 0.02,
+          ),
+          TabButton(
+            isSelected: appointmentType == AppointmentType.Complete,
+            text: "Complete",
+            onTap: () {
+              _tabClick(AppointmentType.Complete);
+            },
+          ),
+          SizedBox(
+            width: size.width * 0.02,
+          ),
+          TabButton(
+            isSelected: appointmentType == AppointmentType.Cancelled,
+            text: "Canceled",
+            onTap: () {
+              _tabClick(AppointmentType.Cancelled);
+            },
+          ),
+        ],
+      ),
     );
   }
 
   void _tabClick(AppointmentType tabType) {
     if (tabType != appointmentType) {
-      // check because if the user click on the same tab then no need to do anything
       appointmentType = tabType;
       if (tabType == AppointmentType.Complete) {
         indexView = const CompleteAppointment();
