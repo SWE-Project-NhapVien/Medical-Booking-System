@@ -1,4 +1,4 @@
-import 'package:booking_doctor_project/DataLayer/repository/appointment_repository.dart';
+import 'package:doctor_webapp/DataLayer/repository/appointment_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'appointment_event.dart';
 import 'appointment_state.dart';

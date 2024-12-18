@@ -1,8 +1,8 @@
-import 'package:booking_doctor_project/screen/appointment/appointment_screen.dart';
-import 'package:booking_doctor_project/screen/home/home_screen.dart';
-import 'package:booking_doctor_project/utils/color_palette.dart';
-import 'package:booking_doctor_project/utils/enum.dart';
-import 'package:booking_doctor_project/utils/fixed_web_component.dart';
+import 'package:doctor_webapp/screen/appointment/appointment_screen.dart';
+import 'package:doctor_webapp/screen/home/home_screen.dart';
+import 'package:doctor_webapp/utils/color_palette.dart';
+import 'package:doctor_webapp/utils/enum.dart';
+import 'package:doctor_webapp/utils/fixed_web_component.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

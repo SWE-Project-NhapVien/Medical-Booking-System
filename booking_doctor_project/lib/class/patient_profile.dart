@@ -14,6 +14,7 @@ class PatientProfile {
   List<String>? allergies;
   List<String>? medicalHistory;
   List<String>? emergencyContacts;
+  String? avaUrl;
 
   PatientProfile({
     required this.firstName,
@@ -28,6 +29,7 @@ class PatientProfile {
     this.allergies,
     this.medicalHistory,
     this.emergencyContacts,
+    this.avaUrl
   });
 
   static Future<void> saveProfile(PatientProfile profile) async {
@@ -45,6 +47,7 @@ class PatientProfile {
       'allergies': profile.allergies ?? [],
       'medicalHistory': profile.medicalHistory ?? [],
       'emergencyContacts': profile.emergencyContacts ?? [],
+      'ava_url': profile.avaUrl ?? ''
     });
     await prefs.setString('selectedProfile', profileJson);
   }
@@ -67,6 +70,7 @@ class PatientProfile {
       allergies: List<String>.from(profileMap['allergies']),
       medicalHistory: List<String>.from(profileMap['medicalHistory']),
       emergencyContacts: List<String>.from(profileMap['emergencyContacts']),
+      avaUrl: profileMap['ava_url']
     );
   }
 
@@ -85,6 +89,7 @@ class PatientProfile {
     String? bloodType,
     double? weight,
     double? height,
+    String? avaUrl
   }) async {
     final prefs = await SharedPreferences.getInstance();
     final profileJson = prefs.getString('selectedProfile');
@@ -98,8 +103,9 @@ class PatientProfile {
       dob: dob ?? profileMap['dob'],
       gender: gender ?? profileMap['gender'],
       bloodType: bloodType ?? profileMap['bloodType'] ?? '',
-      weight: weight ?? profileMap['weight'] ?? 0.0,
-      height: height ?? profileMap['height'] ?? 0.0,
+      weight: weight ?? profileMap['weight'],
+      height: height ?? profileMap['height'],
+      avaUrl: avaUrl ?? profileMap['ava_url'],
     );
     await saveProfile(updatedProfile);
   }

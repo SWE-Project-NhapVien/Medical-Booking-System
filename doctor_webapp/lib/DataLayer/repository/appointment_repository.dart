@@ -1,5 +1,5 @@
-import 'package:booking_doctor_project/DataLayer/data/appointment_data_provider.dart';
-import 'package:booking_doctor_project/class/appointment.dart';
+import 'package:doctor_webapp/DataLayer/data/appointment_data_provider.dart';
+import 'package:doctor_webapp/class/appointment.dart';
 
 class AppointmentRepository {
   final AppointmentDataProvider _appointmentDataProvider;

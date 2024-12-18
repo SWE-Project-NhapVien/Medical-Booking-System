@@ -6,6 +6,7 @@ import 'package:booking_doctor_project/screen/Notification/notification_screen.d
 import 'package:booking_doctor_project/screen/SearchScreen/search_result.dart';
 import 'package:booking_doctor_project/screen/SearchScreen/search_screen.dart';
 import 'package:booking_doctor_project/screen/patient/CreateProfileScreen/create_profile_screen.dart';
+import 'package:booking_doctor_project/screen/patient/ForgotPasswordScreen/forgot_password_screen.dart';
 import 'package:booking_doctor_project/screen/patient/LoginScreen/choose_profile_screen.dart';
 import 'package:booking_doctor_project/widgets/home_page.dart';
 import 'package:flutter/material.dart';
@@ -75,5 +76,9 @@ class NavigationServices {
 
   Future<dynamic> pushHomeScreen() async {
     return _pushMaterialPageRoute(const HomePage());
+  }
+
+  Future<dynamic> pushResetPasswordScreen() async {
+    return _pushMaterialPageRoute(const ForgotPasswordScreen());
   }
 }

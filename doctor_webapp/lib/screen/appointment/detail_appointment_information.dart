@@ -1,5 +1,5 @@
-import 'package:booking_doctor_project/utils/color_palette.dart';
-import 'package:booking_doctor_project/utils/fixed_web_component.dart';
+import 'package:doctor_webapp/utils/color_palette.dart';
+import 'package:doctor_webapp/utils/fixed_web_component.dart';
 import 'package:flutter/material.dart';
 
 class DetailAppointmentInformation extends StatelessWidget {

@@ -16,6 +16,14 @@ class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordState> 
         emit(ForgotPasswordFailure(error: e.toString()));
       }
     });
+    on<ForgotPasswordVerifyOTP>((event, emit) async {
+      try {
+        await AuthServices().verifyOtp(email: event.email, otp: event.otp);
+        emit(ForgotPasswordOTPVerified());
+      } catch (e) {
+        emit(ForgotPasswordOTPFailure(error: e.toString()));
+      }
+    });
     on<ForgotPasswordReset>((event, emit) {
       emit(ForgotPasswordInitial());
     });

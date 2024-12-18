@@ -1,6 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:html' as html;
 
-class AuthServices {
+class DoctorAuthServices {
   final SupabaseClient _supabase = Supabase.instance.client;
 
   Future<AuthResponse> signInWithEmailPassword({
@@ -15,21 +16,6 @@ class AuthServices {
     }
   }
 
-  Future<AuthResponse> signUpWithEmailPassword({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      return await _supabase.auth.signUp(
-        email: email,
-        password: password,
-        emailRedirectTo: 'myapp://create-profile',
-      );
-    } on AuthException catch (e) {
-      throw Exception('Failed to sign up: ${e.message}');
-    }
-  }
-
   Future<void> signOut() async {
     try {
       await _supabase.auth.signOut();
@@ -40,8 +26,12 @@ class AuthServices {
 
   Future<void> resetPassword({required String email}) async {
     try {
-      return await _supabase.auth
-          .resetPasswordForEmail(email, redirectTo: 'myapp://reset-password');
+      final String currentOrigin = html.window.location.origin;
+      // print("currentOrigin: $currentOrigin");
+      final String redirectTo = '$currentOrigin/reset-password';
+      // print(redirectTo);
+      await Supabase.instance.client.auth.resetPasswordForEmail(email, redirectTo: redirectTo);
+
     } catch (e) {
       throw Exception('Failed to reset password: $e');
     }
@@ -67,16 +57,6 @@ class AuthServices {
       throw Exception('Failed to sign up: ${e.message}');
     } catch (e) {
       throw Exception('Failed to update password: $e');
-    }
-  }
-
-  String? getCurruentUserEmail() {
-    try {
-      final session = _supabase.auth.currentSession;
-      final user = session?.user;
-      return user?.email;
-    } catch (e) {
-      throw (Exception('Failed to get current user email: $e'));
     }
   }
 }

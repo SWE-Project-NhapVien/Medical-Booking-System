@@ -25,5 +25,3 @@ class ForgotPasswordVerifyOTP extends ForgotPasswordEvent {
   @override
   List<Object> get props => [email, otp];
 }
-
-class ForgotPasswordReset extends ForgotPasswordEvent {}
