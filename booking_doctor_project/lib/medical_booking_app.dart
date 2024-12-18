@@ -1,5 +1,4 @@
 import 'package:booking_doctor_project/screen/ProfileScreen/profile_screen_main.dart';
-import 'package:booking_doctor_project/screen/patient/SplashScreen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
