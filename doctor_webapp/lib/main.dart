@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
-      '/': (BuildContext context) => const ResetPasswordScreen(),
+      '/': (BuildContext context) => const LoginScreen(),
       '/reset-password': (BuildContext context) => const ResetPasswordScreen(),
     };
   }
