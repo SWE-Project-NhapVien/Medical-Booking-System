@@ -48,6 +48,7 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
       '/reset-password': (BuildContext context) => const ForgotPasswordScreen(),
       '/login': (BuildContext context) =>
           LoginOrSignUpScreen(showLoginScreen: true),
+
     };
   }
 }
