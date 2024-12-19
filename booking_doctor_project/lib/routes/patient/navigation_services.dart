@@ -81,9 +81,9 @@ class NavigationServices {
 
   Future<dynamic> pushResetPasswordScreen() async {
     return _pushMaterialPageRoute(const ForgotPasswordScreen());
+  }
 
   Future<dynamic> pushScheduleScreen(String doctorId) async {
     return _pushMaterialPageRoute(ScheduleScreen(doctorId: doctorId));
-
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:doctor_webapp/bloc/DoctorInfo/doctor_info_event.dart';
 import 'package:doctor_webapp/bloc/DoctorInfo/doctor_info_state.dart';
 import 'package:doctor_webapp/bloc/DoctorInfo/doctor_info_bloc.dart';
+import 'package:doctor_webapp/utils/color_palette.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String doctorId;
@@ -15,9 +16,12 @@ class ProfileScreen extends StatelessWidget {
       create: (context) =>
           GetDoctorInfoBloc()..add(GetDoctorInfoEvent(doctorId)),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Profile"),
-          backgroundColor: Colors.blueAccent,
+        appBar: CommonAppBarView(
+          iconData: Icons.arrow_back,
+          title: "Profile",
+          onBackClick: () {
+            Navigator.pop(context);
+          },
         ),
         body: BlocBuilder<GetDoctorInfoBloc, GetDoctorInfoState>(
           builder: (context, state) {
@@ -91,4 +95,56 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class CommonAppBarView extends StatelessWidget implements PreferredSizeWidget {
+  final IconData iconData;
+  final String title;
+  final VoidCallback onBackClick;
+
+  const CommonAppBarView({
+    super.key,
+    required this.iconData,
+    required this.title,
+    required this.onBackClick,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: ColorPalette.mediumBlue,
+      elevation: 0,
+      toolbarHeight: 70,
+      leading: IconButton(
+        icon: Icon(iconData, color: ColorPalette.whiteColor),
+        onPressed: onBackClick,
+      ),
+      title: Text(
+        title,
+        style: TextStyle(
+          color: ColorPalette.whiteColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 22,
+        ),
+      ),
+      centerTitle: true,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: IconButton(
+            icon: Icon(
+              Icons.settings,
+              color: ColorPalette.whiteColor,
+            ),
+            onPressed: () {
+              // Placeholder for settings action
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(70);
 }
