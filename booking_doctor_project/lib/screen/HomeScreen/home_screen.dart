@@ -19,10 +19,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: ColorPalette.whiteColor,
         body: BlocProvider(
-      create: (_) => GetProfileInfoBloc(),
-      child: HomeScreenView(profileId: GlobalProfile().profileId!),
-    ));
+          create: (_) => GetProfileInfoBloc(),
+          child: HomeScreenView(profileId: GlobalProfile().profileId!),
+        ));
   }
 }
 

@@ -1,3 +1,6 @@
+import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_bloc.dart';
+import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_event.dart';
+import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_state.dart';
 import 'package:booking_doctor_project/bloc/TimeSlot/timeslot_bloc.dart';
 import 'package:booking_doctor_project/bloc/TimeSlot/timeslot_event.dart';
 import 'package:booking_doctor_project/bloc/TimeSlot/timeslot_state.dart';
@@ -71,8 +74,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   ),
                 ),
                 BlocProvider(
-                  create: (_) => GetTimeSlotDataBloc(),
-                  child: const DoctorNameView(),
+                  create: (_) => GetDoctorInfoBloc(),
+                  child: DoctorNameView(doctorId: widget.doctorId),
                 ),
               ],
             ),
@@ -231,7 +234,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     child: TimeSlotView(
                         doctorId: widget.doctorId,
                         date:
-                            '${DateTime.now().year}-$selectedDate-$selectedMonth'),
+                            '${DateTime.now().year}-$selectedMonth-$selectedDate'),
                   ),
                   const SizedBox(
                     height: 10,
@@ -523,13 +526,16 @@ class _TimeSlotViewState extends State<TimeSlotView> {
 }
 
 class DoctorNameView extends StatelessWidget {
-  const DoctorNameView({super.key});
+  final String doctorId;
+  const DoctorNameView({super.key, required this.doctorId});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetTimeSlotDataBloc, GetTimeSlotState>(
+    final bloc = context.read<GetDoctorInfoBloc>();
+    bloc.add(GetDoctorInfoEvent(doctorId: doctorId));
+    return BlocBuilder<GetDoctorInfoBloc, GetDoctorInfoState>(
         builder: (context, state) {
-      if (state is GetTimeSlotSuccess) {
+      if (state is GetDoctorInfoSuccess) {
         return Padding(
           padding: EdgeInsets.fromLTRB(
             0,
@@ -538,18 +544,20 @@ class DoctorNameView extends StatelessWidget {
             MediaQuery.of(context).size.height * 0.01,
           ),
           child: SizedBox(
-            width: 200,
             height: 40,
             child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24.8),
                 ),
                 color: ColorPalette.deepBlue,
-                child: Center(
-                  child: Text(
-                    '${state.timeSlot[0]['first_name']} ${state.timeSlot[0]['last_name']}',
-                    style:
-                        TextStyle(fontSize: 14, color: ColorPalette.whiteColor),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Center(
+                    child: Text(
+                      '${state.doctorInfo[0]['first_name']} ${state.doctorInfo[0]['last_name']}',
+                      style: TextStyle(
+                          fontSize: 14, color: ColorPalette.whiteColor),
+                    ),
                   ),
                 )),
           ),

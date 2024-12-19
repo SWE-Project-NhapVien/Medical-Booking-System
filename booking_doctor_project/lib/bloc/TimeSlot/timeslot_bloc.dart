@@ -14,7 +14,7 @@ class GetTimeSlotDataBloc extends Bloc<GetTimeSlotEvent, GetTimeSlotState> {
     try {
       final supabase = Supabase.instance.client;
       final response = await supabase.rpc('get_timeslot_statuses_with_name',
-          params: {'id': event.doctorId, 'date': event.date});
+          params: {'id': event.doctorId, 'day': event.date});
       emit(GetTimeSlotSuccess(response));
     } catch (e) {
       emit(GetTimeSlotError('Error fetching time slot: $e'));

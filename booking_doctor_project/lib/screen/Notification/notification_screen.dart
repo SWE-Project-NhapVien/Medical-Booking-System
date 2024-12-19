@@ -22,6 +22,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return BlocProvider(
       create: (_) => GetNotificationDataBloc(),
       child: Scaffold(
+        backgroundColor: ColorPalette.whiteColor,
         body: Column(
           children: [
             CommonAppBarView(

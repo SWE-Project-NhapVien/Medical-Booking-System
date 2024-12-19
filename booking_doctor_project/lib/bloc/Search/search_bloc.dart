@@ -14,18 +14,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async {
     emit(SearchLoading());
     try {
-      String? formattedDate;
-      if (event.dateQuery != null) {
-        DateTime parsedDate = DateTime.parse(event.dateQuery!);
-        formattedDate = '${parsedDate.day.toString().padLeft(2, '0')}-'
-            '${parsedDate.month.toString().padLeft(2, '0')}-'
-            '${parsedDate.year}';
-      }
-
       final supabase = Supabase.instance.client;
       final response = await supabase.rpc('search_doctors', params: {
         'search_query': event.searchQuery,
-        'date_query': formattedDate,
+        'date_query': event.dateQuery,
       });
 
       emit(SearchSuccess(response));

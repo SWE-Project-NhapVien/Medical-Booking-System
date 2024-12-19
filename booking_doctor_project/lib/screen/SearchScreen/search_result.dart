@@ -32,6 +32,7 @@ class _SearchResultState extends State<SearchResult> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorPalette.whiteColor,
       body: SingleChildScrollView(
         child: Column(
           children: [

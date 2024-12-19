@@ -34,6 +34,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorPalette.whiteColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -218,7 +219,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     if (picked != null) {
       setState(() {
-        dateController.text = picked.toString().split(" ")[0];
+        dateController.text = '${picked.year}-${picked.month}-${picked.day}';
       });
     }
   }
