@@ -47,6 +47,19 @@ class AuthServices {
     }
   }
 
+  Future<AuthResponse> verifyOtp(
+      {required String email, required String otp}) async {
+    try {
+      return await _supabase.auth.verifyOTP(
+        email: email,
+        token: otp,
+        type: OtpType.recovery,
+      );
+    } on AuthException catch (e) {
+      throw Exception('Error verifying OTP: ${e.message}');
+    }
+  }
+
   Future<void> updatePassword({required String password}) async {
     try {
       await _supabase.auth.updateUser(UserAttributes(password: password));

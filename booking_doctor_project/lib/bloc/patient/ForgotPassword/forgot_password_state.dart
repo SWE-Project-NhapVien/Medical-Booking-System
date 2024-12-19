@@ -22,3 +22,16 @@ class ForgotPasswordFailure extends ForgotPasswordState {
   @override
   List<Object> get props => [error];
 }
+
+class ForgotPasswordOTPFailure extends ForgotPasswordState {
+  final String error;
+
+  const ForgotPasswordOTPFailure({
+    required this.error,
+  });
+
+  @override
+  List<Object> get props => [error];
+}
+
+class ForgotPasswordOTPVerified extends ForgotPasswordState {}

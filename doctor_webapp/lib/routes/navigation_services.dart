@@ -1,3 +1,4 @@
+import 'package:doctor_webapp/screen/reset_password/reset_password.dart';
 import 'package:flutter/material.dart';
 
 class NavigationServices {
@@ -10,5 +11,9 @@ class NavigationServices {
         context,
         MaterialPageRoute(
             builder: (context) => widget, fullscreenDialog: fullscreenDialog));
+  }
+
+  Future<dynamic> pushResetPasswordScreen(){
+    return _pushMaterialPageRoute(const ResetPasswordScreen());
   }
 }

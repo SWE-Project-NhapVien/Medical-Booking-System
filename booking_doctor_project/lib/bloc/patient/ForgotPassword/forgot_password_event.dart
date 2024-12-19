@@ -16,4 +16,14 @@ class ForgotPasswordRequired extends ForgotPasswordEvent {
   List<Object> get props => [email];
 }
 
+class ForgotPasswordVerifyOTP extends ForgotPasswordEvent {
+  final String otp;
+  final String email;
+
+  const ForgotPasswordVerifyOTP({required this.email, required this.otp});
+
+  @override
+  List<Object> get props => [email, otp];
+}
+
 class ForgotPasswordReset extends ForgotPasswordEvent {}

@@ -6,11 +6,10 @@ class TapEffect extends StatefulWidget {
   final Widget child;
 
   const TapEffect(
-      {Key? key,
+      {super.key,
       this.isClickable = true,
       required this.onClick,
-      required this.child})
-      : super(key: key);
+      required this.child});
 
   @override
   State<TapEffect> createState() => _TapEffectState();

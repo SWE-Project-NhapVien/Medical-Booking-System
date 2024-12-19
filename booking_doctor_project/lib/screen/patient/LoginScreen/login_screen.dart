@@ -1,7 +1,6 @@
 import 'package:booking_doctor_project/bloc/patient/ForgotPassword/forgot_password_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/LogIn/log_in_bloc.dart';
 import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
-import 'package:booking_doctor_project/screen/patient/LoginScreen/choose_profile_screen.dart';
 import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/widgets/common_dialogs.dart';
 import 'package:booking_doctor_project/widgets/textfield_with_label.dart';
@@ -9,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
+import 'package:pinput/pinput.dart';
 
 import '../../../utils/color_palette.dart';
 import '../../../utils/text_styles.dart';
@@ -58,26 +58,16 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: ColorPalette.whiteColor,
       body: BlocConsumer<LogInBloc, LogInState>(listener: (context, state) {
-        if (state is LogInSuccess) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const ChooseProfileScreen()),
-          );
+        if (state is LogInProcess) {
+          Dialogs(context).showLoadingDialog();
+        } else if (state is LogInSuccess) {
+          Navigator.of(context).pop();
+          NavigationServices(context).pushChooseProfileScreen();
         } else if (state is LogInFailure) {
-          setState(() {
-            error = state.error;
-          });
+          Navigator.of(context).pop();
+          Dialogs(context).showErrorDialog(message: state.error);
         }
       }, builder: (context, state) {
-        if (state is LogInProcess) {
-          return AlertDialog(
-              backgroundColor: Colors.transparent,
-              content: Lottie.asset(
-                Localfiles.loading,
-                width: size.width * 0.2,
-              ));
-        }
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -152,7 +142,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     onTap: () {
-                      _validateAndLogin();
+                      if (_validateAndLogin()) {
+                        BlocProvider.of<LogInBloc>(context).add(LogInRequired(
+                          email: emailController.text.trim(),
+                          password: passwordController.text,
+                        ));
+                      }
                     },
                     width: size.width / 2,
                     height: size.height * 0.06,
@@ -191,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _validateAndLogin() {
+  bool _validateAndLogin() {
     final email = emailController.text.trim();
     final password = passwordController.text;
 
@@ -204,28 +199,24 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         emailError = "Email cannot be empty.";
       });
-      return;
+      return false;
     }
 
     if (password.isEmpty) {
       setState(() {
         passwordError = "Password cannot be empty.";
       });
-      return;
+      return false;
     }
 
-    if (error.isNotEmpty) {
-      Dialogs(context).showAnimatedDialog(title: 'Error', content: error);
-      return;
-    }
-
-    BlocProvider.of<LogInBloc>(context).add(LogInRequired(
-      email: email,
-      password: password,
-    ));
+    return true;
   }
 
   Future<dynamic> forgotPasswordBottomSheet(BuildContext context) {
+    String otpError = '';
+    String otpCode = '';
+    final otpController = TextEditingController();
+
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -281,12 +272,89 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         );
                       } else if (state is ForgotPasswordSuccess) {
-                        return Center(
-                            child: Text(
-                          'Please check your email to reset password.',
-                          style: TextStyles(context)
-                              .getRegularStyle(color: ColorPalette.deepBlue),
-                        ));
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+                            Text(
+                              'Enter OTP',
+                              style: TextStyles(context).getTitleStyle(
+                                fontWeight: FontWeight.w500,
+                                color: ColorPalette.deepBlue,
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+                            Center(
+                              child: Pinput(
+                                controller: otpController,
+                                length: 6,
+                                onCompleted: (pin) {
+                                  otpCode = pin;
+                                },
+                                errorText: otpError,
+                                defaultPinTheme: PinTheme(
+                                  width: 50,
+                                  height: 50,
+                                  textStyle: const TextStyle(
+                                      fontSize: 20, color: Colors.black),
+                                  decoration: BoxDecoration(
+                                    color: ColorPalette.whiteColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Colors.grey.shade400,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+                            CommonButton(
+                              buttonTextWidget: Text(
+                                'Verify OTP',
+                                style: TextStyles(context).getTitleStyle(
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              textColor: ColorPalette.whiteColor,
+                              fontSize: 16,
+                              radius: 30,
+                              onTap: () {
+                                if (otpCode.isEmpty || otpCode.length != 6) {
+                                  setState(() {
+                                    otpError =
+                                        'Please enter a valid 6-digit OTP';
+                                  });
+                                  return;
+                                }
+                                // Verify OTP
+                                context.read<ForgotPasswordBloc>().add(
+                                    ForgotPasswordVerifyOTP(
+                                        email: emailAccountController.text,
+                                        otp: otpCode));
+                              },
+                            ),
+                            BlocListener<ForgotPasswordBloc,
+                                ForgotPasswordState>(
+                              listener: (context, state) {
+                                if (state is ForgotPasswordOTPVerified) {
+                                  Navigator.pop(context);
+                                  NavigationServices(context)
+                                      .pushResetPasswordScreen();
+                                } else if (state is ForgotPasswordOTPFailure) {
+                                  Dialogs(context)
+                                      .showErrorDialog(message: state.error);
+                                }
+                              },
+                              child: Container(),
+                            ),
+                          ],
+                        );
                       } else if (state is ForgotPasswordFailure) {
                         return Center(
                             child: Text(
