@@ -16,24 +16,29 @@ class ProfileScreen extends StatelessWidget {
       create: (context) =>
           GetDoctorInfoBloc()..add(GetDoctorInfoEvent(doctorId)),
       child: Scaffold(
-        appBar: CommonAppBarView(
-          iconData: Icons.arrow_back,
-          title: "Profile",
-          onBackClick: () {
-            Navigator.pop(context);
-          },
-        ),
-        body: BlocBuilder<GetDoctorInfoBloc, GetDoctorInfoState>(
-          builder: (context, state) {
-            if (state is GetDoctorInfoLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is GetDoctorInfoSuccess) {
-              return _buildDoctorProfile(state.doctorData);
-            } else if (state is GetDoctorInfoError) {
-              return Center(child: Text(state.message));
-            }
-            return const Center(child: Text("No data available."));
-          },
+        backgroundColor: ColorPalette.blueFormColor,
+        body: Row(
+          children: [
+            // Placeholder space for the side navbar
+            Container(
+              width: 88,
+              color: ColorPalette.deepBlue,
+            ),
+            Expanded(
+              child: BlocBuilder<GetDoctorInfoBloc, GetDoctorInfoState>(
+                builder: (context, state) {
+                  if (state is GetDoctorInfoLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is GetDoctorInfoSuccess) {
+                    return _buildDoctorProfile(state.doctorData);
+                  } else if (state is GetDoctorInfoError) {
+                    return Center(child: Text(state.message));
+                  }
+                  return const Center(child: Text("No data available."));
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -41,39 +46,67 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildDoctorProfile(Map<String, dynamic> doctorData) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          // Profile Picture
-          CircleAvatar(
-            radius: 50,
-            backgroundImage: doctorData['ava_url'] != null
-                ? NetworkImage(doctorData['ava_url'])
-                : const AssetImage('assets/placeholder.png') as ImageProvider,
-          ),
-          const SizedBox(height: 16),
-          // Doctor's Name
-          Text(
-            "${doctorData['first_name']} ${doctorData['last_name']}",
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            "Specialization: ${doctorData['specialization']}",
-            style: const TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
-          ),
-          const Divider(height: 32),
-          // Profile Details
-          _buildInfoRow("Date of Birth", doctorData['date_of_birth']),
-          _buildInfoRow("Gender", doctorData['gender']),
-          _buildInfoRow("Blood Type", doctorData['blood_type']),
-          _buildInfoRow("Phone Number", doctorData['phone_number']),
-          _buildInfoRow("Address", doctorData['address']),
-          const Divider(height: 32),
-          _buildInfoRow("Education", doctorData['education']),
-          _buildInfoRow("Career", doctorData['career']),
-          _buildInfoRow("Description", doctorData['description']),
-        ],
+      padding: const EdgeInsets.all(30),
+      child: Container(
+        decoration: BoxDecoration(
+          color: ColorPalette.whiteColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 80,
+                  backgroundColor: ColorPalette.greyColor,
+                  backgroundImage: doctorData['ava_url'] != null
+                      ? NetworkImage(doctorData['ava_url'])
+                      : const AssetImage('assets/placeholder.png')
+                          as ImageProvider,
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 20,
+                  child: CircleAvatar(
+                    radius: 16,
+                    backgroundColor: ColorPalette.deepBlue,
+                    child: const Icon(Icons.edit, color: Colors.white, size: 16),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "${doctorData['first_name']} ${doctorData['last_name']}",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: ColorPalette.blackColor,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "Specialization: ${doctorData['specialization']}",
+              style: TextStyle(
+                fontSize: 16,
+                fontStyle: FontStyle.italic,
+                color: ColorPalette.greyColor,
+              ),
+            ),
+            Divider(height: 32, color: ColorPalette.greyColor),
+            _buildInfoRow("Date of Birth", doctorData['date_of_birth']),
+            _buildInfoRow("Gender", doctorData['gender']),
+            _buildInfoRow("Blood Type", doctorData['blood_type']),
+            _buildInfoRow("Phone Number", doctorData['phone_number']),
+            _buildInfoRow("Address", doctorData['address']),
+            Divider(height: 32, color: ColorPalette.greyColor),
+            _buildInfoRow("Education", doctorData['education']),
+            _buildInfoRow("Career", doctorData['career']),
+            _buildInfoRow("Description", doctorData['description']),
+          ],
+        ),
       ),
     );
   }
@@ -86,65 +119,21 @@ class ProfileScreen extends StatelessWidget {
         children: [
           Text(
             "$label: ",
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: ColorPalette.blackColor,
+            ),
           ),
           Expanded(
-            child: Text(value ?? "N/A"),
+            child: Text(
+              value ?? "N/A",
+              style: TextStyle(
+                color: ColorPalette.blackColor,
+              ),
+            ),
           ),
         ],
       ),
     );
   }
-}
-
-class CommonAppBarView extends StatelessWidget implements PreferredSizeWidget {
-  final IconData iconData;
-  final String title;
-  final VoidCallback onBackClick;
-
-  const CommonAppBarView({
-    super.key,
-    required this.iconData,
-    required this.title,
-    required this.onBackClick,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: ColorPalette.mediumBlue,
-      elevation: 0,
-      toolbarHeight: 70,
-      leading: IconButton(
-        icon: Icon(iconData, color: ColorPalette.whiteColor),
-        onPressed: onBackClick,
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: ColorPalette.whiteColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 22,
-        ),
-      ),
-      centerTitle: true,
-      actions: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: ColorPalette.whiteColor,
-            ),
-            onPressed: () {
-              // Placeholder for settings action
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(70);
 }
