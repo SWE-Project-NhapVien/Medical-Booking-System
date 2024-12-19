@@ -21,7 +21,7 @@ class PieChartOrderStatus extends StatelessWidget {
     double numberOfCompletedAppointment = 10;
     double numberOfPendingAppointment = 30;
 
-    appointments.forEach((element) {
+    for (var element in appointments) {
       if (element.status == 'Cancelled') {
         numberOfCancelledAppointment++;
       } else if (element.status == 'Completed') {
@@ -29,7 +29,7 @@ class PieChartOrderStatus extends StatelessWidget {
       } else {
         numberOfPendingAppointment++;
       }
-    });
+    }
 
     return Container(
       decoration: BoxDecoration(

@@ -110,7 +110,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   ],
                 ),
               ),
-              Expanded(flex: 2, child: const DetailAppointmentInformation()),
+              const Expanded(flex: 2, child: DetailAppointmentInformation()),
             ],
           ),
         ),
