@@ -12,10 +12,10 @@ class AppointmentRepository {
       {required String typeAppointment}) async {
     try {
       List<Appointment> appointmentData = [];
-      final _appointmentData = await _appointmentDataProvider
+      final appointmentData0 = await _appointmentDataProvider
           .getAppointmentData(typeAppointment: typeAppointment);
-      for (var i = 0; i < _appointmentData.length; i++) {
-        appointmentData.add(Appointment.fromMap(_appointmentData[i]));
+      for (var i = 0; i < appointmentData0.length; i++) {
+        appointmentData.add(Appointment.fromMap(appointmentData0[i]));
       }
       return appointmentData;
     } catch (e) {

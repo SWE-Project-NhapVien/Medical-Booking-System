@@ -30,18 +30,18 @@ class DetailAppointmentInformation extends StatelessWidget {
                 color: Colors.blue.shade900,
               ),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               "Name: XXX\nAge: XXX\nSymptoms:\n- Symptom 1\n- Symptom 2\n- Symptom 3",
               style: TextStyle(fontSize: 16),
             ),
-            Spacer(),
+            const Spacer(),
             ElevatedButton(
               onPressed: () {
                 // Add action
               },
-              child: Text("Detail"),
               style: ElevatedButton.styleFrom(),
+              child: Text("Detail"),
             ),
           ],
         ),

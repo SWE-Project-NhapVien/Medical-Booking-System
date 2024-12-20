@@ -153,7 +153,7 @@ class _HandlePageViewState extends State<HandlePageView> {
             icon: Icons.person,
             isSelected: _navigatorType == NavigatorType.profile,
             onClick: () => setState(() {
-              _screen = const ProfileScreen();
+              _screen = const ProfileScreen(doctorId: '00000000-0000-0000-0000-000000000002',);
               _navigatorType = NavigatorType.profile;
             }),
           ),

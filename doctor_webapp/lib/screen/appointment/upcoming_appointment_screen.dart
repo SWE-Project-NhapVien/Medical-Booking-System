@@ -45,7 +45,7 @@ class _UpcomingAppointmentScreenState extends State<UpcomingAppointmentScreen> {
       }
     }, builder: (context, state) {
       if (state is SucessAppointmentState) {
-        final List<AppointmentCard> _list = state.appointment
+        final List<AppointmentCard> list = state.appointment
             .map((e) => AppointmentCard(
                   appointmentId: e.appointmentId,
                   patientFullName: e.patientFullName,
@@ -57,9 +57,9 @@ class _UpcomingAppointmentScreenState extends State<UpcomingAppointmentScreen> {
                 ))
             .toList();
         return ListView.builder(
-          itemCount: _list.length,
+          itemCount: list.length,
           itemBuilder: (context, index) {
-            return _list[index];
+            return list[index];
           },
         );
       }
