@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/screen/HomeScreen/home_screen.dart';
 import 'package:booking_doctor_project/screen/patient/ForgotPasswordScreen/forgot_password_screen.dart';
 import 'package:booking_doctor_project/screen/patient/LoginAndSignUp/login_and_signup_screen.dart';
 import 'package:booking_doctor_project/screen/patient/SplashScreen/splash_screen.dart';
@@ -49,6 +50,7 @@ class _MedicalBookingAppState extends State<MedicalBookingApp> {
       '/reset-password': (BuildContext context) => const ForgotPasswordScreen(),
       '/login': (BuildContext context) =>
           LoginOrSignUpScreen(showLoginScreen: true),
+      '/home': (BuildContext context) => const HomeScreen(),
     };
   }
 }

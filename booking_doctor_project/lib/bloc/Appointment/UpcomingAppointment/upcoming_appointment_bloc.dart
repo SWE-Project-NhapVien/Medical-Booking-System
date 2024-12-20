@@ -9,6 +9,7 @@ class UpcomingAppointmentBloc
     extends Bloc<UpcomingAppointmentEvent, UpcomingAppointmentState> {
   UpcomingAppointmentBloc() : super(InitUpcomingAppointmentState()) {
     on<RequestUpcomingAppointmentEvent>(_requestUpcomingAppointmentEvent);
+    on<AddAppointmentEvent>(_onAddAppointment);
   }
 
   void _requestUpcomingAppointmentEvent(RequestUpcomingAppointmentEvent event,
@@ -49,6 +50,24 @@ class UpcomingAppointmentBloc
       }).toList();
     } else {
       return [];
+    }
+  }
+
+  Future<void> _onAddAppointment(
+      AddAppointmentEvent event, Emitter<UpcomingAppointmentState> emit) async {
+    emit(LoadingUpcomingAppointmentState());
+    try {
+      final supabase = Supabase.instance.client;
+      await supabase.rpc('insert_appointment', params: {
+        '_doctor_id': event.doctorId,
+        '_patient_id': event.patientId,
+        '_status': 'Upcoming',
+        '_timeslot_id': event.timeslotId,
+        '_description': event.description,
+      });
+      emit(AddAppointmentSucess());
+    } catch (e) {
+      emit(AddAppointmentError('Error adding appointment: $e'));
     }
   }
 }

@@ -1,10 +1,28 @@
+import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_bloc.dart';
+import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_event.dart';
+import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_state.dart';
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/text_styles.dart';
 import 'package:booking_doctor_project/widgets/common_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReadyPaymentScreen extends StatelessWidget {
-  const ReadyPaymentScreen({super.key});
+  final String doctorId;
+  final String timeslotId;
+  final int selectedDate;
+  final int selectedMonth;
+  final String selectedTime;
+  final String description;
+  const ReadyPaymentScreen(
+      {super.key,
+      required this.doctorId,
+      required this.timeslotId,
+      required this.selectedDate,
+      required this.selectedMonth,
+      required this.selectedTime,
+      required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -61,53 +79,9 @@ class ReadyPaymentScreen extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 60, vertical: 40),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image: Image.network(
-                                'https://www.shutterstock.com/image-vector/male-doctor-smiling-happy-face-600nw-2481032615.jpg',
-                              ).image)),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Xuan Thanh Dao",
-                              style: TextStyle(
-                                  color: ColorPalette.deepBlue,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            const Text(
-                              'Artificial Intelligence',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        Container(
-                          height: 28,
-                          width: 28,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: ColorPalette.lightBlue,
-                          ),
-                          child: Icon(
-                            Icons.star,
-                            color: ColorPalette.deepBlue,
-                          ),
-                        ),
-                      ],
+                    BlocProvider(
+                      create: (_) => GetDoctorInfoBloc(),
+                      child: DoctorInfoView(doctorId: doctorId),
                     ),
                     const SizedBox(
                       height: 20,
@@ -125,7 +99,8 @@ class ReadyPaymentScreen extends StatelessWidget {
                         Text('Date / Hour',
                             style: TextStyle(color: ColorPalette.deepBlue)),
                         const Spacer(),
-                        Text('Month 24, Year / 10:00 AM',
+                        Text(
+                            '${DateTime.now().year} - $selectedMonth - $selectedDate / $selectedTime',
                             style: TextStyle(color: ColorPalette.blackColor)),
                         const SizedBox(width: 10),
                       ],
@@ -156,7 +131,16 @@ class ReadyPaymentScreen extends StatelessWidget {
                     ),
                     CommonButton(
                       height: 48,
-                      onTap: () {},
+                      onTap: () {
+                        NavigationServices(context).pushPaymentScreen(
+                          doctorId,
+                          timeslotId,
+                          description,
+                          selectedDate,
+                          selectedMonth,
+                          selectedTime,
+                        );
+                      },
                       backgroundColor: ColorPalette.deepBlue,
                       buttonTextWidget: Text(
                         'Pay Now',
@@ -174,5 +158,73 @@ class ReadyPaymentScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class DoctorInfoView extends StatelessWidget {
+  final String doctorId;
+  const DoctorInfoView({super.key, required this.doctorId});
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<GetDoctorInfoBloc>();
+    bloc.add(GetDoctorInfoEvent(doctorId: doctorId));
+    return BlocBuilder<GetDoctorInfoBloc, GetDoctorInfoState>(
+        builder: (context, state) {
+      if (state is GetDoctorInfoSuccess) {
+        return Row(
+          children: [
+            Container(
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: Image.network(
+                    state.doctorInfo[0]['ava_url'],
+                  ).image)),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${state.doctorInfo[0]['first_name']} ${state.doctorInfo[0]['last_name']}",
+                  style: TextStyle(
+                      color: ColorPalette.deepBlue,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  state.doctorInfo[0]['specialization']
+                      .toString()
+                      .replaceAll('[', '')
+                      .replaceAll(']', ''),
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            Container(
+              height: 28,
+              width: 28,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: ColorPalette.lightBlue,
+              ),
+              child: Icon(
+                Icons.star,
+                color: ColorPalette.deepBlue,
+              ),
+            ),
+          ],
+        );
+      }
+      return const SizedBox.shrink();
+    });
   }
 }

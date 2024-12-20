@@ -1,6 +1,7 @@
 import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_bloc.dart';
 import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_event.dart';
 import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_state.dart';
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
@@ -171,7 +172,10 @@ class DoctorInfoView extends StatelessWidget {
                   child: SizedBox(
                     width: 180,
                     child: CommonButton(
-                      onTap: () {},
+                      onTap: () {
+                        NavigationServices(context)
+                            .pushScheduleScreen(doctorId);
+                      },
                       backgroundColor: ColorPalette.deepBlue,
                       buttonTextWidget: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
