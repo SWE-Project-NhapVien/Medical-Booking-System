@@ -541,14 +541,14 @@ class _TimeSlotViewState extends State<TimeSlotView> {
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        if (timeSlotsStatus[index] == true) {
+                      if (timeSlotsStatus[index] == true) {
+                        setState(() {
                           selectedTime = timeSlots[index];
-                        }
-                      });
-                      String tmp =
-                          '$selectedTime ${state.timeSlot[index]['timeslot_id']}';
-                      widget.onTimeSelected(tmp);
+                          String tmp =
+                              '$selectedTime ${state.timeSlot[index]['timeslot_id']}';
+                          widget.onTimeSelected(tmp);
+                        });
+                      }
                     },
                     child: Container(
                       height: 20,
