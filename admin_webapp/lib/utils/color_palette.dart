@@ -13,7 +13,6 @@ class ColorPalette {
   static Color get proportionGreen => const Color.fromARGB(255, 33, 171, 56);
   static Color get proportionRed => const Color.fromARGB(255, 251, 24, 24);
   static Color get proportionAmber => const Color.fromARGB(255, 255, 191, 0);
-  
   static Color get redColor => const Color(0xFFFF0000);
   static Color get lightBlue => const Color(0xFFECF1FF);
   static Color get completeButtonColor => const Color(0xFF8AFF73);

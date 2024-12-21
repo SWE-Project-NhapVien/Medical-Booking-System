@@ -1,10 +1,13 @@
-import 'package:booking_doctor_project/screen/report/report_screen.dart';
-import 'package:booking_doctor_project/screen/schedule/schedule_screen.dart';
-import 'package:booking_doctor_project/utils/color_palette.dart';
-import 'package:booking_doctor_project/utils/enum.dart';
-import 'package:booking_doctor_project/utils/fixed_web_component.dart';
-
+import 'package:admin_webapp/bloc/Logout/logout_bloc.dart';
+import 'package:admin_webapp/routes/navigation_services.dart';
+import 'package:admin_webapp/screen/report/report_screen.dart';
+import 'package:admin_webapp/screen/schedule/schedule_screen.dart';
+import 'package:admin_webapp/utils/color_palette.dart';
+import 'package:admin_webapp/utils/enum.dart';
+import 'package:admin_webapp/utils/fixed_web_component.dart';
+import 'package:admin_webapp/widgets/common_dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'home/home_screen.dart';
 
@@ -81,25 +84,34 @@ class _HandlePageViewState extends State<HandlePageView> {
   @override
   Widget build(BuildContext context) {
     double lottieSize = MediaQuery.of(context).size.width * 0.6;
-    return Scaffold(
-        body: Row(
-      children: [
-        _buildSideBar(),
-        isFirstTime
-            ? Center(
-                child: AlertDialog(
-                  backgroundColor: Colors.transparent,
-                  content: Lottie.network(
-                    FixedWebComponent.loading,
-                    width: lottieSize,
+    return BlocListener<LogoutBloc, LogoutState>(
+      listener: (context, state) {
+        if (state is LogoutSuccess) {
+          NavigationServices(context).popUntilLogin();
+        } else if (state is LogoutFailure) {
+          Dialogs(context).showErrorDialog(message: state.error);
+        }
+      },
+      child: Scaffold(
+          body: Row(
+        children: [
+          _buildSideBar(),
+          isFirstTime
+              ? Center(
+                  child: AlertDialog(
+                    backgroundColor: Colors.transparent,
+                    content: Lottie.network(
+                      FixedWebComponent.loading,
+                      width: lottieSize,
+                    ),
                   ),
+                )
+              : Expanded(
+                  child: _screen,
                 ),
-              )
-            : Expanded(
-                child: _screen,
-              ),
-      ],
-    ));
+        ],
+      )),
+    );
   }
 
   Widget _buildSideBar() {
@@ -154,26 +166,29 @@ class _HandlePageViewState extends State<HandlePageView> {
         Positioned(
           top: _topMainComponentPadding + _mainComponentDistance * 2,
           left: _leftPaddingComponent - 2,
-          child:  _buildSideBarComponent(
-                  icon: Icons.data_exploration,
-                  isSelected: _navigatorType == NavigatorType.report,
-                  onClick: () {
-                    if (_navigatorType != NavigatorType.report) {
-                      setState(() {
-                        _screen = const ReportScreen();
-                        _navigatorType = NavigatorType.report;
-                      });
-                    }
-                  }),
+          child: _buildSideBarComponent(
+              icon: Icons.data_exploration,
+              isSelected: _navigatorType == NavigatorType.report,
+              onClick: () {
+                if (_navigatorType != NavigatorType.report) {
+                  setState(() {
+                    _screen = const ReportScreen();
+                    _navigatorType = NavigatorType.report;
+                  });
+                }
+              }),
         ),
         Positioned(
           left: _leftPaddingComponent,
           bottom: _bottomPadding,
           child: _buildSideBarComponent(
-            icon: Icons.logout,
-            isSelected: _navigatorType == NavigatorType.logout,
-            onClick: () => {},
-          ),
+              icon: Icons.logout,
+              isSelected: _navigatorType == NavigatorType.logout,
+              onClick: () async {
+                await Dialogs(context).showLogoutDialog(context, () {
+                  BlocProvider.of<LogoutBloc>(context).add(const Logout());
+                });
+              }),
         ),
       ],
     );

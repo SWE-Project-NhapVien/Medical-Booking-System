@@ -1,5 +1,5 @@
-import 'package:booking_doctor_project/class/appointment.dart';
-import 'package:booking_doctor_project/utils/text_styles.dart';
+import 'package:admin_webapp/class/appointment.dart';
+import 'package:admin_webapp/utils/text_styles.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../../utils/color_palette.dart';
@@ -54,7 +54,7 @@ class _BarChartWeeklyAppointmentState extends State<BarChartWeeklyAppointment> {
           Text(
             'Weekly Appointment',
             style: TextStyles(context)
-                .getBoldStyle(color: ColorPalette.deepBlue, fontSize: 16),
+                .getRegularStyle(color: ColorPalette.deepBlue, size: 20, fontWeight: FontWeight.w500),
           ),
           const SizedBox(
             height: 32,
