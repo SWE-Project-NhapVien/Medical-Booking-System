@@ -1,7 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'dart:html' as html;
 
-class DoctorAuthServices {
+class AdminAuthServices {
   final SupabaseClient _supabase = Supabase.instance.client;
 
   Future<AuthResponse> signInWithEmailPassword({

@@ -1,5 +1,6 @@
-import 'package:booking_doctor_project/class/appointment.dart';
-import 'package:booking_doctor_project/utils/color_palette.dart';
+import 'package:admin_webapp/class/appointment.dart';
+import 'package:admin_webapp/utils/color_palette.dart';
+import 'package:admin_webapp/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class RecentAppointment extends StatelessWidget {
@@ -34,11 +35,23 @@ class RecentAppointment extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: DataTable(
-            columns: const [
-              DataColumn(label: Text("Order ID")),
-              DataColumn(label: Text("Date")),
-              DataColumn(label: Text("Status")),
-              DataColumn(label: Text("Amount")),
+            columns: [
+              DataColumn(
+                  label: Text("Order ID",
+                      style: TextStyles(context)
+                          .getRegularStyle(fontWeight: FontWeight.w500))),
+              DataColumn(
+                  label: Text("Date",
+                      style: TextStyles(context)
+                          .getRegularStyle(fontWeight: FontWeight.w500))),
+              DataColumn(
+                  label: Text("Status",
+                      style: TextStyles(context)
+                          .getRegularStyle(fontWeight: FontWeight.w500))),
+              DataColumn(
+                  label: Text("Amount",
+                      style: TextStyles(context)
+                          .getRegularStyle(fontWeight: FontWeight.w500))),
             ],
             rows: appointmentList.take(10).map((appointment) {
               return DataRow(cells: [

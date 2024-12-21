@@ -1,9 +1,10 @@
-import 'package:doctor_webapp/utils/color_palette.dart';
-import 'package:doctor_webapp/utils/localfiles.dart';
-import 'package:doctor_webapp/utils/text_styles.dart';
+import 'package:admin_webapp/routes/navigation_services.dart';
+import 'package:admin_webapp/utils/color_palette.dart';
+import 'package:admin_webapp/utils/localfiles.dart';
+import 'package:admin_webapp/utils/text_styles.dart';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
 
 class Dialogs {
   final BuildContext context;
@@ -25,7 +26,10 @@ class Dialogs {
     );
   }
 
-  Future<void> showErrorDialog({String title = 'Error', required String message, String buttonText = 'Got it!'}) {
+  Future<void> showErrorDialog(
+      {String title = 'Error',
+      required String message,
+      String buttonText = 'Got it!'}) {
     return showDialog(
         context: context,
         builder: (context) {

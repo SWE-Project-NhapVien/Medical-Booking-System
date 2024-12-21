@@ -1,9 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:admin_webapp/utils/color_palette.dart';
+import 'package:admin_webapp/utils/text_styles.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-
-import 'package:booking_doctor_project/utils/color_palette.dart';
-import 'package:booking_doctor_project/utils/text_styles.dart';
 
 import '../../../class/appointment.dart';
 
@@ -42,9 +41,11 @@ class PieChartOrderStatus extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Orders Status',
-              style: TextStyles(context)
-                  .getBoldStyle(color: ColorPalette.deepBlue, fontSize: 16),
+              'Order Status',
+              style: TextStyles(context).getRegularStyle(
+                  color: ColorPalette.deepBlue,
+                  size: 20,
+                  fontWeight: FontWeight.w500),
             ),
             const SizedBox(
               height: 20,
@@ -81,6 +82,7 @@ class PieChartOrderStatus extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             _buildToolTips(
+                context: context,
                 numberOfCancelledAppointment: numberOfCancelledAppointment,
                 numberOfCompletedAppointment: numberOfCompletedAppointment,
                 numberOfPendingAppointment: numberOfPendingAppointment),
@@ -91,17 +93,24 @@ class PieChartOrderStatus extends StatelessWidget {
   }
 
   Widget _buildToolTips(
-      {required double numberOfCancelledAppointment,
+      {required BuildContext context,
+      required double numberOfCancelledAppointment,
       required double numberOfCompletedAppointment,
       required double numberOfPendingAppointment}) {
     return Column(
       children: [
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Color'),
-            Text('Status'),
-            Text('Value'),
+            Text('Color',
+                style: TextStyles(context)
+                    .getRegularStyle(fontWeight: FontWeight.w500)),
+            Text('Status',
+                style: TextStyles(context)
+                    .getRegularStyle(fontWeight: FontWeight.w500)),
+            Text('Value',
+                style: TextStyles(context)
+                    .getRegularStyle(fontWeight: FontWeight.w500)),
           ],
         ),
         const SizedBox(height: 6),
