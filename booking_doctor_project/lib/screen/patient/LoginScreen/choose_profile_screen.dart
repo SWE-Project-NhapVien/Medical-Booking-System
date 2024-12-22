@@ -26,6 +26,11 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     context.read<FetchProfileBloc>().add(const FetchProfileEvent());
   }
 
@@ -67,10 +72,6 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
                         title: 'Choose Your Profile',
                         titleSize: 32,
                         topPadding: MediaQuery.of(context).padding.top,
-                        prefixIconData: Icons.arrow_back_ios_new_rounded,
-                        onPrefixIconClick: () {
-                          Navigator.pop(context);
-                        },
                       ),
                       Text(
                         'Your Family',

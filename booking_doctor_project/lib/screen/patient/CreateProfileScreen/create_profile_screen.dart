@@ -1,4 +1,5 @@
 import 'package:booking_doctor_project/bloc/patient/CreateProfile/create_profile_bloc.dart';
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/services/authentication/auth_services.dart';
 import 'package:booking_doctor_project/widgets/common_date_field.dart';
 import 'package:booking_doctor_project/widgets/common_dialogs.dart';
@@ -95,15 +96,16 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     return Scaffold(
       backgroundColor: ColorPalette.whiteColor,
       body: BlocConsumer<CreateProfileBloc, CreateProfileState>(
-          listener: (context, state) {
+          listener: (context, state) async {
         if (state is CreateProfileProcess) {
           Dialogs(context).showLoadingDialog();
         } else if (state is CreateProfileSuccess) {
           Navigator.pop(context);
-          Dialogs(context).showAnimatedDialog(
+          await Dialogs(context).showAnimatedDialog(
             title: 'Create Profile',
             content: 'Profile has been created successfully.',
           );
+          NavigationServices(context).pushChooseProfileScreen();
         } else if (state is CreateProfileFailure) {
           Navigator.pop(context);
           Dialogs(context).showErrorDialog(message: state.error);
@@ -230,11 +232,12 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
             errorText: errors['phoneNumber'] ?? '',
             isRestricted: true),
         LabelAndTextField(
-            context: context,
-            label: 'Relationship',
-            hintText: '',
-            controller: relationshipController,
-            errorText: '',),
+          context: context,
+          label: 'Relationship',
+          hintText: '',
+          controller: relationshipController,
+          errorText: '',
+        ),
         LabelAndTextField(
           context: context,
           label: 'Address',
@@ -378,7 +381,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: Container(
-                        height: size.height * 0.067,
+                        height: 50,
                         width: double.infinity,
                         decoration: BoxDecoration(
                             color: ColorPalette.blueFormColor,
@@ -578,7 +581,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       errors['firstName'] = 'First name is required.';
       isValid = false;
     } else if (!RegExp(r"^[a-zA-Z\s\t]+$").hasMatch(firstNameController.text)) {
-      errors['firstName'] = 'Must not contain numbers or special characters.';
+      errors['firstName'] = 'No numbers or special characters.';
       isValid = false;
     }
 
@@ -586,7 +589,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       errors['lastName'] = 'Last name is required.';
       isValid = false;
     } else if (!RegExp(r"^[a-zA-Z\s\t]+$").hasMatch(lastNameController.text)) {
-      errors['lastName'] = 'Must not contain numbers or special characters.';
+      errors['lastName'] = 'No numbers or special characters.';
       isValid = false;
     }
 
@@ -600,7 +603,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
       errors['phoneNumber'] = 'Phone number must be 10 digits.';
       isValid = false;
     }
-
 
     if (dateOfBirthController.text.isEmpty) {
       errors['dateOfBirth'] = 'Date of birth is required.';
@@ -643,12 +645,14 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
     bool isValid = true;
     errors.clear();
 
-    if (!RegExp(r"^\d+$").hasMatch(weightController.text)) {
+    if (!RegExp(r"^\d+$").hasMatch(weightController.text) &
+        weightController.text.isNotEmpty) {
       errors['weight'] = 'Weight must be numeric.';
       isValid = false;
     }
 
-    if (!RegExp(r"^\d+$").hasMatch(heightController.text)) {
+    if (!RegExp(r"^\d+$").hasMatch(heightController.text) &
+        heightController.text.isNotEmpty) {
       errors['height'] = 'Height must be numeric.';
       isValid = false;
     }
