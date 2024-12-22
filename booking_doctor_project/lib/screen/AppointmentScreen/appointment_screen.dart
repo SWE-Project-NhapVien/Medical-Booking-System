@@ -81,6 +81,9 @@ class _AppointmentScreenState extends State<AppointmentScreen>
                           color: ColorPalette.deepBlue,
                           fontWeight: FontWeight.bold),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     SizedBox(
                       child: _buildTab(size),
                     ),

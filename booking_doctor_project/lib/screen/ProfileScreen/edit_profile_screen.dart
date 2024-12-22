@@ -1,5 +1,6 @@
 import 'package:booking_doctor_project/bloc/patient/CreateProfile/create_profile_bloc.dart';
-import 'package:booking_doctor_project/services/authentication/auth_services.dart';
+import 'package:booking_doctor_project/class/patient_profile.dart';
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/widgets/common_date_field.dart';
 import 'package:booking_doctor_project/widgets/common_dialogs.dart';
 import 'package:booking_doctor_project/widgets/common_textfield.dart';
@@ -69,6 +70,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   int curStep = 0;
 
+  late Future<PatientProfile?> patientProfile;
+
+  @override
+  void initState() {
+    patientProfile = PatientProfile.getProfile();
+    super.initState();
+  }
+
   @override
   void dispose() {
     firstNameController.dispose();
@@ -92,107 +101,151 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: ColorPalette.whiteColor,
-      body: BlocConsumer<CreateProfileBloc, CreateProfileState>(
-          listener: (context, state) {
-        if (state is CreateProfileProcess) {
-          Dialogs(context).showLoadingDialog();
-        } else if (state is CreateProfileSuccess) {
-          Navigator.pop(context);
-          Dialogs(context).showAnimatedDialog(
-            title: 'Edit Profile',
-            content: 'Profile has been edited successfully.',
-          );
-        } else if (state is CreateProfileFailure) {
-          Navigator.pop(context);
-          Dialogs(context).showErrorDialog(message: state.error);
-        }
-      }, builder: (context, state) {
-        return SingleChildScrollView(
-          child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Column(children: [
-                CommonAppBarWithTitle(
-                  title: 'Edit Profile',
-                  titleSize: 32,
-                  topPadding: MediaQuery.of(context).padding.top,
-                  prefixIconData: Icons.arrow_back_ios_new_rounded,
-                  onPrefixIconClick: () async {
-                    if (curStep == 0) {
-                      await Dialogs(context).showErrorDialog(
-                        title: 'Unsaved Profile Changes',
-                        message: 'This profile will not be saved.',
-                      );
-                      Navigator.pop(context);
-                    } else {
-                      await Dialogs(context).showErrorDialog(
-                        title: 'Unsaved Profile Changes',
-                        message: 'This profile will not be saved.',
-                      );
-                      setState(() {
-                        curStep -= 1;
-                      });
-                    }
-                  },
-                ),
-                if (curStep == 0) _buildPersonalInformationForm(size),
-                if (curStep == 1) _buildHealthInformationForm(size),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: CommonButton(
-                      buttonTextWidget: Text(
-                        curStep == 0 ? 'Next' : 'Complete',
-                        style: TextStyles(context).getTitleStyle(
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      onTap: () {
-                        if (curStep == 0) {
-                          if (validatePage1()) {
+    return FutureBuilder<PatientProfile?>(
+        future: patientProfile,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError || snapshot.data == null) {
+            return const Center(
+              child: Text('Error loading profile'),
+            );
+          }
+          final profile = snapshot.data!;
+          firstNameController.text = profile.firstName;
+          lastNameController.text = profile.lastName;
+          phoneNumberController.text = profile.phoneNumber;
+          addressController.text = profile.address ?? '';
+          dateOfBirthController.text =
+              '${profile.dob.substring(8, 10)}/${profile.dob.substring(5, 7)}/${profile.dob.substring(0, 4)}';
+          weightController.text = profile.weight.toString();
+          heightController.text = profile.height.toString();
+          if (profile.emergencyContacts != null &&
+              profile.emergencyContacts!.isNotEmpty) {
+            restrictedEmergencyContactController.text =
+                profile.emergencyContacts!.first;
+            for (int i = 1; i < profile.emergencyContacts!.length; i++) {
+              emergencyContactsControllers.add(
+                  TextEditingController(text: profile.emergencyContacts![i]));
+            }
+          }
+          if (profile.medicalHistory != null) {
+            for (var element in profile.medicalHistory!) {
+              medicalHistoryControllers
+                  .add(TextEditingController(text: element));
+            }
+          }
+          selectedGender = profile.gender;
+
+          if (profile.bloodType != null) {
+            selectedBloodType = profile.bloodType!;
+          }
+
+          return Scaffold(
+            backgroundColor: ColorPalette.whiteColor,
+            body: BlocConsumer<CreateProfileBloc, CreateProfileState>(
+                listener: (context, state) async {
+              if (state is CreateProfileProcess) {
+                Dialogs(context).showLoadingDialog();
+              } else if (state is CreateProfileSuccess) {
+                Navigator.pop(context);
+                await Dialogs(context).showAnimatedDialog(
+                  title: 'Create Profile',
+                  content: 'Profile has been created successfully.',
+                );
+                NavigationServices(context).pushChooseProfileScreen();
+              } else if (state is CreateProfileFailure) {
+                Navigator.pop(context);
+                Dialogs(context).showErrorDialog(message: state.error);
+              }
+            }, builder: (context, state) {
+              return SingleChildScrollView(
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    child: Column(children: [
+                      CommonAppBarWithTitle(
+                        title: 'Create A Profile',
+                        titleSize: 32,
+                        topPadding: MediaQuery.of(context).padding.top,
+                        prefixIconData: Icons.arrow_back_ios_new_rounded,
+                        onPrefixIconClick: () async {
+                          if (curStep == 0) {
+                            await Dialogs(context).showErrorDialog(
+                              title: 'Unsaved Profile Changes',
+                              message: 'This profile will not be saved.',
+                            );
+                            Navigator.pop(context);
+                          } else {
+                            await Dialogs(context).showErrorDialog(
+                              title: 'Unsaved Profile Changes',
+                              message: 'This profile will not be saved.',
+                            );
                             setState(() {
-                              curStep += 1;
+                              curStep -= 1;
                             });
                           }
-                        } else {
-                          if (validatePage2()) {
-                            final userEmail =
-                                AuthServices().getCurruentUserEmail();
-                            context
-                                .read<CreateProfileBloc>()
-                                .add(CreateProfileRequired(
-                                  firstName: firstNameController.text,
-                                  lastName: lastNameController.text,
-                                  email: userEmail ?? '',
-                                  phoneNumber: phoneNumberController.text,
-                                  dateOfBirth: dateOfBirthController.text,
-                                  bloodType: selectedBloodType,
-                                  gender: selectedGender,
-                                  address: addressController.text,
-                                  height: double.parse(heightController.text),
-                                  weight: double.parse(weightController.text),
-                                  emergencyContact: [
-                                    restrictedEmergencyContactController.text,
-                                    ...emergencyContactsControllers
-                                        .map((controller) => controller.text)
-                                  ],
-                                  relationship: relationshipController.text,
-                                ));
-                          }
-                        }
-                      },
-                      width: double.infinity,
-                      height: size.height * 0.06,
-                      radius: 30,
-                    ),
-                  ),
-                ),
-              ])),
-        );
-      }),
-    );
+                        },
+                      ),
+                      if (curStep == 0) _buildPersonalInformationForm(size),
+                      if (curStep == 1) _buildHealthInformationForm(size),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: CommonButton(
+                            buttonTextWidget: Text(
+                              curStep == 0 ? 'Next' : 'Complete',
+                              style: TextStyles(context).getTitleStyle(
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            onTap: () {
+                              if (curStep == 0) {
+                                if (validatePage1()) {
+                                  setState(() {
+                                    curStep += 1;
+                                  });
+                                }
+                              } else {
+                                if (validatePage2()) {
+                                  // final userEmail =
+                                  //     AuthServices().getCurruentUserEmail();
+                                  // context
+                                  //     .read<CreateProfileBloc>()
+                                  //     .add(CreateProfileRequired(
+                                  //       firstName: firstNameController.text,
+                                  //       lastName: lastNameController.text,
+                                  //       email: userEmail ?? '',
+                                  //       phoneNumber: phoneNumberController.text,
+                                  //       dateOfBirth: dateOfBirthController.text,
+                                  //       bloodType: selectedBloodType,
+                                  //       gender: selectedGender,
+                                  //       address: addressController.text,
+                                  //       height: double.parse(heightController.text),
+                                  //       weight: double.parse(weightController.text),
+                                  //       emergencyContact: [
+                                  //         restrictedEmergencyContactController.text,
+                                  //         ...emergencyContactsControllers
+                                  //             .map((controller) => controller.text)
+                                  //       ],
+                                  //       relationship: relationshipController.text,
+                                  //     ));
+                                }
+                              }
+                            },
+                            width: double.infinity,
+                            height: size.height * 0.06,
+                            radius: 30,
+                          ),
+                        ),
+                      ),
+                    ])),
+              );
+            }),
+          );
+        });
   }
 
   Widget _buildPersonalInformationForm(Size size) {
@@ -230,11 +283,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             errorText: errors['phoneNumber'] ?? '',
             isRestricted: true),
         LabelAndTextField(
-            context: context,
-            label: 'Relationship',
-            hintText: '',
-            controller: relationshipController,
-            errorText: '',),
+          context: context,
+          label: 'Relationship',
+          hintText: '',
+          controller: relationshipController,
+          errorText: '',
+        ),
         LabelAndTextField(
           context: context,
           label: 'Address',
@@ -266,6 +320,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           color: ColorPalette.blueFormColor,
                           borderRadius: BorderRadius.circular(15)),
                       child: CustDropDown(
+                          defaultSelectedIndex: genders.indexOf(selectedGender),
                           items: List<CustDropdownMenuItem<String>>.generate(
                             genders.length,
                             (index) => CustDropdownMenuItem<String>(
@@ -378,12 +433,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: Container(
-                        height: size.height * 0.067,
+                        height: 50,
                         width: double.infinity,
                         decoration: BoxDecoration(
                             color: ColorPalette.blueFormColor,
                             borderRadius: BorderRadius.circular(15)),
                         child: CustDropDown(
+                            defaultSelectedIndex:
+                                bloodTypes.indexOf(selectedBloodType),
                             items: List<CustDropdownMenuItem<String>>.generate(
                               bloodTypes.length,
                               (index) => CustDropdownMenuItem<String>(
@@ -413,12 +470,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             SizedBox(width: size.width * 0.02),
             Expanded(
               child: LabelAndTextField(
-                  context: context,
-                  label: 'Weight',
-                  hintText: '',
-                  controller: weightController,
-                  errorText: errors['weight'] ?? '',
-                  suffixText: 'kg'),
+                context: context,
+                label: 'Weight',
+                hintText: '',
+                controller: weightController,
+                errorText: errors['weight'] ?? '',
+                suffixText: 'kg',
+              ),
             ),
             SizedBox(width: size.width * 0.02),
             Expanded(
@@ -578,7 +636,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       errors['firstName'] = 'First name is required.';
       isValid = false;
     } else if (!RegExp(r"^[a-zA-Z\s\t]+$").hasMatch(firstNameController.text)) {
-      errors['firstName'] = 'Must not contain numbers or special characters.';
+      errors['firstName'] = 'No numbers or special characters.';
       isValid = false;
     }
 
@@ -586,7 +644,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       errors['lastName'] = 'Last name is required.';
       isValid = false;
     } else if (!RegExp(r"^[a-zA-Z\s\t]+$").hasMatch(lastNameController.text)) {
-      errors['lastName'] = 'Must not contain numbers or special characters.';
+      errors['lastName'] = 'No numbers or special characters.';
       isValid = false;
     }
 
@@ -600,7 +658,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       errors['phoneNumber'] = 'Phone number must be 10 digits.';
       isValid = false;
     }
-
 
     if (dateOfBirthController.text.isEmpty) {
       errors['dateOfBirth'] = 'Date of birth is required.';
@@ -643,12 +700,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     bool isValid = true;
     errors.clear();
 
-    if (!RegExp(r"^\d+$").hasMatch(weightController.text)) {
+    if (!RegExp(r"^\d+$").hasMatch(weightController.text) &
+        weightController.text.isNotEmpty) {
       errors['weight'] = 'Weight must be numeric.';
       isValid = false;
     }
 
-    if (!RegExp(r"^\d+$").hasMatch(heightController.text)) {
+    if (!RegExp(r"^\d+$").hasMatch(heightController.text) &
+        heightController.text.isNotEmpty) {
       errors['height'] = 'Height must be numeric.';
       isValid = false;
     }

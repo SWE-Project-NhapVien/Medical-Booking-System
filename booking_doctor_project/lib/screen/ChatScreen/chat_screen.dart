@@ -7,6 +7,7 @@ class ChatScreen1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorPalette.whiteColor,
       body: Center(
         child: Text(
           "AVAILABLE SOON!",
@@ -14,39 +15,6 @@ class ChatScreen1 extends StatelessWidget {
               fontSize: 36,
               color: ColorPalette.deepBlue,
               fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-}
-
-class ChatScreen2 extends StatelessWidget {
-  const ChatScreen2({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          "This is a Chat Screen 2",
-          style: TextStyle(fontSize: 40),
-        ),
-      ),
-    );
-  }
-}
-
-class ChatScreen3 extends StatelessWidget {
-  const ChatScreen3({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          "This is a Chat Screen 3",
-          overflow: TextOverflow.clip,
-          style: TextStyle(fontSize: 40),
         ),
       ),
     );

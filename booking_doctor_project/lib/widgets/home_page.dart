@@ -1,6 +1,7 @@
 import 'package:booking_doctor_project/screen/AppointmentScreen/appointment_screen.dart';
 import 'package:booking_doctor_project/screen/ChatScreen/chat_screen.dart';
 import 'package:booking_doctor_project/screen/HomeScreen/home_screen.dart';
+import 'package:booking_doctor_project/screen/ProfileScreen/profile_screen_main.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class _HomePageState extends State<HomePage> {
   List pages = const [
     HomeScreen(),
     ChatScreen1(),
-    ChatScreen3(),
+    ProfileScreen(),
     AppointmentScreen(),
   ];
 

@@ -37,7 +37,7 @@ class UpcomingAppointmentBloc
         String formattedDate = DateFormat('MMMM d, y').format(date);
         return Appointment(
           appointmentDate: formattedDate,
-          appointmentTime: item['appointment_time'].toString(),
+          appointmentTime: item['appointment_time'].toString().substring(0, 5),
           appointmentId: item['appointment_id'].toString(),
           doctorFullName:
               item['doctor_last_name'] + ' ' + item['doctor_first_name'],
@@ -45,7 +45,7 @@ class UpcomingAppointmentBloc
           specializations: item['doctor_specialization'].cast<String>(),
           result: null,
           status: 'upcoming',
-          price: item['appointment_price'],
+          price: item['appointment_price'].toString(),
         );
       }).toList();
     } else {

@@ -1,11 +1,9 @@
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:booking_doctor_project/screen/ProfileScreen/edit_profile_screen.dart';
 import 'package:booking_doctor_project/screen/ProfileScreen/policy_screen.dart';
-
-// Replace this with your actual global patient ID source
-String globalPatientId = "ef48f364-1e9a-4c86-b490-57883ffcbc59";
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -15,22 +13,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool _showLogoutCard = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void _toggleLogoutCard() {
-    setState(() {
-      _showLogoutCard = !_showLogoutCard;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorPalette.whiteColor,
       body: Column(
         children: [
           const CommonAppBarView(
@@ -59,74 +45,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
 
-          // Profile Info, Policy, Switch Profile, Logout
           _buildMenuOptions(MediaQuery.of(context).size),
-          const Spacer(),
-          if (_showLogoutCard) _buildLogoutOverlay(),
         ],
-      ),
-    );
-  }
-
-  Widget _buildLogoutOverlay() {
-    return Container(
-      decoration: BoxDecoration(
-        color: ColorPalette.whiteColor,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-        boxShadow: [
-          BoxShadow(
-            color: ColorPalette.blackColor.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 10,
-            offset: const Offset(0, 0),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              'Logout',
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF2260FF)),
-            ),
-            const SizedBox(height: 10),
-            const Text('Are you sure you want to log out?'),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                  style: const ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Color(0xFFCAD6FF)),
-                  ),
-                  onPressed: _toggleLogoutCard,
-                  child: Text('Cancel',
-                      style: TextStyle(
-                          color: ColorPalette.deepBlue,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold)),
-                ),
-                ElevatedButton(
-                  style: const ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Color(0xFF2260FF)),
-                  ),
-                  onPressed: () => logoutCardEvent(),
-                  child: Text('Yes, Logout',
-                      style: TextStyle(
-                          color: ColorPalette.whiteColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold)),
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -156,7 +76,77 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           SizedBox(height: size.height * 0.02),
           GestureDetector(
-            onTap: () => logoutLayoutEvent(),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return AlertDialog(
+                        backgroundColor: Colors.transparent,
+                        content: Container(
+                          width: 300,
+                          height: 150,
+                          decoration: BoxDecoration(
+                              color: ColorPalette.whiteColor,
+                              borderRadius: BorderRadius.circular(40)),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 16),
+                                Text(
+                                  'Logged Out',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorPalette.deepBlue,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Are you sure you want to log out?',
+                                  style: TextStyle(
+                                    color: ColorPalette.deepBlue,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    const SizedBox(width: 32),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              ColorPalette.lightBlue),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        'Cancel',
+                                        style: TextStyle(
+                                            color: ColorPalette.deepBlue),
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              ColorPalette.deepBlue),
+                                      onPressed: () {},
+                                      child: Text(
+                                        'Confirm',
+                                        style: TextStyle(
+                                            color: ColorPalette.whiteColor),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 32),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ));
+                  });
+            },
             child: _logoutLayout(),
           ),
         ],
@@ -271,8 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void switchProfileLayoutEvent(BuildContext context) {
     // Handle on tap event here.
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text("Switch Profile")));
+    NavigationServices(context).pushChooseProfileScreen();
   }
 
   // Logout Layout
@@ -288,14 +277,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
               right: MediaQuery.of(context).size.width * 0.0861111),
           child: Image.asset('assets/images/next_arrow.png', fit: BoxFit.none))
     ]);
-  }
-
-  void logoutLayoutEvent() {
-    _toggleLogoutCard();
-  }
-
-  void logoutCardEvent() {
-    // Handle on tap event here.
-    //TO-DO IMPLEMENT
   }
 }
