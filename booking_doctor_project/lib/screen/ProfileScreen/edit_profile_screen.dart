@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/bloc/patient/GetAProfile/get_a_profile_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/UpdateProfile/update_profile_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/UpdateProfile/update_profile_event.dart';
 import 'package:booking_doctor_project/bloc/patient/UpdateProfile/update_profile_state.dart';
@@ -104,151 +105,193 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return FutureBuilder<PatientProfile?>(
-        future: patientProfile,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError || snapshot.data == null) {
-            return const Center(
-              child: Text('Error loading profile'),
-            );
-          }
-          final profile = snapshot.data!;
-          firstNameController.text = profile.firstName;
-          lastNameController.text = profile.lastName;
-          phoneNumberController.text = profile.phoneNumber;
-          addressController.text = profile.address ?? '';
-          dateOfBirthController.text =
-              '${profile.dob.substring(8, 10)}/${profile.dob.substring(5, 7)}/${profile.dob.substring(0, 4)}';
-          weightController.text = profile.weight.toString();
-          heightController.text = profile.height.toString();
-          if (profile.emergencyContacts != null &&
-              profile.emergencyContacts!.isNotEmpty) {
-            restrictedEmergencyContactController.text =
-                profile.emergencyContacts!.first;
-            for (int i = 1; i < profile.emergencyContacts!.length; i++) {
-              emergencyContactsControllers.add(
-                  TextEditingController(text: profile.emergencyContacts![i]));
-            }
-          }
-          if (profile.medicalHistory != null) {
-            for (var element in profile.medicalHistory!) {
-              medicalHistoryControllers
-                  .add(TextEditingController(text: element));
-            }
-          }
-          selectedGender = profile.gender;
 
-          if (profile.bloodType != null) {
-            selectedBloodType = profile.bloodType!;
-          }
-
-          return Scaffold(
-            backgroundColor: ColorPalette.whiteColor,
-            body: BlocConsumer<UpdateProfileBloc, UpdateProfileState>(
-                listener: (context, state) async {
-              if (state is UpdateProfileLoading) {
-                Dialogs(context).showLoadingDialog();
-              } else if (state is UpdateProfileSuccess) {
-                Navigator.pop(context);
-                await Dialogs(context).showAnimatedDialog(
-                  title: 'Update Profile',
-                  content: 'Profile has been updated successfully.',
-                );
-                NavigationServices(context).pushHomeScreen();
-              } else if (state is UpdateProfileError) {
-                Navigator.pop(context);
-                Dialogs(context).showErrorDialog(message: state.error);
+    return BlocListener<GetAProfileBloc, GetAProfileState>(
+      listener: (context, state) {
+        if (state is GetAProfileSuccess) {
+          NavigationServices(context).pushHomeScreen();
+        }
+      },
+      child: FutureBuilder<PatientProfile?>(
+          future: patientProfile,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError || snapshot.data == null) {
+              return const Center(
+                child: Text('Error loading profile'),
+              );
+            }
+            final profile = snapshot.data!;
+            firstNameController.text = profile.firstName;
+            lastNameController.text = profile.lastName;
+            phoneNumberController.text = profile.phoneNumber;
+            addressController.text = profile.address ?? '';
+            dateOfBirthController.text =
+                '${profile.dob.substring(8, 10)}/${profile.dob.substring(5, 7)}/${profile.dob.substring(0, 4)}';
+            weightController.text = profile.weight.toString();
+            heightController.text = profile.height.toString();
+            relationshipController.text = profile.relationship ?? '';
+            if (profile.emergencyContacts != null &&
+                profile.emergencyContacts!.isNotEmpty) {
+              restrictedEmergencyContactController.text =
+                  profile.emergencyContacts!.first;
+              for (int i = 1; i < profile.emergencyContacts!.length; i++) {
+                emergencyContactsControllers.add(
+                    TextEditingController(text: profile.emergencyContacts![i]));
               }
-            }, builder: (context, state) {
-              return SingleChildScrollView(
-                child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                    child: Column(children: [
-                      CommonAppBarWithTitle(
-                        title: 'Edit Profile',
-                        titleSize: 32,
-                        topPadding: MediaQuery.of(context).padding.top,
-                        prefixIconData: Icons.arrow_back_ios_new_rounded,
-                        onPrefixIconClick: () async {
-                          if (curStep == 0) {
-                            await Dialogs(context).showErrorDialog(
-                              title: 'Unsaved Profile Changes',
-                              message: 'This profile will not be saved.',
-                            );
-                            Navigator.pop(context);
-                          } else {
-                            await Dialogs(context).showErrorDialog(
-                              title: 'Unsaved Profile Changes',
-                              message: 'This profile will not be saved.',
-                            );
-                            setState(() {
-                              curStep -= 1;
-                            });
-                          }
-                        },
-                      ),
-                      if (curStep == 0) _buildPersonalInformationForm(size),
-                      if (curStep == 1) _buildHealthInformationForm(size),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
-                          child: CommonButton(
-                            buttonTextWidget: Text(
-                              curStep == 0 ? 'Next' : 'Complete',
-                              style: TextStyles(context).getTitleStyle(
-                                fontWeight: FontWeight.w400,
+            }
+            if (profile.medicalHistory != null &&
+                profile.medicalHistory!.isNotEmpty) {
+              for (var element in profile.medicalHistory!) {
+                medicalHistoryControllers
+                    .add(TextEditingController(text: element));
+              }
+            }
+            selectedGender = profile.gender;
+
+            selectedBloodType = profile.bloodType ?? 'None';
+
+            if (profile.allergies != null && profile.allergies!.isNotEmpty) {
+              for (var element in profile.allergies!) {
+                selectedAllergy.add(element);
+              }
+            }
+
+            if (profile.medicalHistory != null &&
+                profile.medicalHistory!.isNotEmpty) {
+              for (var element in profile.medicalHistory!) {
+                medicalHistoryControllers
+                    .add(TextEditingController(text: element));
+              }
+            }
+
+            return Scaffold(
+              backgroundColor: ColorPalette.whiteColor,
+              body: BlocConsumer<UpdateProfileBloc, UpdateProfileState>(
+                  listener: (context, state) async {
+                if (state is UpdateProfileLoading) {
+                  Dialogs(context).showLoadingDialog();
+                } else if (state is UpdateProfileSuccess) {
+                  Navigator.pop(context);
+                  await Dialogs(context).showAnimatedDialog(
+                    title: 'Update Profile',
+                    content: 'Profile has been updated successfully.',
+                  );
+                  context.read<GetAProfileBloc>().add(GetAProfileRequired(
+                      profileId: GlobalProfile().profileId!));
+                } else if (state is UpdateProfileError) {
+                  Navigator.pop(context);
+                  Dialogs(context).showErrorDialog(message: state.error);
+                }
+              }, builder: (context, state) {
+                return SingleChildScrollView(
+                  child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: Column(children: [
+                        CommonAppBarWithTitle(
+                          title: 'Edit Profile',
+                          titleSize: 32,
+                          topPadding: MediaQuery.of(context).padding.top,
+                          prefixIconData: Icons.arrow_back_ios_new_rounded,
+                          onPrefixIconClick: () async {
+                            if (curStep == 0) {
+                              await Dialogs(context).showErrorDialog(
+                                title: 'Unsaved Profile Changes',
+                                message: 'This profile will not be saved.',
+                              );
+                              Navigator.pop(context);
+                            } else {
+                              await Dialogs(context).showErrorDialog(
+                                title: 'Unsaved Profile Changes',
+                                message: 'This profile will not be saved.',
+                              );
+                              setState(() {
+                                curStep -= 1;
+                              });
+                            }
+                          },
+                        ),
+                        if (curStep == 0) _buildPersonalInformationForm(size),
+                        if (curStep == 1) _buildHealthInformationForm(size),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: CommonButton(
+                              buttonTextWidget: Text(
+                                curStep == 0 ? 'Next' : 'Complete',
+                                style: TextStyles(context).getTitleStyle(
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
+                              onTap: () {
+                                if (curStep == 0) {
+                                  if (validatePage1()) {
+                                    setState(() {
+                                      curStep += 1;
+                                    });
+                                  }
+                                } else {
+                                  if (validatePage2()) {
+                                    List<String> allergiesTmp = [];
+                                    for (var element in selectedAllergy) {
+                                      allergiesTmp.add(element);
+                                    }
+
+                                    List<String> emergencyContactsTmp = [];
+                                    emergencyContactsTmp.add(
+                                        restrictedEmergencyContactController
+                                            .text);
+                                    for (var element
+                                        in emergencyContactsControllers) {
+                                      emergencyContactsTmp.add(element.text);
+                                    }
+
+                                    List<String> medicalHistoryTmp = [];
+                                    for (var element
+                                        in medicalHistoryControllers) {
+                                      medicalHistoryTmp.add(element.text);
+                                    }
+
+                                    context.read<UpdateProfileBloc>().add(
+                                          UpdateProfileDataEvent(
+                                            id: GlobalProfile().profileId!,
+                                            fname: firstNameController.text,
+                                            lname: lastNameController.text,
+                                            pnum: phoneNumberController.text,
+                                            rela: relationshipController.text,
+                                            gender: selectedGender,
+                                            dob:
+                                                '${dateOfBirthController.text.substring(6, 10)}-${dateOfBirthController.text.substring(3, 5)}-${dateOfBirthController.text.substring(0, 2)}',
+                                            blood: selectedBloodType,
+                                            address: addressController.text,
+                                            weight: double.parse(
+                                                weightController.text),
+                                            height: double.parse(
+                                                heightController.text),
+                                            econtact: emergencyContactsTmp,
+                                            medlist: medicalHistoryTmp,
+                                            allergy: allergiesTmp,
+                                          ),
+                                        );
+                                  }
+                                }
+                              },
+                              width: double.infinity,
+                              height: size.height * 0.06,
+                              radius: 30,
                             ),
-                            onTap: () {
-                              if (curStep == 0) {
-                                if (validatePage1()) {
-                                  setState(() {
-                                    curStep += 1;
-                                  });
-                                }
-                              } else {
-                                if (validatePage2()) {
-                                  context.read<UpdateProfileBloc>().add(
-                                        UpdateProfileDataEvent(
-                                          id: GlobalProfile().profileId!,
-                                          fname: firstNameController.text,
-                                          lname: lastNameController.text,
-                                          pnum: phoneNumberController.text,
-                                          rela: relationshipController.text,
-                                          gender: selectedGender,
-                                          dob:
-                                              '${dateOfBirthController.text.substring(6, 10)}-${dateOfBirthController.text.substring(3, 5)}-${dateOfBirthController.text.substring(0, 2)}',
-                                          blood: selectedBloodType,
-                                          address: addressController.text,
-                                          weight: double.parse(
-                                              weightController.text),
-                                          height: double.parse(
-                                              heightController.text),
-                                          econtact:
-                                              profile.emergencyContacts ?? [],
-                                          medlist: profile.medicalHistory ?? [],
-                                          allergy: profile.allergies ?? [],
-                                        ),
-                                      );
-                                }
-                              }
-                            },
-                            width: double.infinity,
-                            height: size.height * 0.06,
-                            radius: 30,
                           ),
                         ),
-                      ),
-                    ])),
-              );
-            }),
-          );
-        });
+                      ])),
+                );
+              }),
+            );
+          }),
+    );
   }
 
   Widget _buildPersonalInformationForm(Size size) {
@@ -561,6 +604,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               color: ColorPalette.blueFormColor,
                               borderRadius: BorderRadius.circular(15)),
                           child: CustDropDown(
+                              defaultSelectedIndex:
+                                  allergies.indexOf(selectedAllergy[index]),
                               items:
                                   List<CustDropdownMenuItem<String>>.generate(
                                 allergies.length,
