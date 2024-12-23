@@ -1,4 +1,7 @@
-import 'package:booking_doctor_project/bloc/patient/CreateProfile/create_profile_bloc.dart';
+import 'package:booking_doctor_project/bloc/patient/UpdateProfile/update_profile_bloc.dart';
+import 'package:booking_doctor_project/bloc/patient/UpdateProfile/update_profile_event.dart';
+import 'package:booking_doctor_project/bloc/patient/UpdateProfile/update_profile_state.dart';
+import 'package:booking_doctor_project/class/global_profile.dart';
 import 'package:booking_doctor_project/class/patient_profile.dart';
 import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/widgets/common_date_field.dart';
@@ -145,18 +148,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
           return Scaffold(
             backgroundColor: ColorPalette.whiteColor,
-            body: BlocConsumer<CreateProfileBloc, CreateProfileState>(
+            body: BlocConsumer<UpdateProfileBloc, UpdateProfileState>(
                 listener: (context, state) async {
-              if (state is CreateProfileProcess) {
+              if (state is UpdateProfileLoading) {
                 Dialogs(context).showLoadingDialog();
-              } else if (state is CreateProfileSuccess) {
+              } else if (state is UpdateProfileSuccess) {
                 Navigator.pop(context);
                 await Dialogs(context).showAnimatedDialog(
-                  title: 'Create Profile',
-                  content: 'Profile has been created successfully.',
+                  title: 'Update Profile',
+                  content: 'Profile has been updated successfully.',
                 );
-                NavigationServices(context).pushChooseProfileScreen();
-              } else if (state is CreateProfileFailure) {
+                NavigationServices(context).pushHomeScreen();
+              } else if (state is UpdateProfileError) {
                 Navigator.pop(context);
                 Dialogs(context).showErrorDialog(message: state.error);
               }
@@ -166,7 +169,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                     child: Column(children: [
                       CommonAppBarWithTitle(
-                        title: 'Create A Profile',
+                        title: 'Edit Profile',
                         titleSize: 32,
                         topPadding: MediaQuery.of(context).padding.top,
                         prefixIconData: Icons.arrow_back_ios_new_rounded,
@@ -210,28 +213,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 }
                               } else {
                                 if (validatePage2()) {
-                                  // final userEmail =
-                                  //     AuthServices().getCurruentUserEmail();
-                                  // context
-                                  //     .read<CreateProfileBloc>()
-                                  //     .add(CreateProfileRequired(
-                                  //       firstName: firstNameController.text,
-                                  //       lastName: lastNameController.text,
-                                  //       email: userEmail ?? '',
-                                  //       phoneNumber: phoneNumberController.text,
-                                  //       dateOfBirth: dateOfBirthController.text,
-                                  //       bloodType: selectedBloodType,
-                                  //       gender: selectedGender,
-                                  //       address: addressController.text,
-                                  //       height: double.parse(heightController.text),
-                                  //       weight: double.parse(weightController.text),
-                                  //       emergencyContact: [
-                                  //         restrictedEmergencyContactController.text,
-                                  //         ...emergencyContactsControllers
-                                  //             .map((controller) => controller.text)
-                                  //       ],
-                                  //       relationship: relationshipController.text,
-                                  //     ));
+                                  context.read<UpdateProfileBloc>().add(
+                                        UpdateProfileDataEvent(
+                                          id: GlobalProfile().profileId!,
+                                          fname: firstNameController.text,
+                                          lname: lastNameController.text,
+                                          pnum: phoneNumberController.text,
+                                          rela: relationshipController.text,
+                                          gender: selectedGender,
+                                          dob:
+                                              '${dateOfBirthController.text.substring(6, 10)}-${dateOfBirthController.text.substring(3, 5)}-${dateOfBirthController.text.substring(0, 2)}',
+                                          blood: selectedBloodType,
+                                          address: addressController.text,
+                                          weight: double.parse(
+                                              weightController.text),
+                                          height: double.parse(
+                                              heightController.text),
+                                          econtact:
+                                              profile.emergencyContacts ?? [],
+                                          medlist: profile.medicalHistory ?? [],
+                                          allergy: profile.allergies ?? [],
+                                        ),
+                                      );
                                 }
                               }
                             },
