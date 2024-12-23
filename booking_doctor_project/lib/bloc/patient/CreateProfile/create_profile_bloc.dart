@@ -20,7 +20,12 @@ class CreateProfileBloc extends Bloc<CreateProfileEvent, CreateProfileState> {
           'p_blood_type': event.bloodType,
           'p_gender': event.gender,
           'p_address': event.address,
-          'p_relationship': event.relationship
+          'p_height': event.height,
+          'p_weight': event.weight,
+          'p_relationship': event.relationship,
+          'p_emergency_contact': event.emergencyContact,
+          'p_medical_history': event.medicalHistory,
+          'p_allergies': event.allergies,
         });
         emit(CreateProfileSuccess());
       } catch (e) {

@@ -173,14 +173,18 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                   bloodType: selectedBloodType,
                                   gender: selectedGender,
                                   address: addressController.text,
-                                  height: double.parse(heightController.text),
-                                  weight: double.parse(weightController.text),
+                                  height: double.tryParse(heightController.text),
+                                  weight: double.tryParse(weightController.text),
                                   emergencyContact: [
                                     restrictedEmergencyContactController.text,
                                     ...emergencyContactsControllers
                                         .map((controller) => controller.text)
                                   ],
                                   relationship: relationshipController.text,
+                                  allergies: selectedAllergy,
+                                  medicalHistory: medicalHistoryControllers
+                                      .map((controller) => controller.text)
+                                      .toList(),
                                 ));
                           }
                         }
@@ -647,17 +651,20 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
 
     if (!RegExp(r"^\d+$").hasMatch(weightController.text) &
         weightController.text.isNotEmpty) {
+      print('weightController.text: ${weightController.text}');
       errors['weight'] = 'Weight must be numeric.';
       isValid = false;
     }
 
     if (!RegExp(r"^\d+$").hasMatch(heightController.text) &
         heightController.text.isNotEmpty) {
+      print('heightController.text: ${heightController.text}');
       errors['height'] = 'Height must be numeric.';
       isValid = false;
     }
 
     setState(() {});
+    print('is valid: $isValid');
     return isValid;
   }
 }

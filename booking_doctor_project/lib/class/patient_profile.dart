@@ -7,6 +7,7 @@ class PatientProfile {
   String phoneNumber;
   String dob;
   String gender;
+  String? relationship;
   String? address;
   String? bloodType;
   double? weight;
@@ -22,6 +23,7 @@ class PatientProfile {
     required this.phoneNumber,
     required this.dob,
     required this.gender,
+    this.relationship,
     this.address,
     this.bloodType,
     this.weight,
@@ -40,6 +42,7 @@ class PatientProfile {
       'phoneNumber': profile.phoneNumber,
       'dob': profile.dob,
       'gender': profile.gender,
+      'relationship': profile.relationship ?? '',
       'address': profile.address ?? '',
       'bloodType': profile.bloodType ?? '',
       'weight': profile.weight ?? 0.0,
@@ -63,6 +66,7 @@ class PatientProfile {
       phoneNumber: profileMap['phoneNumber'],
       dob: profileMap['dob'],
       gender: profileMap['gender'],
+      relationship: profileMap['relationship'],
       address: profileMap['address'],
       bloodType: profileMap['bloodType'],
       weight: profileMap['weight'],
@@ -85,6 +89,7 @@ class PatientProfile {
     String? phoneNumber,
     String? dob,
     String? gender,
+    String? relationship,
     String? address,
     String? bloodType,
     double? weight,
@@ -101,6 +106,7 @@ class PatientProfile {
       phoneNumber: phoneNumber ?? profileMap['phoneNumber'],
       address: address ?? profileMap['address'] ?? '',
       dob: dob ?? profileMap['dob'],
+      relationship: relationship ?? profileMap['relationship'] ?? '',
       gender: gender ?? profileMap['gender'],
       bloodType: bloodType ?? profileMap['bloodType'] ?? '',
       weight: weight ?? profileMap['weight'],

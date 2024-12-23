@@ -39,6 +39,7 @@ class GetAProfileBloc extends Bloc<GetAProfileEvent, GetAProfileState> {
       phoneNumber: item['phone_number'],
       dob: item['date_of_birth'],
       gender: item['gender'],
+      relationship: item['relationship'] ?? '',
       address: item['address'] ?? '',
       bloodType: item['blood_type'] ?? '',
       weight: (item['weight'] as num?)?.toDouble() ?? 0.0,
