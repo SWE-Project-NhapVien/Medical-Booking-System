@@ -1,8 +1,7 @@
+import 'package:booking_doctor_project/utils/color_palette.dart';
+import 'package:booking_doctor_project/utils/text_styles.dart';
+import 'package:booking_doctor_project/widgets/tap_effect.dart';
 import 'package:flutter/material.dart';
-
-import '../utils/color_palette.dart';
-import '../utils/text_styles.dart';
-import 'tap_effect.dart';
 
 class DateOfBirthPicker extends StatefulWidget {
   final String label;
@@ -27,7 +26,7 @@ class DateOfBirthPickerState extends State<DateOfBirthPicker> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return SizedBox(
-      height: 101,
+      height: 103,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,7 +45,7 @@ class DateOfBirthPickerState extends State<DateOfBirthPicker> {
                         style: TextStyles(context).getTitleStyle(
                           size: 20,
                           fontWeight: FontWeight.w500,
-                          color: ColorPalette.proportionRed,
+                          color: ColorPalette.redColor,
                         ),
                       ),
                     ]
@@ -58,7 +57,7 @@ class DateOfBirthPickerState extends State<DateOfBirthPicker> {
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: ColorPalette.mediumBlue,
+              color: ColorPalette.blueFormColor,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -106,7 +105,7 @@ class DateOfBirthPickerState extends State<DateOfBirthPicker> {
               child: Text(
                 widget.errorText,
                 style: TextStyles(context).getSmallStyle().copyWith(
-                      color: ColorPalette.proportionRed,
+                      color: ColorPalette.redColor,
                       fontStyle: FontStyle.italic,
                     ),
               ),

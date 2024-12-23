@@ -1,10 +1,10 @@
-import 'package:admin_webapp/bloc/doctor/CreateDoctorProfile/create_doctor_profile_bloc.dart';
-import 'package:admin_webapp/widgets/common_date_field.dart';
-import 'package:admin_webapp/widgets/common_dialogs.dart';
-import 'package:admin_webapp/widgets/common_textfield.dart';
-import 'package:admin_webapp/widgets/custom_dropdown.dart';
-import 'package:admin_webapp/widgets/tap_effect.dart';
-import 'package:admin_webapp/widgets/textfield_with_label.dart';
+import 'package:booking_doctor_project/bloc/doctor/CreateDoctorProfile/create_doctor_profile_bloc.dart';
+import 'package:booking_doctor_project/widgets/common_date_field.dart';
+import 'package:booking_doctor_project/widgets/common_dialogs.dart';
+import 'package:booking_doctor_project/widgets/common_textfield.dart';
+import 'package:booking_doctor_project/widgets/custom_dropdown.dart';
+import 'package:booking_doctor_project/widgets/tap_effect.dart';
+import 'package:booking_doctor_project/widgets/textfield_with_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -115,7 +115,7 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
                         ),
                       ),
                       onTap: () {
-                        if (validateForm()) {
+                        if (validateDoctorForm()) {
                           context.read<CreateDoctorProfileBloc>().add(
                                 CreateDoctorProfileRequired(
                                   firstName: firstNameController.text,
@@ -150,99 +150,216 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
 
   Widget _buildDoctorInformationForm(Size size) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LabelAndTextField(
-          context: context,
-          label: 'First Name',
-          controller: firstNameController,
-          errorText: errors['firstName'] ?? '',
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: LabelAndTextField(
+                  context: context,
+                  label: 'First Name',
+                  hintText: '',
+                  controller: firstNameController,
+                  errorText: errors['firstName'] ?? '',
+                  isRestricted: true),
+            ),
+            SizedBox(width: size.width * 0.02),
+            Expanded(
+              child: LabelAndTextField(
+                  context: context,
+                  label: 'Last Name',
+                  hintText: '',
+                  controller: lastNameController,
+                  errorText: errors['lastName'] ?? '',
+                  isRestricted: true),
+            ),
+          ],
         ),
         LabelAndTextField(
-          context: context,
-          label: 'Last Name',
-          controller: lastNameController,
-          errorText: errors['lastName'] ?? '',
-        ),
-        CommonTextField(
-          textEditingController: phoneNumberController,
-          hintText: 'Phone Number',
-          errorText: errors['phoneNumber'] ?? '',
-        ),
-        CommonDateField(
-          controller: dateOfBirthController,
-          hintText: 'Date of Birth',
-        ),
-        CustomDropdown<String>(
-          label: 'Gender',
-          items: genders,
-          value: selectedGender,
-          onChanged: (value) {
-            setState(() {
-              selectedGender = value ?? 'None';
-            });
-          },
-        ),
-        CustomDropdown<String>(
-          label: 'Blood Type',
-          items: bloodTypes,
-          value: selectedBloodType,
-          onChanged: (value) {
-            setState(() {
-              selectedBloodType = value ?? 'None';
-            });
-          },
+            context: context,
+            label: 'Phone Number',
+            hintText: '',
+            controller: phoneNumberController,
+            errorText: errors['phoneNumber'] ?? '',
+            isRestricted: true),
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: DateOfBirthPicker(
+                label: 'Date of Birth',
+                isRestricted: true,
+                errorText: errors['dateOfBirth'] ?? '',
+                controller: dateOfBirthController,
+              ),
+            ),
+            SizedBox(width: size.width * 0.02),
+            Expanded(
+              flex: 1,
+              child: Container(
+                height: 101,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Gender',
+                      style: TextStyles(context).getTitleStyle(
+                        size: 20,
+                        fontWeight: FontWeight.w500,
+                        color: ColorPalette.blackColor,
+                      ),
+                    ),
+                    Container(
+                      height: size.height * 0.06,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: ColorPalette.blueFormColor,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: CustDropDown(
+                          items: List<CustDropdownMenuItem<String>>.generate(
+                            genders.length,
+                            (index) => CustDropdownMenuItem<String>(
+                              value: genders[index],
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Text(
+                                  genders[index],
+                                  style: TextStyles(context).getRegularStyle(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          borderRadius: 10,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedGender = value as String;
+                            });
+                          }),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
         LabelAndTextField(
-          context: context,
-          label: 'Address',
-          controller: addressController,
-          errorText: errors['address'] ?? '',
+            context: context,
+            label: 'Address',
+            hintText: '',
+            controller: addressController,
+            errorText: errors['address'] ?? '',
+            isRestricted: true),
+        LabelAndTextField(
+            context: context,
+            label: 'Education',
+            hintText: '',
+            controller: educationController,
+            errorText: errors['education'] ?? ''),
+        LabelAndTextField(
+            context: context,
+            label: 'Career',
+            hintText: '',
+            controller: careerController,
+            errorText: errors['career'] ?? ''),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Specialization',
+              style: TextStyles(context).getTitleStyle(
+                size: 20,
+                fontWeight: FontWeight.w500,
+                color: ColorPalette.blackColor,
+              ),
+            ),
+            SizedBox(height: 5),
+            Container(
+              height: size.height * 0.06,
+              decoration: BoxDecoration(
+                  color: ColorPalette.blueFormColor,
+                  borderRadius: BorderRadius.circular(15)),
+              child: CustDropDown(
+                  items: List<CustDropdownMenuItem<String>>.generate(
+                    specializations.length,
+                    (index) => CustDropdownMenuItem<String>(
+                      value: specializations[index],
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          specializations[index],
+                          style: TextStyles(context).getRegularStyle(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  borderRadius: 10,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedSpecialization = value as String;
+                    });
+                  }),
+            ),
+          ],
         ),
         LabelAndTextField(
-          context: context,
-          label: 'Education',
-          controller: educationController,
-        ),
+            context: context,
+            label: 'Profile Description',
+            hintText: 'Enter a brief description',
+            controller: descriptionController,
+            errorText: errors['description'] ?? '',
+            height: 111),
         LabelAndTextField(
-          context: context,
-          label: 'Career',
-          controller: careerController,
-        ),
-        LabelAndTextField(
-          context: context,
-          label: 'Description',
-          controller: descriptionController,
-        ),
-        CustomDropdown<String>(
-          label: 'Specialization',
-          items: specializations,
-          value: selectedSpecialization,
-          onChanged: (value) {
-            setState(() {
-              selectedSpecialization = value ?? 'General Medicine';
-            });
-          },
-        ),
+            context: context,
+            label: 'Profile Picture URL',
+            hintText: 'Enter image URL',
+            controller: profilePictureUrlController,
+            errorText: errors['avaUrl'] ?? ''),
       ],
     );
   }
 
-  bool validateForm() {
-    errors.clear();
+  bool validateDoctorForm() {
     bool isValid = true;
+    errors.clear();
 
     if (firstNameController.text.isEmpty) {
-      errors['firstName'] = 'First name is required';
+      errors['firstName'] = 'First name is required.';
       isValid = false;
     }
+
     if (lastNameController.text.isEmpty) {
-      errors['lastName'] = 'Last name is required';
+      errors['lastName'] = 'Last name is required.';
       isValid = false;
     }
-    if (phoneNumberController.text.isEmpty) {
-      errors['phoneNumber'] = 'Phone number is required';
+
+    if (phoneNumberController.text.isEmpty ||
+        !RegExp(r"^\d+$").hasMatch(phoneNumberController.text)) {
+      errors['phoneNumber'] = 'Valid phone number is required.';
       isValid = false;
     }
+
+    if (educationController.text.isEmpty) {
+      errors['education'] = 'Education is required.';
+      isValid = false;
+    }
+
+    if (careerController.text.isEmpty) {
+      errors['career'] = 'Career is required.';
+      isValid = false;
+    }
+
+    if (selectedSpecialization == null || selectedSpecialization.isEmpty) {
+      errors['specialization'] = 'Specialization is required.';
+      isValid = false;
+    }
+
+    if (profilePictureUrlController.text.isEmpty) {
+      errors['avaUrl'] = 'Profile picture URL is required.';
+      isValid = false;
+    }
+
+    setState(() {});
     return isValid;
   }
 }

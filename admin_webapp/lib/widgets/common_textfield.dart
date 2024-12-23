@@ -135,7 +135,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
                 child: Text(
                 widget.errorText ?? "",
                 style: TextStyles(context).getSmallStyle().copyWith(
-                    color: ColorPalette.proportionRed,
+                    color: ColorPalette.redColor,
                     fontStyle: FontStyle.italic,
                   ),
               ),

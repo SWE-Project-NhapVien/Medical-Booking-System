@@ -1,4 +1,4 @@
-import '../utils/color_palette.dart';
+import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:flutter/material.dart';
 
 class CustDropDown<T> extends StatefulWidget {

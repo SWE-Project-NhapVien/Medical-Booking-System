@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/widgets/common_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -36,7 +37,7 @@ Widget LabelAndTextField(
                       style: TextStyles(context).getTitleStyle(
                         size: 20,
                         fontWeight: FontWeight.w500,
-                        color: ColorPalette.proportionRed,
+                        color: ColorPalette.redColor,
                       ),
                     ),
                   ]

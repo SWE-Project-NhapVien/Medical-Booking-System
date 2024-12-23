@@ -1,9 +1,8 @@
+import 'package:booking_doctor_project/utils/color_palette.dart';
+import 'package:booking_doctor_project/utils/localfiles.dart';
+import 'package:booking_doctor_project/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import '../utils/color_palette.dart';
-import '../utils/localfiles.dart';
-import '../utils/text_styles.dart';
-
 
 
 class Dialogs {
@@ -39,12 +38,12 @@ class Dialogs {
                     color: ColorPalette.deepBlue),
               ),
               scrollable: true,
-              backgroundColor: ColorPalette.mediumBlue,
+              backgroundColor: ColorPalette.blueFormColor,
               content: SingleChildScrollView(
                 child: Text(
                   message,
                   style: TextStyles(context)
-                      .getRegularStyle(color: ColorPalette.proportionRed),
+                      .getRegularStyle(color: ColorPalette.redColor),
                 ),
               ),
               actions: [
@@ -80,7 +79,7 @@ class Dialogs {
             child: FadeTransition(
               opacity: Tween<double>(begin: 0.5, end: 1.0).animate(a1),
               child: AlertDialog(
-                backgroundColor: ColorPalette.mediumBlue,
+                backgroundColor: ColorPalette.blueFormColor,
                 title: Text(
                   title,
                   style: TextStyles(context).getTitleStyle(
