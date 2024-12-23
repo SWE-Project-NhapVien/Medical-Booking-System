@@ -3,6 +3,7 @@ import 'package:booking_doctor_project/screen/schedule/schedule_screen.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/enum.dart';
 import 'package:booking_doctor_project/utils/fixed_web_component.dart';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'home/home_screen.dart';
@@ -52,7 +53,9 @@ class _HandlePageViewState extends State<HandlePageView> {
     setState(() {
       isFirstTime = false;
       _screen = const HomeScreen();
+      
     });
+    
   }
 
   @override
