@@ -4,6 +4,8 @@ import 'package:booking_doctor_project/bloc/DoctorInfo/doctor_info_state.dart';
 import 'package:booking_doctor_project/bloc/TimeSlot/timeslot_bloc.dart';
 import 'package:booking_doctor_project/bloc/TimeSlot/timeslot_event.dart';
 import 'package:booking_doctor_project/bloc/TimeSlot/timeslot_state.dart';
+import 'package:booking_doctor_project/class/patient_profile.dart';
+import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:booking_doctor_project/widgets/common_dialogs.dart';
@@ -25,9 +27,12 @@ class ScheduleScreen extends StatefulWidget {
 class _ScheduleScreenState extends State<ScheduleScreen> {
   late int selectedDate;
   late int selectedMonth;
+  late String selectedTime;
   late Map<int, List<String>> daysInWeekByMonth;
   late TextEditingController descriptionController;
   late ScrollController scrollController;
+  late String timeslotId;
+  late Future<PatientProfile?> patientProfile;
 
   @override
   void initState() {
@@ -36,6 +41,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     daysInWeekByMonth = generateDaysInWeekByMonth();
     descriptionController = TextEditingController();
     scrollController = ScrollController();
+    selectedTime = '';
+    timeslotId = '';
+    patientProfile = PatientProfile.getProfile();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       scrollController.jumpTo((selectedDate - 1) * 70.0);
@@ -232,9 +240,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   BlocProvider(
                     create: (_) => GetTimeSlotDataBloc(),
                     child: TimeSlotView(
-                        doctorId: widget.doctorId,
-                        date:
-                            '${DateTime.now().year}-$selectedMonth-$selectedDate'),
+                      doctorId: widget.doctorId,
+                      date:
+                          '${DateTime.now().year}-$selectedMonth-$selectedDate',
+                      onTimeSelected: (value) {
+                        List<String> tmp = value.split(' ');
+                        selectedTime = tmp[0];
+                        timeslotId = tmp[1];
+                      },
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -257,84 +271,110 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   const SizedBox(
                     height: 5,
                   ),
-                  const Text(
-                    "Fullname",
-                  ),
-                  Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: ColorPalette.lightBlue,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            'Jane Doe',
-                            style: TextStyle(
+                  FutureBuilder(
+                      future: patientProfile,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: AlertDialog(
+                              backgroundColor: Colors.transparent,
+                              content: Lottie.asset(
+                                Localfiles.loading,
+                                width: 100,
+                              ),
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          return const Center(
+                            child: Text('No patient profile found'),
+                          );
+                        }
+                        final profile = snapshot.data;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Fullname",
+                            ),
+                            Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: ColorPalette.lightBlue,
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                    Text(
+                                      '${profile!.firstName} ${profile.lastName}',
+                                      style: TextStyle(
+                                          color: ColorPalette.deepBlue,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              "Age",
+                            ),
+                            Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: ColorPalette.lightBlue,
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                    Text(
+                                      '${DateTime.now().year - int.parse(profile.dob.substring(0, 4))}',
+                                      style: TextStyle(
+                                          color: ColorPalette.deepBlue,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              "Gender",
+                            ),
+                            Container(
+                              height: 32,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
                                 color: ColorPalette.deepBlue,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    "Age",
-                  ),
-                  Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: ColorPalette.lightBlue,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            '28',
-                            style: TextStyle(
-                                color: ColorPalette.deepBlue,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const Text(
-                    "Gender",
-                  ),
-                  Container(
-                    height: 32,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: ColorPalette.deepBlue,
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Female',
-                        style: TextStyle(
-                            color: ColorPalette.whiteColor,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
+                              ),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  profile.gender,
+                                  style: TextStyle(
+                                      color: ColorPalette.whiteColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
                   const SizedBox(
                     height: 10,
                   ),
@@ -382,7 +422,26 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                     height: 30,
                   ),
                   CommonButton(
-                    onTap: () {},
+                    onTap: () {
+                      if (descriptionController.text.isEmpty) {
+                        Dialogs(context).showErrorDialog(
+                            title: 'Error',
+                            message: 'Please enter your problem');
+                      } else if (selectedTime.isEmpty) {
+                        Dialogs(context).showErrorDialog(
+                            title: 'Error',
+                            message: 'Please select a time slot');
+                      } else {
+                        NavigationServices(context).pushReadyPaymentScreen(
+                          widget.doctorId,
+                          timeslotId,
+                          selectedDate,
+                          selectedMonth,
+                          selectedTime,
+                          descriptionController.text,
+                        );
+                      }
+                    },
                     backgroundColor: ColorPalette.deepBlue,
                     buttonText: 'Book',
                     textColor: ColorPalette.whiteColor,
@@ -422,11 +481,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 class TimeSlotView extends StatefulWidget {
   final String doctorId;
   final String date;
+  final void Function(String selectedTime) onTimeSelected;
 
   const TimeSlotView({
     super.key,
     required this.doctorId,
     required this.date,
+    required this.onTimeSelected,
   });
 
   @override
@@ -436,21 +497,6 @@ class TimeSlotView extends StatefulWidget {
 class _TimeSlotViewState extends State<TimeSlotView> {
   late String selectedTime;
 
-  final List<String> timeSlots = [
-    '8:00 AM',
-    '8:30 AM',
-    '9:00 AM',
-    '9:30 AM',
-    '10:00 AM',
-    '10:30 AM',
-    '2:00 PM',
-    '2:30 PM',
-    '3:00 PM',
-    '3:30 PM',
-    '4:00 PM',
-    '4:30 PM'
-  ];
-
   @override
   void initState() {
     selectedTime = '';
@@ -459,8 +505,8 @@ class _TimeSlotViewState extends State<TimeSlotView> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = context.read<GetTimeSlotDataBloc>();
-    bloc.add(GetTimeSlotEvent(doctorId: widget.doctorId, date: widget.date));
+    final bloc2 = context.read<GetTimeSlotDataBloc>();
+    bloc2.add(GetTimeSlotEvent(doctorId: widget.doctorId, date: widget.date));
 
     return BlocBuilder<GetTimeSlotDataBloc, GetTimeSlotState>(
         builder: (context, state) {
@@ -475,6 +521,15 @@ class _TimeSlotViewState extends State<TimeSlotView> {
           ),
         );
       } else if (state is GetTimeSlotSuccess) {
+        List<String> timeSlots = [];
+        for (int i = 0; i < state.timeSlot.length; i++) {
+          timeSlots
+              .add(state.timeSlot[i]['timeslot'].toString().substring(0, 5));
+        }
+        List<bool> timeSlotsStatus = [];
+        for (int i = 0; i < state.timeSlot.length; i++) {
+          timeSlotsStatus.add(state.timeSlot[i]['status']);
+        }
         return SizedBox(
           height: 150,
           child: GridView.builder(
@@ -486,26 +541,35 @@ class _TimeSlotViewState extends State<TimeSlotView> {
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selectedTime = timeSlots[index];
-                      });
+                      if (timeSlotsStatus[index] == true) {
+                        setState(() {
+                          selectedTime = timeSlots[index];
+                          String tmp =
+                              '$selectedTime ${state.timeSlot[index]['timeslot_id']}';
+                          widget.onTimeSelected(tmp);
+                        });
+                      }
                     },
                     child: Container(
                       height: 20,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: timeSlots.indexOf(selectedTime) == index
-                            ? ColorPalette.deepBlue
-                            : ColorPalette.mediumBlue,
+                        color: timeSlotsStatus[index] == false
+                            ? ColorPalette.lightBlue
+                            : timeSlots.indexOf(selectedTime) == index
+                                ? ColorPalette.deepBlue
+                                : ColorPalette.mediumBlue,
                       ),
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
                           timeSlots[index],
                           style: TextStyle(
-                              color: timeSlots.indexOf(selectedTime) == index
-                                  ? ColorPalette.whiteColor
-                                  : ColorPalette.blackColor,
+                              color: timeSlotsStatus[index] == false
+                                  ? ColorPalette.mediumBlue
+                                  : timeSlots.indexOf(selectedTime) == index
+                                      ? ColorPalette.whiteColor
+                                      : ColorPalette.blackColor,
                               fontSize: 12,
                               fontWeight: FontWeight.bold),
                         ),

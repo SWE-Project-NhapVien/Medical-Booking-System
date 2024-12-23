@@ -5,7 +5,6 @@ import 'package:booking_doctor_project/screen/AppointmentScreen/cancelled_appoin
 import 'package:booking_doctor_project/screen/AppointmentScreen/complete_appointment.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
 import 'package:booking_doctor_project/utils/localfiles.dart';
-import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -72,12 +71,18 @@ class _AppointmentScreenState extends State<AppointmentScreen>
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
                 child: Column(
                   children: [
-                    CommonAppBarView(
-                      iconData: Icons.arrow_back_ios_new_rounded,
-                      title: 'All Appointments',
-                      onBackClick: () {
-                        Navigator.pop(context);
-                      },
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Text(
+                      'All Appointments',
+                      style: TextStyle(
+                          fontSize: 24,
+                          color: ColorPalette.deepBlue,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 20,
                     ),
                     SizedBox(
                       child: _buildTab(size),

@@ -62,17 +62,18 @@ class _HomeScreenState extends State<HomeScreenView> {
         );
       } else if (state is GetProfileInfoSuccess) {
         bool unreadNoti = false;
-        for (int i = 0; i < state.profileInfo.length; i++) {
-          if (state.profileInfo[i]['read_status'] == false) {
-            unreadNoti = true;
-            break;
-          }
-        }
-
         List<String> notiList = [];
-        for (int i = 0; i < state.profileInfo.length; i++) {
-          state.profileInfo[i]['notification_id'] ??
-              notiList.add(state.profileInfo[i]['notification_id']);
+        if (state.profileInfo[0]['notification_id'] != null) {
+          for (int i = 0; i < state.profileInfo.length; i++) {
+            if (state.profileInfo[i]['read_status'] == false) {
+              unreadNoti = true;
+              break;
+            }
+          }
+          for (int i = 0; i < state.profileInfo.length; i++) {
+            state.profileInfo[i]['notification_id'] ??
+                notiList.add(state.profileInfo[i]['notification_id']);
+          }
         }
 
         return Padding(
@@ -91,7 +92,8 @@ class _HomeScreenState extends State<HomeScreenView> {
                         shape: BoxShape.circle,
                         image: DecorationImage(
                             image: Image.network(
-                          state.profileInfo[0]['ava_url'],
+                          state.profileInfo[0]['ava_url'] ??
+                              'https://vikaxjhrmnewkrlovxmi.supabase.co/storage/v1/object/public/web/default_avatar.png',
                         ).image)),
                   ),
                   const SizedBox(

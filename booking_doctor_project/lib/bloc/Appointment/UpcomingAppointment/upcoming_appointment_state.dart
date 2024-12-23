@@ -18,3 +18,10 @@ final class SuccessUpcomingAppointmentState extends UpcomingAppointmentState {
 
   SuccessUpcomingAppointmentState(this.appointments);
 }
+
+final class AddAppointmentSucess extends UpcomingAppointmentState {}
+
+final class AddAppointmentError extends UpcomingAppointmentState {
+  String message;
+  AddAppointmentError(this.message);
+}

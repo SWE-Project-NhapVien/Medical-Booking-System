@@ -3,6 +3,9 @@ import 'package:booking_doctor_project/screen/AppointmentScreen/appointment_deta
 import 'package:booking_doctor_project/screen/AppointmentScreen/appointment_screen.dart';
 import 'package:booking_doctor_project/screen/DoctorInfo/doctor_info_screen.dart';
 import 'package:booking_doctor_project/screen/Notification/notification_screen.dart';
+import 'package:booking_doctor_project/screen/Payment/payment.dart';
+import 'package:booking_doctor_project/screen/Payment/payment_succesful.dart';
+import 'package:booking_doctor_project/screen/Payment/ready_payment.dart';
 import 'package:booking_doctor_project/screen/SearchScreen/search_result.dart';
 import 'package:booking_doctor_project/screen/SearchScreen/search_screen.dart';
 import 'package:booking_doctor_project/screen/patient/CreateProfileScreen/create_profile_screen.dart';
@@ -85,5 +88,57 @@ class NavigationServices {
 
   Future<dynamic> pushScheduleScreen(String doctorId) async {
     return _pushMaterialPageRoute(ScheduleScreen(doctorId: doctorId));
+  }
+
+  Future<dynamic> pushReadyPaymentScreen(
+      String doctorId,
+      String timeslotId,
+      int selectedDate,
+      int selectedmonth,
+      String selectedTime,
+      String description) async {
+    return _pushMaterialPageRoute(ReadyPaymentScreen(
+      doctorId: doctorId,
+      timeslotId: timeslotId,
+      selectedDate: selectedDate,
+      selectedMonth: selectedmonth,
+      selectedTime: selectedTime,
+      description: description,
+    ));
+  }
+
+  Future<dynamic> pushPaymentScreen(
+    String doctorId,
+    String timeslotId,
+    String description,
+    int selectedDate,
+    int selectedmonth,
+    String selectedTime,
+  ) async {
+    return _pushMaterialPageRoute(PaymentScreen(
+      doctorId: doctorId,
+      timeslotId: timeslotId,
+      description: description,
+      selectedDate: selectedDate,
+      selectedMonth: selectedmonth,
+      selectedTime: selectedTime,
+    ));
+  }
+
+  Future<dynamic> pushPaymentSuccesfulScreen(
+      String doctorId,
+      String timeslotId,
+      String description,
+      int selectedDate,
+      int selectedmonth,
+      String selectedTime) async {
+    return _pushMaterialPageRoute(PaymentSuccesfulScreen(
+      doctorId: doctorId,
+      timeslotId: timeslotId,
+      description: description,
+      selectedDate: selectedDate,
+      selectedMonth: selectedmonth,
+      selectedTime: selectedTime,
+    ));
   }
 }

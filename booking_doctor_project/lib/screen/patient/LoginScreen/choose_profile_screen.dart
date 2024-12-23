@@ -26,6 +26,11 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     context.read<FetchProfileBloc>().add(const FetchProfileEvent());
   }
 
@@ -67,10 +72,6 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
                         title: 'Choose Your Profile',
                         titleSize: 32,
                         topPadding: MediaQuery.of(context).padding.top,
-                        prefixIconData: Icons.arrow_back_ios_new_rounded,
-                        onPrefixIconClick: () {
-                          Navigator.pop(context);
-                        },
                       ),
                       Text(
                         'Your Family',
@@ -78,6 +79,9 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
                             size: 20,
                             fontWeight: FontWeight.w500,
                             color: ColorPalette.deepBlue),
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       ListView.builder(
                         shrinkWrap: true,
@@ -105,15 +109,15 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
                                       profiles[index]['ava_url'] == null,
                                 ),
                               ),
-                              SizedBox(
-                                height: size.height * 0.02,
+                              const SizedBox(
+                                height: 8,
                               ),
                             ],
                           );
                         },
                       ),
-                      SizedBox(
-                        height: size.height * 0.02,
+                      const SizedBox(
+                        height: 8,
                       ),
                       GestureDetector(
                         onTap: () {

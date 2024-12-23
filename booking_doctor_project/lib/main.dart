@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/bloc/TimeSlot/timeslot_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/CancelAppointment/cancel_appointment_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/CreateProfile/create_profile_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/FetchProfile/fetch_profile_bloc.dart';
@@ -46,7 +47,9 @@ Widget _setAllProviders() {
       BlocProvider<ResetPasswordBloc>(create: (context) => ResetPasswordBloc()),
       BlocProvider<GetAProfileBloc>(create: (context) => GetAProfileBloc()),
       BlocProvider<CancelAppointmentBloc>(
-            create: (context) => CancelAppointmentBloc()),
+          create: (context) => CancelAppointmentBloc()),
+      BlocProvider<GetTimeSlotDataBloc>(
+          create: (context) => GetTimeSlotDataBloc()),
     ],
     child: const MedicalBookingApp(),
   );
