@@ -1,8 +1,13 @@
+import 'package:booking_doctor_project/bloc/doctor/CreateDoctorProfile/create_doctor_profile_bloc.dart';
 import 'package:booking_doctor_project/screen/handle_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+
+import 'package:booking_doctor_project/screen/add_doctor_profile_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -146,6 +146,7 @@ class DetailAppointmentInformation extends StatelessWidget {
               ),
             ),
             const Spacer(),
+
             SizedBox(
               width: 260,
               child: CommonButton(
