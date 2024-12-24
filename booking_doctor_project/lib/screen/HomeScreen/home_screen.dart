@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreenView> {
                           .then((_) => context.read<GetProfileInfoBloc>().add(
                               GetProfileInfoEvent(
                                   profileId:
-                                      'ef48f364-1e9a-4c86-b490-57883ffcbc59')));
+                                      GlobalProfile().profileId!))); // Refresh
                     },
                     child: Container(
                       width: 36.0, // Width of the button
@@ -320,7 +320,8 @@ class UpcomingAppointmentView extends StatelessWidget {
                               shape: BoxShape.circle,
                               image: DecorationImage(
                                   image: Image.network(
-                                state.appointmentData[0]['ava_url'],
+                                state.appointmentData[0]['ava_url'] ??
+                                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2F8DoZLvVpkbPZs1z1dBzXKLvgRNwgUrstA&s',
                               ).image)),
                         ),
                         const SizedBox(

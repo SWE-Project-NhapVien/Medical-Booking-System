@@ -181,7 +181,8 @@ class DoctorInfoView extends StatelessWidget {
                   shape: BoxShape.circle,
                   image: DecorationImage(
                       image: Image.network(
-                    state.doctorInfo[0]['ava_url'],
+                    state.doctorInfo[0]['ava_url'] ??
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2F8DoZLvVpkbPZs1z1dBzXKLvgRNwgUrstA&s',
                   ).image)),
             ),
             const SizedBox(

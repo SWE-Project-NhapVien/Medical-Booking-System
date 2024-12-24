@@ -33,7 +33,6 @@ class _AppointmentDetailState extends State<AppointmentDetail> {
     return BlocListener<CancelAppointmentBloc, CancelAppointmentState>(
       listener: (context, state) async {
         if (state is CancelAppointmentSuccess) {
-          Navigator.pop(context);
           await Dialogs(context).showErrorDialog(
             title: 'Cancel an Appointment',
             message: 'You have cancelled this appointment.',

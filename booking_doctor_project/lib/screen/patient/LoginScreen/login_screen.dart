@@ -78,10 +78,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   title: 'Log In',
                   titleSize: 32,
                   topPadding: MediaQuery.of(context).padding.top,
-                  prefixIconData: Icons.arrow_back_ios_new_rounded,
-                  onPrefixIconClick: () {
-                    Navigator.pop(context);
-                  },
                 ),
                 SizedBox(
                   height: size.height * 0.01,

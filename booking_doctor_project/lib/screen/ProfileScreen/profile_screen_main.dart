@@ -1,9 +1,24 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:booking_doctor_project/bloc/patient/ProfileInfo/profile_info_bloc.dart';
+import 'package:booking_doctor_project/bloc/patient/ProfileInfo/profile_info_event.dart';
+import 'package:booking_doctor_project/bloc/patient/ProfileInfo/profile_info_state.dart';
+import 'package:booking_doctor_project/bloc/patient/UpdateProfile/update_profile_bloc.dart';
+import 'package:booking_doctor_project/bloc/patient/UpdateProfile/update_profile_event.dart';
+import 'package:booking_doctor_project/bloc/patient/UpdateProfile/update_profile_state.dart';
+import 'package:booking_doctor_project/class/global_profile.dart';
+import 'package:booking_doctor_project/class/patient_profile.dart';
 import 'package:booking_doctor_project/routes/patient/navigation_services.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
-import 'package:booking_doctor_project/widgets/common_app_bar_view.dart';
+import 'package:booking_doctor_project/utils/localfiles.dart';
 import 'package:flutter/material.dart';
 import 'package:booking_doctor_project/screen/ProfileScreen/edit_profile_screen.dart';
 import 'package:booking_doctor_project/screen/ProfileScreen/policy_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,40 +28,170 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late Future<PatientProfile?> patientProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    patientProfile = PatientProfile.getProfile();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<GetProfileInfoBloc>();
+    bloc.add(GetProfileInfoEvent(profileId: GlobalProfile().profileId!));
     return Scaffold(
       backgroundColor: ColorPalette.whiteColor,
-      body: Column(
-        children: [
-          const CommonAppBarView(
-              iconData: Icons.arrow_back_ios, title: 'Profile'),
+      body: BlocBuilder<GetProfileInfoBloc, GetProfileInfoState>(
+        builder: (context, state) {
+          if (state is GetProfileInfoLoading) {
+            return Center(
+              child: Center(
+                child: AlertDialog(
+                  backgroundColor: Colors.transparent,
+                  content: Lottie.asset(
+                    Localfiles.loading,
+                    width: 100,
+                  ),
+                ),
+              ),
+            );
+          } else if (state is GetProfileInfoSuccess) {
+            return Column(
+              children: [
+                const SizedBox(height: 40),
+                Text('Profile',
+                    style:
+                        TextStyle(fontSize: 28, color: ColorPalette.deepBlue)),
+                Stack(
+                  children: [
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              image: Image.network(state.profileInfo[0]
+                                              ['ava_url'] !=
+                                          ''
+                                      ? state.profileInfo[0]['ava_url']
+                                      : 'https://vikaxjhrmnewkrlovxmi.supabase.co/storage/v1/object/public/web/default_avatar.png')
+                                  .image)),
+                    ),
+                    BlocConsumer<UpdateProfileBloc, UpdateProfileState>(
+                      listener: (context, state) {
+                        if (state is UpdateProfileSuccess) {
+                          context.read<GetProfileInfoBloc>().add(
+                              GetProfileInfoEvent(
+                                  profileId: GlobalProfile().profileId!));
+                        }
+                      },
+                      builder: (context, state) {
+                        return Positioned(
+                          right: 0,
+                          bottom: 0,
+                          child: Container(
+                            width: 34,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: ColorPalette.deepBlue),
+                            child: Center(
+                              child: IconButton(
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: ColorPalette.whiteColor,
+                                    size: 18,
+                                  ),
+                                  onPressed: () async {
+                                    try {
+                                      final ImagePicker picker = ImagePicker();
+                                      final SupabaseClient supabase =
+                                          Supabase.instance.client;
+                                      // Pick an image from the gallery
+                                      final XFile? pickedFile =
+                                          await picker.pickImage(
+                                              source: ImageSource.gallery);
 
-          Stack(children: [
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: Image.asset(
-                    'assets/images/patient/default_avatar.png',
-                  ).image)),
-            ),
-            Positioned(right: 0, bottom: 0, child: _editButton())
-          ]),
+                                      if (pickedFile == null) {
+                                        return;
+                                      }
 
-          // Name
-          const Text(
-            'name',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-            ),
-          ),
+                                      File imageFile = File(pickedFile.path);
 
-          _buildMenuOptions(MediaQuery.of(context).size),
-        ],
+                                      // Prepare file upload details
+                                      final String fileName =
+                                          '${GlobalProfile().profileId}/${generateRandomString(12)}.png';
+                                      const String bucketName = "patient";
+
+                                      final String folderPath =
+                                          '${GlobalProfile().profileId}';
+                                      final List<FileObject> objects =
+                                          await supabase.storage
+                                              .from(bucketName)
+                                              .list(path: folderPath);
+
+                                      if (objects.isNotEmpty) {
+                                        final filePaths = objects
+                                            .map((file) =>
+                                                '$folderPath/${file.name}')
+                                            .toList();
+                                        await supabase.storage
+                                            .from(bucketName)
+                                            .remove(filePaths);
+                                      }
+
+                                      await supabase.storage
+                                          .from(bucketName)
+                                          .upload(
+                                            fileName,
+                                            imageFile,
+                                            fileOptions: const FileOptions(
+                                                cacheControl: '3600',
+                                                upsert: false),
+                                          );
+
+                                      String publicUrl = supabase.storage
+                                          .from(bucketName)
+                                          .getPublicUrl(fileName);
+
+                                      context.read<UpdateProfileBloc>().add(
+                                          UpdateProfileImageEvent(
+                                              id: GlobalProfile().profileId!,
+                                              imageUrl: publicUrl));
+                                    } catch (error) {
+                                      print("Error: $error");
+                                    }
+                                  }),
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  ],
+                ),
+                const SizedBox(height: 32),
+                _buildMenuOptions(MediaQuery.of(context).size),
+              ],
+            );
+          } else if (state is GetProfileInfoError) {
+            return Center(
+              child: Text(state.error),
+            );
+          }
+          return const SizedBox.shrink();
+        },
+      ),
+    );
+  }
+
+  String generateRandomString(int length) {
+    const characters =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    final random = Random();
+    return String.fromCharCodes(
+      Iterable.generate(
+        length,
+        (_) => characters.codeUnitAt(random.nextInt(characters.length)),
       ),
     );
   }
@@ -131,7 +276,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor:
                                               ColorPalette.deepBlue),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        NavigationServices(context)
+                                            .pushLogInScreen();
+                                      },
                                       child: Text(
                                         'Confirm',
                                         style: TextStyle(
@@ -152,45 +300,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
     );
-  }
-
-  // Back button
-  Widget _backButton(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: MediaQuery.of(context).size.width * 0.038,
-        vertical: MediaQuery.of(context).size.height * 0.061,
-      ),
-      child: IconButton(
-        icon: const Icon(Icons.arrow_back, color: Colors.black),
-        onPressed: () => Navigator.pop(context),
-      ),
-    );
-  }
-
-  // Edit button
-  Widget _editButton() {
-    return Container(
-      width: 34,
-      decoration:
-          BoxDecoration(shape: BoxShape.circle, color: ColorPalette.deepBlue),
-      child: Center(
-        child: IconButton(
-          icon: Icon(
-            Icons.edit,
-            color: ColorPalette.whiteColor,
-            size: 18,
-          ),
-          onPressed: () => editButtonEvent(),
-        ),
-      ),
-    );
-  }
-
-  void editButtonEvent() {
-    // Handle edit button click event here.
-    //TO-DO IMPLEMENT
-    debugPrint("Edit button clicked");
   }
 
   //Profile Info Layout

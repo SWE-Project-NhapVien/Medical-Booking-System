@@ -533,6 +533,7 @@ class _TimeSlotViewState extends State<TimeSlotView> {
         return SizedBox(
           height: 150,
           child: GridView.builder(
+              padding: EdgeInsets.zero,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 6, crossAxisSpacing: 0, mainAxisSpacing: 0),
               itemCount: state.timeSlot.length,

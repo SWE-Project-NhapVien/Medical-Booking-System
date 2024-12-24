@@ -19,7 +19,9 @@ class CreateProfileRequired extends CreateProfileEvent {
   String address;
   double? height;
   double? weight;
+  List<String>? allergies;
   final List<String> emergencyContact;
+  final List<String>? medicalHistory;
   final String? relationship;
 
   CreateProfileRequired({
@@ -33,7 +35,9 @@ class CreateProfileRequired extends CreateProfileEvent {
     this.address = '',
     this.height,
     this.weight,
+    this.allergies,
     required this.emergencyContact,
+    this.medicalHistory,
     this.relationship,
   });
 
