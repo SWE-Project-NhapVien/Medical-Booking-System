@@ -1,4 +1,5 @@
 import 'package:booking_doctor_project/bloc/doctor/CreateDoctorProfile/create_doctor_profile_bloc.dart';
+import 'package:booking_doctor_project/screen/handle_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,20 +25,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CreateDoctorProfileBloc>(
-      create: (_) => CreateDoctorProfileBloc(),
-      child: const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Admin Webapp',
-        home: CreateDoctorProfileScreen(doctorId: '00000000-0000-0000-0000-000000000014',),
-      ),
-    );
-  }
-
-  /*Widget build(BuildContext context) {
     return const MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Admin Webapp',
         home: HandlePageView());
-  }*/
+  }
 }
