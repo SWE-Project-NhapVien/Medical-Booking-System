@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../utils/color_palette.dart';
 import '../utils/text_styles.dart';
 
-// ignore: must_be_immutable
 class CommonTextField extends StatefulWidget {
   final IconData? prefixIconData, suffixIconData, selectedIconData;
   final Color? fillColor;
@@ -26,7 +25,7 @@ class CommonTextField extends StatefulWidget {
     super.key,
     required this.textEditingController,
     required this.hintText,
-    this.contentPadding = const EdgeInsets.symmetric(horizontal: 20),
+    this.contentPadding = const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
     this.fillColor = const Color(0xFFECF1FF),
     this.hintTextStyle = const TextStyle(color: Color(0xFF809CFF)),
     this.focusColor = const Color(0xFF2260FF),
@@ -80,7 +79,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextFormField( 
+          TextFormField(
             textAlign: TextAlign.left,
             focusNode: _focusNode,
             keyboardType: widget.keyboardType,
@@ -94,9 +93,9 @@ class _CommonTextFieldState extends State<CommonTextField> {
               contentPadding: widget.contentPadding,
               hintText: widget.hintText,
               hintStyle: widget.hintTextStyle,
-              suffixText: widget.suffixText?? '',
+              suffixText: widget.suffixText ?? '',
               suffixStyle: TextStyles(context).getRegularStyle(
-                color: ColorPalette.lightBlueTextColor
+                color: ColorPalette.lightBlueTextColor,
               ),
               prefixIcon: widget.prefixIconData != null
                   ? Icon(widget.prefixIconData, color: _iconColor)
@@ -105,8 +104,7 @@ class _CommonTextFieldState extends State<CommonTextField> {
                   ? IconButton(
                       isSelected: !widget.isObscureText,
                       icon: Icon(widget.suffixIconData, color: _iconColor),
-                      selectedIcon:
-                          Icon(widget.selectedIconData, color: _iconColor),
+                      selectedIcon: Icon(widget.selectedIconData, color: _iconColor),
                       onPressed: () => setState(() {
                         widget.isObscureText = !widget.isObscureText;
                       }),
@@ -132,12 +130,12 @@ class _CommonTextFieldState extends State<CommonTextField> {
           if (widget.errorText != null && widget.errorText!.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 5, left: 8),
-                child: Text(
+              child: Text(
                 widget.errorText ?? "",
                 style: TextStyles(context).getSmallStyle().copyWith(
-                    color: ColorPalette.redColor,
-                    fontStyle: FontStyle.italic,
-                  ),
+                      color: ColorPalette.redColor,
+                      fontStyle: FontStyle.italic,
+                    ),
               ),
             ),
         ],

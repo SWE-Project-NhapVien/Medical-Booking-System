@@ -8,15 +8,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../utils/color_palette.dart';
 import '../../../utils/text_styles.dart';
-import '../../../widgets/common_appbar_with_title.dart';
 import '../../../widgets/common_button.dart';
 
 class CreateDoctorProfileScreen extends StatefulWidget {
-  const CreateDoctorProfileScreen({super.key});
+  final String doctorId;  
+
+  const CreateDoctorProfileScreen({super.key, required this.doctorId});  
 
   @override
   State<CreateDoctorProfileScreen> createState() => _CreateDoctorProfileScreenState();
 }
+
 
 class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
   final List<String> genders = ["Male", "Female", "None"];
@@ -51,7 +53,6 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
   final educationController = TextEditingController();
   final careerController = TextEditingController();
   final descriptionController = TextEditingController();
-  final profilePictureUrlController = TextEditingController();
 
   final Map<String, String> errors = {};
 
@@ -65,7 +66,6 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
     educationController.dispose();
     careerController.dispose();
     descriptionController.dispose();
-    profilePictureUrlController.dispose();
     super.dispose();
   }
 
@@ -212,7 +212,7 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
               SizedBox(width: size.width * 0.02),
               Expanded(
                 flex: 1,
-                child: Container(
+                child: SizedBox(
                   height: 101,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,7 +225,7 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
                           color: ColorPalette.blackColor,
                         ),
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Container(
                         height: size.height * 0.06,
                         width: double.infinity,
@@ -269,7 +269,6 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
             hintText: '',
             controller: addressController,
             errorText: errors['address'] ?? '',
-            isRestricted: true,
           ),
 
           // Education Field
@@ -279,6 +278,7 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
             hintText: '',
             controller: educationController,
             errorText: errors['education'] ?? '',
+            isRestricted: true,
           ),
 
           // Career Field
@@ -288,6 +288,7 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
             hintText: '',
             controller: careerController,
             errorText: errors['career'] ?? '',
+            isRestricted: true,
           ),
 
           // Specialization Dropdown
@@ -302,7 +303,7 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
                   color: ColorPalette.blackColor,
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Container(
                 height: size.height * 0.06,
                 decoration: BoxDecoration(
@@ -344,14 +345,7 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
             height: 111,
           ),
 
-          // Profile Picture URL Field
-          LabelAndTextField(
-            context: context,
-            label: 'Profile Picture URL',
-            hintText: 'Enter image URL',
-            controller: profilePictureUrlController,
-            errorText: errors['avaUrl'] ?? '',
-          ),
+          
           // Complete Button
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
@@ -366,6 +360,7 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
                   if (validateDoctorForm()) {
                     context.read<CreateDoctorProfileBloc>().add(
                           CreateDoctorProfileRequired(
+                            doctorId: widget.doctorId,
                             firstName: firstNameController.text,
                             lastName: lastNameController.text,
                             phoneNumber: phoneNumberController.text,
@@ -376,13 +371,12 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
                             education: educationController.text,
                             career: careerController.text,
                             description: descriptionController.text,
-                            avaUrl: profilePictureUrlController.text,
+                            avaUrl: ' ', //add later
                             specialization: [selectedSpecialization],
                           ),
                         );
                   }
                 },
-                width: double.infinity,
                 height: size.height * 0.06,
                 radius: 30,
               ),
@@ -424,15 +418,12 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
       isValid = false;
     }
 
-    if (selectedSpecialization == null || selectedSpecialization.isEmpty) {
+    if (selectedSpecialization.isEmpty) {
       errors['specialization'] = 'Specialization is required.';
       isValid = false;
     }
 
-    if (profilePictureUrlController.text.isEmpty) {
-      errors['avaUrl'] = 'Profile picture URL is required.';
-      isValid = false;
-    }
+    
 
     setState(() {});
     return isValid;

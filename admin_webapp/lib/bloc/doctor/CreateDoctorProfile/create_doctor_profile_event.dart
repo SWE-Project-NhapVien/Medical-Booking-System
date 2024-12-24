@@ -8,6 +8,7 @@ abstract class CreateDoctorProfileEvent extends Equatable {
 }
 
 class CreateDoctorProfileRequired extends CreateDoctorProfileEvent {
+  final String doctorId;
   final String firstName;
   final String lastName;
   final String phoneNumber;
@@ -22,6 +23,7 @@ class CreateDoctorProfileRequired extends CreateDoctorProfileEvent {
   final List<String> specialization;
 
   const CreateDoctorProfileRequired({
+    required this.doctorId,
     required this.firstName,
     required this.lastName,
     required this.phoneNumber,

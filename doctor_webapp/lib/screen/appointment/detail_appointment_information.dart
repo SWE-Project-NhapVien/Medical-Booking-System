@@ -41,7 +41,7 @@ class DetailAppointmentInformation extends StatelessWidget {
                 // Add action
               },
               style: ElevatedButton.styleFrom(),
-              child: Text("Detail"),
+              child: const Text("Detail"),
             ),
           ],
         ),

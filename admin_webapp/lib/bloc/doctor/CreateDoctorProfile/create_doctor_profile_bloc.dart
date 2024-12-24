@@ -12,6 +12,7 @@ class CreateDoctorProfileBloc extends Bloc<CreateDoctorProfileEvent, CreateDocto
       try {
         final formattedDateOfBirth = convertDateFormat(event.dateOfBirth);
         await Supabase.instance.client.rpc('create_doctor_profile', params: {
+          'p_doctor_id': event.doctorId,
           'p_first_name': event.firstName,
           'p_last_name': event.lastName,
           'p_phone_number': event.phoneNumber,
