@@ -73,7 +73,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final Map<String, String> errors = {};
 
   int curStep = 0;
-
+  bool initialized = false;
   late Future<PatientProfile?> patientProfile;
 
   @override
@@ -124,48 +124,47 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Text('Error loading profile'),
               );
             }
-            final profile = snapshot.data!;
-            firstNameController.text = profile.firstName;
-            lastNameController.text = profile.lastName;
-            phoneNumberController.text = profile.phoneNumber;
-            addressController.text = profile.address ?? '';
-            dateOfBirthController.text =
-                '${profile.dob.substring(8, 10)}/${profile.dob.substring(5, 7)}/${profile.dob.substring(0, 4)}';
-            weightController.text = profile.weight.toString();
-            heightController.text = profile.height.toString();
-            relationshipController.text = profile.relationship ?? '';
-            if (profile.emergencyContacts != null &&
-                profile.emergencyContacts!.isNotEmpty) {
-              restrictedEmergencyContactController.text =
-                  profile.emergencyContacts!.first;
-              for (int i = 1; i < profile.emergencyContacts!.length; i++) {
-                emergencyContactsControllers.add(
-                    TextEditingController(text: profile.emergencyContacts![i]));
-              }
-            }
-            if (profile.medicalHistory != null &&
-                profile.medicalHistory!.isNotEmpty) {
-              for (var element in profile.medicalHistory!) {
-                medicalHistoryControllers
-                    .add(TextEditingController(text: element));
-              }
-            }
-            selectedGender = profile.gender;
 
-            selectedBloodType = profile.bloodType ?? 'None';
-
-            if (profile.allergies != null && profile.allergies!.isNotEmpty) {
-              for (var element in profile.allergies!) {
-                selectedAllergy.add(element);
+            if (initialized == false) {
+              final profile = snapshot.data!;
+              firstNameController.text = profile.firstName;
+              lastNameController.text = profile.lastName;
+              phoneNumberController.text = profile.phoneNumber;
+              addressController.text = profile.address ?? '';
+              dateOfBirthController.text =
+                  '${profile.dob.substring(8, 10)}/${profile.dob.substring(5, 7)}/${profile.dob.substring(0, 4)}';
+              weightController.text = profile.weight.toString();
+              heightController.text = profile.height.toString();
+              relationshipController.text = profile.relationship ?? '';
+              if (profile.emergencyContacts != null &&
+                  profile.emergencyContacts!.isNotEmpty) {
+                restrictedEmergencyContactController.text =
+                    profile.emergencyContacts!.first;
+                for (int i = 1; i < profile.emergencyContacts!.length; i++) {
+                  emergencyContactsControllers.add(TextEditingController(
+                      text: profile.emergencyContacts![i]));
+                }
               }
-            }
 
-            if (profile.medicalHistory != null &&
-                profile.medicalHistory!.isNotEmpty) {
-              for (var element in profile.medicalHistory!) {
-                medicalHistoryControllers
-                    .add(TextEditingController(text: element));
+              selectedGender = profile.gender;
+
+              selectedBloodType = profile.bloodType ?? 'None';
+
+              if (profile.allergies != null && profile.allergies!.isNotEmpty) {
+                for (var element in profile.allergies!) {
+                  selectedAllergy.add(element);
+                }
               }
+
+              if (profile.medicalHistory != null &&
+                  profile.medicalHistory!.isNotEmpty) {
+                for (var element in profile.medicalHistory!) {
+                  medicalHistoryControllers
+                      .add(TextEditingController(text: element));
+                }
+              }
+
+              initialized = true;
             }
 
             return Scaffold(

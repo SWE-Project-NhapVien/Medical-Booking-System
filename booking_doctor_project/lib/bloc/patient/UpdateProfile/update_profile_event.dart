@@ -33,3 +33,13 @@ class UpdateProfileDataEvent extends UpdateProfileEvent {
     required this.allergy,
   });
 }
+
+class UpdateProfileImageEvent extends UpdateProfileEvent {
+  final String id;
+  final String imageUrl;
+
+  UpdateProfileImageEvent({
+    required this.id,
+    required this.imageUrl,
+  });
+}

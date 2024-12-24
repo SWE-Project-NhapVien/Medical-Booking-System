@@ -80,10 +80,8 @@ class _ChooseProfileScreenState extends State<ChooseProfileScreen> {
                             fontWeight: FontWeight.w500,
                             color: ColorPalette.deepBlue),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
                       ListView.builder(
+                        padding: EdgeInsets.zero,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: profiles.length,

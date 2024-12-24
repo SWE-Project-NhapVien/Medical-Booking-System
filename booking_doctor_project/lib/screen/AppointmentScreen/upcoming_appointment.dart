@@ -63,7 +63,7 @@ class _UpcomingAppointmentState extends State<UpcomingAppointment> {
                     doctorName: appointment.doctorFullName,
                     appointmentName: appointment.specializations.join(', '),
                     date: appointment.appointmentDate,
-                    time: appointment.appointmentTime,
+                    time: appointment.appointmentTime.substring(0, 5),
                     price: appointment.price.toString(),
                     onTap: () {
                       NavigationServices(context)

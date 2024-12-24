@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class UpdateProfileBloc extends Bloc<UpdateProfileEvent, UpdateProfileState> {
   UpdateProfileBloc() : super(UpdateProfileInitial()) {
     on<UpdateProfileDataEvent>(_onUpdateProfileData);
+    on<UpdateProfileImageEvent>(_onUpdateProfileImage);
   }
 
   Future<void> _onUpdateProfileData(
@@ -28,6 +29,22 @@ class UpdateProfileBloc extends Bloc<UpdateProfileEvent, UpdateProfileState> {
         'new_height': event.height,
         'new_allergies': event.allergy,
         'new_medhis': event.medlist,
+      });
+
+      emit(UpdateProfileSuccess());
+    } catch (e) {
+      emit(UpdateProfileError('Error updating profile: $e'));
+    }
+  }
+
+  Future<void> _onUpdateProfileImage(
+      UpdateProfileImageEvent event, Emitter<UpdateProfileState> emit) async {
+    emit(UpdateProfileLoading());
+    try {
+      final supabase = Supabase.instance.client;
+      await supabase.rpc('update_avaurl', params: {
+        'id': event.id,
+        'new_avaurl': event.imageUrl,
       });
 
       emit(UpdateProfileSuccess());
