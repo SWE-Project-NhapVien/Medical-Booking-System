@@ -75,148 +75,198 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: ColorPalette.whiteColor,
-      body: BlocConsumer<CreateDoctorProfileBloc, CreateDoctorProfileState>(
-        listener: (context, state) {
-          if (state is CreateDoctorProfileProcess) {
-            Dialogs(context).showLoadingDialog();
-          } else if (state is CreateDoctorProfileSuccess) {
-            Navigator.pop(context);
-            Dialogs(context).showAnimatedDialog(
-              title: 'Create Profile',
-              content: 'Doctor profile has been created successfully.',
-            );
-          } else if (state is CreateDoctorProfileFailure) {
-            Navigator.pop(context);
-            Dialogs(context).showErrorDialog(message: state.error);
-          }
-        },
-        builder: (context, state) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: Column(
-                children: [
-                  CommonAppBarWithTitle(
-                    title: 'Create Doctor Profile',
-                    titleSize: 32,
-                    topPadding: MediaQuery.of(context).padding.top,
-                    prefixIconData: Icons.arrow_back_ios_new_rounded,
-                    onPrefixIconClick: () => Navigator.pop(context),
-                  ),
-                  _buildDoctorInformationForm(size),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: CommonButton(
-                      buttonTextWidget: Text(
-                        'Complete',
-                        style: TextStyles(context).getTitleStyle(
-                          fontWeight: FontWeight.w400,
+      backgroundColor: ColorPalette.blueFormColor,
+      body: Row(
+        children: [
+          // Placeholder space for the side navbar
+          Container(
+            width: 88,
+          ),
+          Expanded(
+            child: BlocConsumer<CreateDoctorProfileBloc, CreateDoctorProfileState>(
+              listener: (context, state) {
+                if (state is CreateDoctorProfileProcess) {
+                  Dialogs(context).showLoadingDialog();
+                } else if (state is CreateDoctorProfileSuccess) {
+                  Navigator.pop(context);
+                  Dialogs(context).showAnimatedDialog(
+                    title: 'Create Profile',
+                    content: 'Doctor profile has been created successfully.',
+                  );
+                } else if (state is CreateDoctorProfileFailure) {
+                  Navigator.pop(context);
+                  Dialogs(context).showErrorDialog(message: state.error);
+                }
+              },
+              builder: (context, state) {
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    child: Column(
+                      children: [
+                        CommonAppBarWithTitle(
+                          title: 'Create Doctor Profile',
+                          titleSize: 32,
+                          topPadding: MediaQuery.of(context).padding.top,
+                          prefixIconData: Icons.arrow_back_ios_new_rounded,
+                          onPrefixIconClick: () => Navigator.pop(context),
                         ),
-                      ),
-                      onTap: () {
-                        if (validateDoctorForm()) {
-                          context.read<CreateDoctorProfileBloc>().add(
-                                CreateDoctorProfileRequired(
-                                  firstName: firstNameController.text,
-                                  lastName: lastNameController.text,
-                                  phoneNumber: phoneNumberController.text,
-                                  dateOfBirth: dateOfBirthController.text,
-                                  bloodType: selectedBloodType,
-                                  gender: selectedGender,
-                                  address: addressController.text,
-                                  education: educationController.text,
-                                  career: careerController.text,
-                                  description: descriptionController.text,
-                                  avaUrl: profilePictureUrlController.text,
-                                  specialization: [selectedSpecialization],
-                                ),
-                              );
-                        }
-                      },
-                      width: double.infinity,
-                      height: size.height * 0.06,
-                      radius: 30,
+                        _buildDoctorInformationForm(size),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: CommonButton(
+                            buttonTextWidget: Text(
+                              'Complete',
+                              style: TextStyles(context).getTitleStyle(
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            onTap: () {
+                              if (validateDoctorForm()) {
+                                context.read<CreateDoctorProfileBloc>().add(
+                                      CreateDoctorProfileRequired(
+                                        firstName: firstNameController.text,
+                                        lastName: lastNameController.text,
+                                        phoneNumber: phoneNumberController.text,
+                                        dateOfBirth: dateOfBirthController.text,
+                                        bloodType: selectedBloodType,
+                                        gender: selectedGender,
+                                        address: addressController.text,
+                                        education: educationController.text,
+                                        career: careerController.text,
+                                        description: descriptionController.text,
+                                        avaUrl: profilePictureUrlController.text,
+                                        specialization: [selectedSpecialization],
+                                      ),
+                                    );
+                              }
+                            },
+                            width: double.infinity,
+                            height: size.height * 0.06,
+                            radius: 30,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildDoctorInformationForm(Size size) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: LabelAndTextField(
+Widget _buildDoctorInformationForm(Size size) {
+  return SingleChildScrollView(
+    padding: const EdgeInsets.all(30),
+    child: Container(
+      decoration: BoxDecoration(
+        color: ColorPalette.whiteColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Profile Picture
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              CircleAvatar(
+                radius: 80,
+                backgroundColor: ColorPalette.greyColor,
+                backgroundImage: const AssetImage('assets/placeholder.png'),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 20,
+                child: CircleAvatar(
+                  radius: 16,
+                  backgroundColor: ColorPalette.deepBlue,
+                  child: const Icon(Icons.edit, color: Colors.white, size: 16),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Name Fields
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: LabelAndTextField(
                   context: context,
                   label: 'First Name',
                   hintText: '',
                   controller: firstNameController,
                   errorText: errors['firstName'] ?? '',
-                  isRestricted: true),
-            ),
-            SizedBox(width: size.width * 0.02),
-            Expanded(
-              child: LabelAndTextField(
+                  isRestricted: true,
+                ),
+              ),
+              SizedBox(width: size.width * 0.02),
+              Expanded(
+                child: LabelAndTextField(
                   context: context,
                   label: 'Last Name',
                   hintText: '',
                   controller: lastNameController,
                   errorText: errors['lastName'] ?? '',
-                  isRestricted: true),
-            ),
-          ],
-        ),
-        LabelAndTextField(
+                  isRestricted: true,
+                ),
+              ),
+            ],
+          ),
+
+          // Phone Number Field
+          LabelAndTextField(
             context: context,
             label: 'Phone Number',
             hintText: '',
             controller: phoneNumberController,
             errorText: errors['phoneNumber'] ?? '',
-            isRestricted: true),
-        Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: DateOfBirthPicker(
-                label: 'Date of Birth',
-                isRestricted: true,
-                errorText: errors['dateOfBirth'] ?? '',
-                controller: dateOfBirthController,
+            isRestricted: true,
+          ),
+
+          // Date of Birth and Gender
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: DateOfBirthPicker(
+                  label: 'Date of Birth',
+                  isRestricted: true,
+                  errorText: errors['dateOfBirth'] ?? '',
+                  controller: dateOfBirthController,
+                ),
               ),
-            ),
-            SizedBox(width: size.width * 0.02),
-            Expanded(
-              flex: 1,
-              child: Container(
-                height: 101,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Gender',
-                      style: TextStyles(context).getTitleStyle(
-                        size: 20,
-                        fontWeight: FontWeight.w500,
-                        color: ColorPalette.blackColor,
+              SizedBox(width: size.width * 0.02),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  height: 101,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Gender',
+                        style: TextStyles(context).getTitleStyle(
+                          size: 20,
+                          fontWeight: FontWeight.w500,
+                          color: ColorPalette.blackColor,
+                        ),
                       ),
-                    ),
-                    Container(
-                      height: size.height * 0.06,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
+                      SizedBox(height: 5),
+                      Container(
+                        height: size.height * 0.06,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
                           color: ColorPalette.blueFormColor,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: CustDropDown(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: CustDropDown(
                           items: List<CustDropdownMenuItem<String>>.generate(
                             genders.length,
                             (index) => CustDropdownMenuItem<String>(
@@ -235,51 +285,64 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
                             setState(() {
                               selectedGender = value as String;
                             });
-                          }),
-                    ),
-                  ],
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        LabelAndTextField(
+            ],
+          ),
+
+          // Address Field
+          LabelAndTextField(
             context: context,
             label: 'Address',
             hintText: '',
             controller: addressController,
             errorText: errors['address'] ?? '',
-            isRestricted: true),
-        LabelAndTextField(
+            isRestricted: true,
+          ),
+
+          // Education Field
+          LabelAndTextField(
             context: context,
             label: 'Education',
             hintText: '',
             controller: educationController,
-            errorText: errors['education'] ?? ''),
-        LabelAndTextField(
+            errorText: errors['education'] ?? '',
+          ),
+
+          // Career Field
+          LabelAndTextField(
             context: context,
             label: 'Career',
             hintText: '',
             controller: careerController,
-            errorText: errors['career'] ?? ''),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Specialization',
-              style: TextStyles(context).getTitleStyle(
-                size: 20,
-                fontWeight: FontWeight.w500,
-                color: ColorPalette.blackColor,
+            errorText: errors['career'] ?? '',
+          ),
+
+          // Specialization Dropdown
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Specialization',
+                style: TextStyles(context).getTitleStyle(
+                  size: 20,
+                  fontWeight: FontWeight.w500,
+                  color: ColorPalette.blackColor,
+                ),
               ),
-            ),
-            SizedBox(height: 5),
-            Container(
-              height: size.height * 0.06,
-              decoration: BoxDecoration(
+              SizedBox(height: 5),
+              Container(
+                height: size.height * 0.06,
+                decoration: BoxDecoration(
                   color: ColorPalette.blueFormColor,
-                  borderRadius: BorderRadius.circular(15)),
-              child: CustDropDown(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: CustDropDown(
                   items: List<CustDropdownMenuItem<String>>.generate(
                     specializations.length,
                     (index) => CustDropdownMenuItem<String>(
@@ -298,26 +361,36 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
                     setState(() {
                       selectedSpecialization = value as String;
                     });
-                  }),
-            ),
-          ],
-        ),
-        LabelAndTextField(
+                  },
+                ),
+              ),
+            ],
+          ),
+
+          // Profile Description Field
+          LabelAndTextField(
             context: context,
             label: 'Profile Description',
             hintText: 'Enter a brief description',
             controller: descriptionController,
             errorText: errors['description'] ?? '',
-            height: 111),
-        LabelAndTextField(
+            height: 111,
+          ),
+
+          // Profile Picture URL Field
+          LabelAndTextField(
             context: context,
             label: 'Profile Picture URL',
             hintText: 'Enter image URL',
             controller: profilePictureUrlController,
-            errorText: errors['avaUrl'] ?? ''),
-      ],
-    );
-  }
+            errorText: errors['avaUrl'] ?? '',
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 
   bool validateDoctorForm() {
     bool isValid = true;
