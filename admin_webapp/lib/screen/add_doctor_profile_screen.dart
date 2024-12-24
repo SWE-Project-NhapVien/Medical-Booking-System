@@ -1,9 +1,7 @@
 import 'package:booking_doctor_project/bloc/doctor/CreateDoctorProfile/create_doctor_profile_bloc.dart';
 import 'package:booking_doctor_project/widgets/common_date_field.dart';
 import 'package:booking_doctor_project/widgets/common_dialogs.dart';
-import 'package:booking_doctor_project/widgets/common_textfield.dart';
 import 'package:booking_doctor_project/widgets/custom_dropdown.dart';
-import 'package:booking_doctor_project/widgets/tap_effect.dart';
 import 'package:booking_doctor_project/widgets/textfield_with_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -78,7 +76,6 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
       backgroundColor: ColorPalette.blueFormColor,
       body: Row(
         children: [
-          // Placeholder space for the side navbar
           Container(
             width: 88,
           ),
@@ -102,52 +99,7 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
                 return SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                    child: Column(
-                      children: [
-                        CommonAppBarWithTitle(
-                          title: 'Create Doctor Profile',
-                          titleSize: 32,
-                          topPadding: MediaQuery.of(context).padding.top,
-                          prefixIconData: Icons.arrow_back_ios_new_rounded,
-                          onPrefixIconClick: () => Navigator.pop(context),
-                        ),
-                        _buildDoctorInformationForm(size),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16.0),
-                          child: CommonButton(
-                            buttonTextWidget: Text(
-                              'Complete',
-                              style: TextStyles(context).getTitleStyle(
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            onTap: () {
-                              if (validateDoctorForm()) {
-                                context.read<CreateDoctorProfileBloc>().add(
-                                      CreateDoctorProfileRequired(
-                                        firstName: firstNameController.text,
-                                        lastName: lastNameController.text,
-                                        phoneNumber: phoneNumberController.text,
-                                        dateOfBirth: dateOfBirthController.text,
-                                        bloodType: selectedBloodType,
-                                        gender: selectedGender,
-                                        address: addressController.text,
-                                        education: educationController.text,
-                                        career: careerController.text,
-                                        description: descriptionController.text,
-                                        avaUrl: profilePictureUrlController.text,
-                                        specialization: [selectedSpecialization],
-                                      ),
-                                    );
-                              }
-                            },
-                            width: double.infinity,
-                            height: size.height * 0.06,
-                            radius: 30,
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: _buildDoctorInformationForm(size),
                   ),
                 );
               },
@@ -158,18 +110,33 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
     );
   }
 
-Widget _buildDoctorInformationForm(Size size) {
-  return SingleChildScrollView(
-    padding: const EdgeInsets.all(30),
-    child: Container(
-      decoration: BoxDecoration(
-        color: ColorPalette.whiteColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+  Widget _buildDoctorInformationForm(Size size) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(30),
+      child: Container(
+        decoration: BoxDecoration(
+          color: ColorPalette.whiteColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Title and Back Button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                Text(
+                  'Create Doctor Profile',
+                  style: TextStyles(context).getTitleStyle(size: 32),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
           // Profile Picture
           Stack(
             alignment: Alignment.center,
@@ -385,6 +352,41 @@ Widget _buildDoctorInformationForm(Size size) {
             controller: profilePictureUrlController,
             errorText: errors['avaUrl'] ?? '',
           ),
+          // Complete Button
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: CommonButton(
+                buttonTextWidget: Text(
+                  'Complete',
+                  style: TextStyles(context).getTitleStyle(
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                onTap: () {
+                  if (validateDoctorForm()) {
+                    context.read<CreateDoctorProfileBloc>().add(
+                          CreateDoctorProfileRequired(
+                            firstName: firstNameController.text,
+                            lastName: lastNameController.text,
+                            phoneNumber: phoneNumberController.text,
+                            dateOfBirth: dateOfBirthController.text,
+                            bloodType: selectedBloodType,
+                            gender: selectedGender,
+                            address: addressController.text,
+                            education: educationController.text,
+                            career: careerController.text,
+                            description: descriptionController.text,
+                            avaUrl: profilePictureUrlController.text,
+                            specialization: [selectedSpecialization],
+                          ),
+                        );
+                  }
+                },
+                width: double.infinity,
+                height: size.height * 0.06,
+                radius: 30,
+              ),
+            ),
         ],
       ),
     ),
