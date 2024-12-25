@@ -72,20 +72,30 @@ class AppointmentCard extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(top: size.height * 0.02),
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _schedule(
-                        iconData: Icons.calendar_today,
-                        info: date,
-                        context: context),
-                    _schedule(
-                        iconData: Icons.access_time,
-                        info: time,
-                        context: context),
-                    _schedule(
-                        iconData: Icons.money_off_csred_rounded,
-                        info: price.isNotEmpty ? formatPrice(price) : '',
-                        context: context),
+                    Row(
+                      children: [
+                        _schedule(
+                            iconData: Icons.calendar_today,
+                            info: date,
+                            context: context),
+                        _schedule(
+                            iconData: Icons.access_time,
+                            info: time,
+                            context: context),
+                        const Spacer(),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: 146,
+                      child: _schedule(
+                          iconData: Icons.money_off_csred_rounded,
+                          info: price.isNotEmpty ? formatPrice(price) : '',
+                          context: context),
+                    ),
                   ],
                 ),
               ),

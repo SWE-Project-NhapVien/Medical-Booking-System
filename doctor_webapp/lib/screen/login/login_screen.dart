@@ -103,10 +103,11 @@ class _LoginScreenState extends State<LoginScreen> {
           Dialogs(context).showLoadingDialog();
         } else if (state is DoctorLoginSuccess) {
           Navigator.of(context).pop();
-          Dialogs(context).showAnimatedDialog(
+          await Dialogs(context).showAnimatedDialog(
             title: 'Success',
             content: 'Login Successful',
           );
+          NavigationServices(context).pushHomeScreen();
         } else if (state is DoctorLoginFailure) {
           Navigator.of(context).pop();
           Dialogs(context).showErrorDialog(message: state.error);
@@ -298,7 +299,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 controller: emailAccountController,
                                 errorText: ''),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
                               child: CommonButton(
                                 buttonTextWidget: Text(
                                   'Send',
@@ -412,10 +414,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Text(
                               'Please check your email for OTP',
-                              style: TextStyles(context).getRegularStyle(
-                                size: 16,
-                                color: ColorPalette.deepBlue,
-                              ).copyWith(fontStyle: FontStyle.italic),
+                              style: TextStyles(context)
+                                  .getRegularStyle(
+                                    size: 16,
+                                    color: ColorPalette.deepBlue,
+                                  )
+                                  .copyWith(fontStyle: FontStyle.italic),
                             ),
                             SizedBox(
                               height: size.height * 0.02,
@@ -442,7 +446,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
                               child: CommonButton(
                                 buttonTextWidget: Text(
                                   'Send',

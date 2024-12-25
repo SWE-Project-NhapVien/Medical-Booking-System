@@ -19,44 +19,32 @@ class ProfileScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           GetDoctorInfoBloc()..add(GetDoctorInfoEvent(doctorId)),
-      child: Scaffold(
-        backgroundColor: ColorPalette.blueFormColor,
-        body: Row(
-          children: [
-            // Placeholder space for the side navbar
-            Container(
-              width: 88,
-            ),
-            Expanded(
-              child: BlocBuilder<GetDoctorInfoBloc, GetDoctorInfoState>(
-                builder: (context, state) {
-                  if (state is GetDoctorInfoLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is GetDoctorInfoSuccess) {
-                    return _buildDoctorProfile(context, state.doctorData, textStyles);
-                  } else if (state is GetDoctorInfoError) {
-                    return Center(child: Text(state.message));
-                  }
-                  return const Center(child: Text("No data available."));
-                },
-              ),
-            ),
-          ],
+      child: Expanded(
+        child: BlocBuilder<GetDoctorInfoBloc, GetDoctorInfoState>(
+          builder: (context, state) {
+            if (state is GetDoctorInfoLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is GetDoctorInfoSuccess) {
+              return _buildDoctorProfile(context, state.doctorData, textStyles);
+            } else if (state is GetDoctorInfoError) {
+              return Center(child: Text(state.message));
+            }
+            return const Center(child: Text("No data available."));
+          },
         ),
       ),
     );
   }
 
-  Widget _buildDoctorProfile(
-      BuildContext context, Map<String, dynamic> doctorData, TextStyles textStyles) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(30),
-      child: Container(
-        decoration: BoxDecoration(
-          color: ColorPalette.whiteColor,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        padding: const EdgeInsets.all(20),
+  Widget _buildDoctorProfile(BuildContext context,
+      Map<String, dynamic> doctorData, TextStyles textStyles) {
+    return Container(
+      decoration: BoxDecoration(
+        color: ColorPalette.whiteColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.all(20),
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -88,7 +76,8 @@ class ProfileScreen extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 16,
                     backgroundColor: ColorPalette.deepBlue,
-                    child: const Icon(Icons.edit, color: Colors.white, size: 16),
+                    child:
+                        const Icon(Icons.edit, color: Colors.white, size: 16),
                   ),
                 ),
               ],
@@ -104,12 +93,14 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              "Specialization: ${doctorData['specialization']}",
+              "Specialization: ${doctorData['specialization'].toString().replaceAll("[", "").replaceAll("]", "")}",
               style: textStyles.getDescriptionStyle(),
             ),
             Divider(height: 32, color: ColorPalette.greyColor),
-            _buildInfoRow(context, textStyles, "First Name", doctorData['first_name']),
-            _buildInfoRow(context, textStyles, "Last Name", doctorData['last_name']),
+            _buildInfoRow(
+                context, textStyles, "First Name", doctorData['first_name']),
+            _buildInfoRow(
+                context, textStyles, "Last Name", doctorData['last_name']),
             _buildInfoRow(
               context,
               textStyles,
@@ -117,13 +108,18 @@ class ProfileScreen extends StatelessWidget {
               _formatDate(doctorData['date_of_birth']),
             ),
             _buildInfoRow(context, textStyles, "Gender", doctorData['gender']),
-            _buildInfoRow(context, textStyles, "Blood Type", doctorData['blood_type']),
-            _buildInfoRow(context, textStyles, "Phone Number", doctorData['phone_number']),
-            _buildInfoRow(context, textStyles, "Address", doctorData['address']),
+            _buildInfoRow(
+                context, textStyles, "Blood Type", doctorData['blood_type']),
+            _buildInfoRow(context, textStyles, "Phone Number",
+                doctorData['phone_number']),
+            _buildInfoRow(
+                context, textStyles, "Address", doctorData['address']),
             Divider(height: 32, color: ColorPalette.greyColor),
-            _buildInfoRow(context, textStyles, "Education", doctorData['education']),
+            _buildInfoRow(
+                context, textStyles, "Education", doctorData['education']),
             _buildInfoRow(context, textStyles, "Career", doctorData['career']),
-            _buildInfoRow(context, textStyles, "Description", doctorData['description']),
+            _buildInfoRow(
+                context, textStyles, "Description", doctorData['description']),
           ],
         ),
       ),
@@ -136,8 +132,8 @@ class ProfileScreen extends StatelessWidget {
     return DateFormat('yyyy-MM-dd').format(date); // Format to show only date.
   }
 
-  Widget _buildInfoRow(
-      BuildContext context, TextStyles textStyles, String label, String? value) {
+  Widget _buildInfoRow(BuildContext context, TextStyles textStyles,
+      String label, String? value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(

@@ -56,6 +56,7 @@ class _UpcomingAppointmentState extends State<UpcomingAppointment> {
               );
             } else {
               return ListView.builder(
+                padding: EdgeInsets.zero,
                 itemCount: appointments.length,
                 itemBuilder: (context, index) {
                   final appointment = appointments[index];
