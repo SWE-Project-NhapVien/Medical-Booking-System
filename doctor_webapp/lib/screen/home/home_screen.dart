@@ -1,3 +1,4 @@
+import 'package:doctor_webapp/screen/appointment/appointment_screen.dart';
 import 'package:doctor_webapp/screen/profile/profile_screen.dart';
 import 'package:doctor_webapp/utils/color_palette.dart';
 import 'package:flutter/material.dart';
@@ -140,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedIndex == 0
                 ? const HomeView()
                 : selectedIndex == 1
-                    ? Container()
+                    ? const AppointmentScreen()
                     : const ProfileScreen(
                         doctorId: '00000000-0000-0000-0000-000000000002',
                       ),
