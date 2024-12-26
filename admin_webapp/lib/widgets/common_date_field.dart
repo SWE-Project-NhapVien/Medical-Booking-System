@@ -1,6 +1,6 @@
-import 'package:booking_doctor_project/utils/color_palette.dart';
-import 'package:booking_doctor_project/utils/text_styles.dart';
-import 'package:booking_doctor_project/widgets/tap_effect.dart';
+import 'package:admin_webapp/utils/color_palette.dart';
+import 'package:admin_webapp/utils/text_styles.dart';
+import 'package:admin_webapp/widgets/tap_effect.dart';
 import 'package:flutter/material.dart';
 
 class DateOfBirthPicker extends StatefulWidget {
