@@ -110,8 +110,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                 alignment: Alignment.topLeft,
                                 child: DropdownButton(
                                   style: TextStyle(
-                                    color: ColorPalette.deepBlue,
-                                  ),
+                                      color: ColorPalette.deepBlue,
+                                      fontSize: 18),
                                   iconEnabledColor: ColorPalette.deepBlue,
                                   iconDisabledColor: ColorPalette.deepBlue,
                                   underline: const SizedBox(),
@@ -143,9 +143,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                         value: 12, child: Text('December')),
                                   ],
                                   onChanged: (value) {
-                                    setState(() {
-                                      selectedMonth = value as int;
-                                    });
+                                    if (value as int >= DateTime.now().month) {
+                                      setState(() {
+                                        selectedMonth = value;
+                                      });
+                                    }
                                   },
                                 ),
                               ),
@@ -171,9 +173,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          setState(() {
-                                            selectedDate = index + 1;
-                                          });
+                                          if (index + 1 >= DateTime.now().day) {
+                                            setState(() {
+                                              selectedDate = index + 1;
+                                            });
+                                          }
                                         },
                                         child: Container(
                                           width: 60,
@@ -249,9 +253,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         timeslotId = tmp[1];
                       },
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
                   ),
                   Divider(
                     color: ColorPalette.deepBlue,
