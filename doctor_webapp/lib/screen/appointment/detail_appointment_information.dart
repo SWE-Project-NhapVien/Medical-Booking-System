@@ -149,7 +149,7 @@ class DetailAppointmentInformation extends StatelessWidget {
             SizedBox(
               width: 260,
               child: CommonButton(
-                backgroundColor: ColorPalette.mediumBlue,
+                backgroundColor: ColorPalette.whiteColor,
                 onTap: () {},
                 buttonText: 'Examine',
                 textColor: ColorPalette.deepBlue,

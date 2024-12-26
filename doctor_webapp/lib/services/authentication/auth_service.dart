@@ -1,5 +1,4 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'dart:html' as html;
 
 class DoctorAuthServices {
   final SupabaseClient _supabase = Supabase.instance.client;

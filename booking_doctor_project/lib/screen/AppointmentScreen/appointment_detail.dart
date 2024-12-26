@@ -114,9 +114,8 @@ class _AppointmentDetailState extends State<AppointmentDetail> {
                               _sectionTitle(context, 'Patient Details'),
                               _appointmentNote(
                                 size,
-                                note: profile.medicalHistory!.isNotEmpty
-                                    ? profile.medicalHistory!.join('\n')
-                                    : 'No medical history found.',
+                                note: widget.appointment.description ??
+                                    'No description',
                               ),
                               if (widget.appointment.status == 'completed')
                                 Column(

@@ -41,6 +41,7 @@ class CancelledAppointmentBloc
           doctorAvatar: item['doctor_avatar_url'],
           specializations: item['doctor_specialization'].cast<String>(),
           result: null,
+          description: item['description'],
           status: 'canceled',
           price: item['appointment_price'].toString(),
         );

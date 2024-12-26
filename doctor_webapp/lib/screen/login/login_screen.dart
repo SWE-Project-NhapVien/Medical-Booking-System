@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
             title: 'Success',
             content: 'Login Successful',
           );
-          NavigationServices(context).pushHandlePageView();
+          NavigationServices(context).pushHomeScreen();
         } else if (state is DoctorLoginFailure) {
           Navigator.of(context).pop();
           Dialogs(context).showErrorDialog(message: state.error);
@@ -196,27 +196,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: size.height * 0.02,
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.001),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.width * 0.001),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Flexible(
-                          child: Text(
-                            'Don’t have an account? ',
-                            style: TextStyles(context)
-                                .getRegularStyle(fontWeight: FontWeight.w200),
-                          ),
+                        Text(
+                          'Don’t have an account? ',
+                          style: TextStyles(context)
+                              .getRegularStyle(fontWeight: FontWeight.w200),
                         ),
                         TapEffect(
                           onClick: () {
                             //
                           },
-                          child: Flexible(
-                            child: Text(
-                              'Contact the Admin',
-                              style: TextStyles(context).getRegularStyle(
-                                color: ColorPalette.deepBlue,
-                              ),
+                          child: Text(
+                            'Contact the Admin',
+                            style: TextStyles(context).getRegularStyle(
+                              color: ColorPalette.deepBlue,
                             ),
                           ),
                         ),

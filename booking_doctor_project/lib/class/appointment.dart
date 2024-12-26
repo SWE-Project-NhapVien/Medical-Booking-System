@@ -7,10 +7,10 @@ class Appointment {
   final String doctorFullName;
   final List<String> specializations;
   String? doctorAvatar;
+  String? description;
   MedicalResult? result;
   String status; //upcoming - completed - canceled
   String price;
-  
 
   Appointment({
     required this.appointmentDate,
@@ -20,6 +20,7 @@ class Appointment {
     required this.specializations,
     this.doctorAvatar,
     this.result,
+    required this.description,
     required this.status,
     this.price = '125000',
   });
