@@ -1,8 +1,8 @@
-import 'package:booking_doctor_project/bloc/doctor/CreateDoctorProfile/create_doctor_profile_bloc.dart';
-import 'package:booking_doctor_project/widgets/common_date_field.dart';
-import 'package:booking_doctor_project/widgets/common_dialogs.dart';
-import 'package:booking_doctor_project/widgets/custom_dropdown.dart';
-import 'package:booking_doctor_project/widgets/textfield_with_label.dart';
+import 'package:admin_webapp/bloc/doctor/CreateDoctorProfile/create_doctor_profile_bloc.dart';
+import 'package:admin_webapp/widgets/common_date_field.dart';
+import 'package:admin_webapp/widgets/common_dialogs.dart';
+import 'package:admin_webapp/widgets/custom_dropdown.dart';
+import 'package:admin_webapp/widgets/textfield_with_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

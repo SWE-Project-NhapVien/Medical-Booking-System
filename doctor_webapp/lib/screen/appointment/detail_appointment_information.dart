@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:doctor_webapp/utils/color_palette.dart';
 import 'package:doctor_webapp/utils/fixed_web_component.dart';
 import 'package:doctor_webapp/widgets/comon_button.dart';

@@ -1,3 +1,4 @@
+import 'package:admin_webapp/utils/color_palette.dart';
 import 'package:admin_webapp/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class CardItem extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.2,
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: Card(
+        color: ColorPalette.greyColor,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -30,7 +32,7 @@ class CardItem extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: Text(
                   'From October 2024',
-                  style: TextStyles(context).getDescriptionStyle(),
+                  style: TextStyles(context).getDescriptionStyle().copyWith(fontSize: 14),
                 ),
               )
             ],

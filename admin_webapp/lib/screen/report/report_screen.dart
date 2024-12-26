@@ -49,22 +49,27 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
 
   @override
   Widget build(BuildContext context) {
-    double lottieSize = MediaQuery.of(context).size.width * 0.2;
+    final size = MediaQuery.of(context).size;
+    double lottieSize = size.width * 0.2;
     return Scaffold(
+      backgroundColor: ColorPalette.blueFormColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(
+                horizontal: size.width * 0.01, vertical: size.height * 0.02),
             child: Text(
               "Report",
-              style: TextStyles(context)
-                  .getBoldStyle(fontSize: 36, color: ColorPalette.deepBlue),
+              style: TextStyles(context).getTitleStyle(
+                  size: 40,
+                  color: ColorPalette.deepBlue,
+                  fontWeight: FontWeight.w500),
             ),
           ),
           Expanded(
             child: Container(
-              margin: const EdgeInsets.fromLTRB(10, 0, 8, 10),
+              margin: EdgeInsets.symmetric(horizontal: size.width * 0.01),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: ColorPalette.whiteColor,
@@ -95,30 +100,34 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
                     return SingleChildScrollView(
                         child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            // card
-                            CardItem(
-                              title: 'Total Appointment',
-                              description:
-                                  report.appointments.length.toString(),
-                            ),
-                            CardItem(
-                              title: 'Total revenue',
-                              description:
-                                  '${report.appointments.length * priceAppointment} VND',
-                            ),
-                            CardItem(
-                              title: 'An appointment price',
-                              description: '$priceAppointment VND',
-                            ),
-                            CardItem(
-                              title: 'Total patient',
-                              description:
-                                  report.totalPatientAccount.toString(),
-                            ),
-                          ],
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: size.width * 0.01),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // card
+                              CardItem(
+                                title: 'Total Appointment',
+                                description:
+                                    report.appointments.length.toString(),
+                              ),
+                              CardItem(
+                                title: 'Total revenue',
+                                description:
+                                    '${report.appointments.length * priceAppointment} VND',
+                              ),
+                              CardItem(
+                                title: 'An appointment price',
+                                description: '$priceAppointment VND',
+                              ),
+                              CardItem(
+                                title: 'Total patient',
+                                description:
+                                    report.totalPatientAccount.toString(),
+                              ),
+                            ],
+                          ),
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,8 +149,12 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
                             ),
                             Expanded(
                               flex: 1,
-                              child: PieChartOrderStatus(
-                                appointments: report.appointments,
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.only(right: size.width * 0.01),
+                                child: PieChartOrderStatus(
+                                  appointments: report.appointments,
+                                ),
                               ),
                             )
                           ],
