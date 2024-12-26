@@ -131,6 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Center(
                   child: CommonButton(
+                    key: Key("Login Button"),
                     buttonTextWidget: Text(
                       'Log In',
                       style: TextStyles(context).getTitleStyle(
