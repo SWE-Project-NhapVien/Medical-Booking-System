@@ -66,6 +66,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           child: Column(
                             children: [
                               TabBar(
+                                key: const Key('TabBar Appointment'),
                                 padding: const EdgeInsets.all(10),
                                 unselectedLabelColor:
                                     ColorPalette.unselectedTabAppointment,
