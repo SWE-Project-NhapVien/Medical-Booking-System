@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../DataLayer/repository/appointment_repository.dart';
 import '../../utils/color_palette.dart';
 import '../../utils/enum.dart';
-import '../../utils/text_styles.dart';
 import 'cancelled_appointment_screen.dart';
 import 'detail_appointment_information.dart';
 
@@ -36,26 +35,26 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       create: (context) => AppointmentRepository(
           appointmentDataProvider: AppointmentDataProvider()),
       child: BlocProvider(
-        create: (context) => AppointmentBloc(appointmentRepository: context.read<AppointmentRepository>()),
-        child: Scaffold(
-          body: Row(
+        create: (context) => AppointmentBloc(
+            appointmentRepository: context.read<AppointmentRepository>()),
+        child: Expanded(
+          child: Row(
             children: [
               Expanded(
                 flex: 5,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        "Appointments",
-                        style: TextStyles(context).getBoldStyle(
-                            fontSize: 36, color: ColorPalette.deepBlue),
-                      ),
+                    Text(
+                      "Appointments",
+                      style: TextStyle(
+                          color: ColorPalette.deepBlue,
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold),
                     ),
+                    const SizedBox(height: 8),
                     Expanded(
                       child: Container(
-                        margin: const EdgeInsets.fromLTRB(20, 10, 8, 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.white,
@@ -110,6 +109,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   ],
                 ),
               ),
+              const SizedBox(width: 30),
               const Expanded(flex: 2, child: DetailAppointmentInformation()),
             ],
           ),

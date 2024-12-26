@@ -42,7 +42,6 @@ class MyApp extends StatelessWidget {
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
       '/': (BuildContext context) => const LoginScreen(),
-      // '/': (BuildContext context) => const ProfileScreen(doctorId: "00000000-0000-0000-0000-000000000002"),
       '/reset-password': (BuildContext context) => const ResetPasswordScreen(),
     };
   }

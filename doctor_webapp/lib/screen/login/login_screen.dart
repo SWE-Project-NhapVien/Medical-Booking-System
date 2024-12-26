@@ -306,7 +306,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 controller: emailAccountController,
                                 errorText: ''),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
                               child: CommonButton(
                                 buttonTextWidget: Text(
                                   'Send',
@@ -420,10 +421,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Text(
                               'Please check your email for OTP',
-                              style: TextStyles(context).getRegularStyle(
-                                size: 16,
-                                color: ColorPalette.deepBlue,
-                              ).copyWith(fontStyle: FontStyle.italic),
+                              style: TextStyles(context)
+                                  .getRegularStyle(
+                                    size: 16,
+                                    color: ColorPalette.deepBlue,
+                                  )
+                                  .copyWith(fontStyle: FontStyle.italic),
                             ),
                             SizedBox(
                               height: size.height * 0.02,
@@ -450,7 +453,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
                               child: CommonButton(
                                 buttonTextWidget: Text(
                                   'Send',

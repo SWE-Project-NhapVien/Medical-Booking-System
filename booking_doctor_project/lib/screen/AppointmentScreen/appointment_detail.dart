@@ -1,5 +1,9 @@
+import 'package:booking_doctor_project/bloc/Appointment/UpcomingAppointment/upcoming_appointment_bloc.dart';
+import 'package:booking_doctor_project/bloc/Appointment/UpcomingAppointment/upcoming_appointment_event.dart';
+import 'package:booking_doctor_project/bloc/Appointment/UpcomingAppointment/upcoming_appointment_state.dart';
 import 'package:booking_doctor_project/bloc/patient/CancelAppointment/cancel_appointment_bloc.dart';
 import 'package:booking_doctor_project/class/appointment.dart';
+import 'package:booking_doctor_project/class/global_profile.dart';
 import 'package:booking_doctor_project/class/patient_profile.dart';
 import 'package:booking_doctor_project/utils/text_styles.dart';
 import 'package:booking_doctor_project/utils/color_palette.dart';
@@ -30,114 +34,124 @@ class _AppointmentDetailState extends State<AppointmentDetail> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return BlocListener<CancelAppointmentBloc, CancelAppointmentState>(
+    return BlocListener<UpcomingAppointmentBloc, UpcomingAppointmentState>(
       listener: (context, state) async {
-        if (state is CancelAppointmentSuccess) {
-          await Dialogs(context).showErrorDialog(
-            title: 'Cancel an Appointment',
-            message: 'You have cancelled this appointment.',
-          );
+        if (state is SuccessUpcomingAppointmentState) {
           Navigator.pop(context);
-        } else if (state is CancelAppointmentError) {
-          Navigator.pop(context);
-          await Dialogs(context).showErrorDialog(message: state.error);
-        } else if (state is CancelAppointmentProcess) {
-          // Navigator.pop(context);
-          await Dialogs(context).showLoadingDialog();
         }
       },
-      child: Scaffold(
-        backgroundColor: ColorPalette.whiteColor,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Custom AppBar
-              CommonAppBarView(
-                iconData: Icons.arrow_back_ios_new_rounded,
-                title: 'Appointment Detail',
-                onBackClick: () {
-                  Navigator.pop(context);
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: size.width * 0.05,
-                  vertical: size.height * 0.01,
+      child: BlocListener<CancelAppointmentBloc, CancelAppointmentState>(
+        listener: (context, state) async {
+          if (state is CancelAppointmentSuccess) {
+            Navigator.pop(context);
+            await Dialogs(context).showErrorDialog(
+              title: 'Cancel an Appointment',
+              message: 'You have cancelled this appointment.',
+            );
+            context.read<UpcomingAppointmentBloc>().add(
+                RequestUpcomingAppointmentEvent(
+                    profileId: GlobalProfile().profileId!));
+          } else if (state is CancelAppointmentError) {
+            Navigator.pop(context);
+            await Dialogs(context).showErrorDialog(message: state.error);
+          } else if (state is CancelAppointmentProcess) {
+            // Navigator.pop(context);
+            await Dialogs(context).showLoadingDialog();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: ColorPalette.whiteColor,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Custom AppBar
+                CommonAppBarView(
+                  iconData: Icons.arrow_back_ios_new_rounded,
+                  title: 'Appointment Detail',
+                  onBackClick: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _sectionTitle(context, 'Time'),
-                    _sectionContent(context,
-                        '${widget.appointment.appointmentTime} - ${widget.appointment.appointmentDate}'),
-                    _divider(size),
-                    _sectionTitle(context, 'Patient Details'),
-                    FutureBuilder<PatientProfile?>(
-                      future: patientProfile,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        if (snapshot.hasError || snapshot.data == null) {
-                          return const Center(
-                              child: Text('No patient details found.'));
-                        }
-                        final profile = snapshot.data!;
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _informationBox(context,
-                                title: 'Name',
-                                info:
-                                    '${profile.firstName} ${profile.lastName}'),
-                            _informationBox(context,
-                                title: 'Age',
-                                info: _calculateAge(profile.dob).toString()),
-                            _informationBox(context,
-                                title: 'Gender', info: profile.gender),
-                            _divider(size),
-                            _sectionTitle(context, 'Patient Details'),
-                            _appointmentNote(
-                              size,
-                              note: profile.medicalHistory!.isNotEmpty
-                                  ? profile.medicalHistory!.join('\n')
-                                  : 'No medical history found.',
-                            ),
-                            if (widget.appointment.status == 'completed')
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _divider(size),
-                                  _sectionTitle(context, 'Doctor\'s Note'),
-                                  _appointmentNote(
-                                    size,
-                                    note: 'Doctor have not noted.',
-                                  )
-                                ],
-                              )
-                          ],
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 22),
-                    if (widget.appointment.status == 'upcoming')
-                      CommonButton(
-                        buttonText: 'Cancel',
-                        fontSize: 18,
-                        backgroundColor: ColorPalette.redColor,
-                        onTap: () {
-                          context.read<CancelAppointmentBloc>().add(
-                              CancelAppointmentRequired(
-                                  appointmentId:
-                                      widget.appointment.appointmentId));
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.05,
+                    vertical: size.height * 0.01,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _sectionTitle(context, 'Time'),
+                      _sectionContent(context,
+                          '${widget.appointment.appointmentTime} - ${widget.appointment.appointmentDate}'),
+                      _divider(size),
+                      _sectionTitle(context, 'Patient Details'),
+                      FutureBuilder<PatientProfile?>(
+                        future: patientProfile,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          if (snapshot.hasError || snapshot.data == null) {
+                            return const Center(
+                                child: Text('No patient details found.'));
+                          }
+                          final profile = snapshot.data!;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _informationBox(context,
+                                  title: 'Name',
+                                  info:
+                                      '${profile.firstName} ${profile.lastName}'),
+                              _informationBox(context,
+                                  title: 'Age',
+                                  info: _calculateAge(profile.dob).toString()),
+                              _informationBox(context,
+                                  title: 'Gender', info: profile.gender),
+                              _divider(size),
+                              _sectionTitle(context, 'Patient Details'),
+                              _appointmentNote(
+                                size,
+                                note: profile.medicalHistory!.isNotEmpty
+                                    ? profile.medicalHistory!.join('\n')
+                                    : 'No medical history found.',
+                              ),
+                              if (widget.appointment.status == 'completed')
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _divider(size),
+                                    _sectionTitle(context, 'Doctor\'s Note'),
+                                    _appointmentNote(
+                                      size,
+                                      note: 'Doctor have not noted.',
+                                    )
+                                  ],
+                                )
+                            ],
+                          );
                         },
                       ),
-                  ],
+                      const SizedBox(height: 22),
+                      if (widget.appointment.status == 'upcoming')
+                        CommonButton(
+                          buttonText: 'Cancel',
+                          fontSize: 18,
+                          backgroundColor: ColorPalette.redColor,
+                          onTap: () {
+                            context.read<CancelAppointmentBloc>().add(
+                                CancelAppointmentRequired(
+                                    appointmentId:
+                                        widget.appointment.appointmentId));
+                          },
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

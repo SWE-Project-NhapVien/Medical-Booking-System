@@ -1,3 +1,4 @@
+import 'package:booking_doctor_project/bloc/Appointment/UpcomingAppointment/upcoming_appointment_bloc.dart';
 import 'package:booking_doctor_project/bloc/TimeSlot/timeslot_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/CancelAppointment/cancel_appointment_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/CreateProfile/create_profile_bloc.dart';
@@ -50,6 +51,8 @@ Widget _setAllProviders() {
       BlocProvider<GetAProfileBloc>(create: (context) => GetAProfileBloc()),
       BlocProvider<CancelAppointmentBloc>(
           create: (context) => CancelAppointmentBloc()),
+      BlocProvider<UpcomingAppointmentBloc>(
+          create: (context) => UpcomingAppointmentBloc()),
       BlocProvider<GetTimeSlotDataBloc>(
           create: (context) => GetTimeSlotDataBloc()),
       BlocProvider<UpdateProfileBloc>(create: (context) => UpdateProfileBloc()),
