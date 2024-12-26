@@ -20,9 +20,10 @@ class NavigationServices {
     return _pushMaterialPageRoute(const ResetPasswordScreen());
   }
 
-
   Future<dynamic> pushHomeScreen() {
     return _pushMaterialPageRoute(const HomeScreen());
+  }
+
   Future<dynamic> pushHandlePageView() {
     return _pushMaterialPageRoute(const HandlePageView());
   }
