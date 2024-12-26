@@ -1,13 +1,13 @@
-import 'package:doctor_webapp/bloc/DoctorLogin/doctor_login_bloc.dart';
-import 'package:doctor_webapp/bloc/ForgotPassword/forgot_password_bloc.dart';
-import 'package:doctor_webapp/routes/navigation_services.dart';
-import 'package:doctor_webapp/utils/color_palette.dart';
-import 'package:doctor_webapp/utils/localfiles.dart';
-import 'package:doctor_webapp/utils/text_styles.dart';
-import 'package:doctor_webapp/widgets/common_dialogs.dart';
-import 'package:doctor_webapp/widgets/comon_button.dart';
-import 'package:doctor_webapp/widgets/tap_effect.dart';
-import 'package:doctor_webapp/widgets/textfield_with_label.dart';
+import 'package:admin_webapp/bloc/AdminLogin/login_bloc.dart';
+import 'package:admin_webapp/bloc/ForgotPassword/forgot_password_bloc.dart';
+import 'package:admin_webapp/routes/navigation_services.dart';
+import 'package:admin_webapp/utils/color_palette.dart';
+import 'package:admin_webapp/utils/localfiles.dart';
+import 'package:admin_webapp/utils/text_styles.dart';
+import 'package:admin_webapp/widgets/common_dialogs.dart';
+import 'package:admin_webapp/widgets/comon_button.dart';
+import 'package:admin_webapp/widgets/tap_effect.dart';
+import 'package:admin_webapp/widgets/textfield_with_label.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -97,18 +97,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildLoginForm(Size size) {
-    return BlocConsumer<DoctorLoginBloc, DoctorLoginState>(
+    return BlocConsumer<LoginBloc, LoginState>(
       listener: (context, state) async {
-        if (state is DoctorLoginProcess) {
+        if (state is LoginProcess) {
           Dialogs(context).showLoadingDialog();
-        } else if (state is DoctorLoginSuccess) {
+        } else if (state is LoginSuccess) {
           Navigator.of(context).pop();
           await Dialogs(context).showAnimatedDialog(
             title: 'Success',
             content: 'Login Successful',
           );
           NavigationServices(context).pushHandlePageView();
-        } else if (state is DoctorLoginFailure) {
+        } else if (state is LoginFailure) {
           Navigator.of(context).pop();
           Dialogs(context).showErrorDialog(message: state.error);
         }
@@ -122,18 +122,26 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Center(
+                    child: Text(
+                      "Hello!",
+                      style: TextStyles(context).getTitleStyle(
+                          size: 36,
+                          fontWeight: FontWeight.w500,
+                          color: ColorPalette.deepBlue),
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.05,
+                  ),
                   Text(
                     "Welcome",
                     style: TextStyles(context).getTitleStyle(
                         fontWeight: FontWeight.w500,
                         color: ColorPalette.deepBlue),
                   ),
-                  Text(
-                    "“Wear the white coat with dignity and pride—it is an honor and privilege to get to serve the public as a physician.”  - Bill H. Warren",
-                    style: TextStyles(context).getDescriptionStyle(),
-                  ),
                   SizedBox(
-                    height: size.height * 0.05,
+                    height: size.height * 0.01,
                   ),
                   LabelAndTextField(
                     context: context,
@@ -152,23 +160,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     selectedIconData: CupertinoIcons.eye_fill,
                     isObscured: obscurePassword,
                   ),
-                  TapEffect(
-                    onClick: () async {
-                      await showAnimatedForgotPasswordForm(context, size);
-                    },
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        'Forgot Password',
-                        style: TextStyles(context).getRegularStyle(
-                          color: ColorPalette.deepBlue,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.05,
-                  ),
                   Center(
                     child: CommonButton(
                       buttonTextWidget: Text(
@@ -179,8 +170,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       onTap: () {
                         if (_validateAndLogin()) {
-                          BlocProvider.of<DoctorLoginBloc>(context).add(
-                            DoctorLoginRequired(
+                          BlocProvider.of<LoginBloc>(context).add(
+                            LoginRequired(
                               email: emailController.text,
                               password: passwordController.text,
                             ),
@@ -192,37 +183,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       radius: 30,
                     ),
                   ),
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.001),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            'Don’t have an account? ',
-                            style: TextStyles(context)
-                                .getRegularStyle(fontWeight: FontWeight.w200),
-                          ),
-                        ),
-                        TapEffect(
-                          onClick: () {
-                            //
-                          },
-                          child: Flexible(
-                            child: Text(
-                              'Contact the Admin',
-                              style: TextStyles(context).getRegularStyle(
-                                color: ColorPalette.deepBlue,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
                 ],
               ),
             ),
@@ -306,8 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 controller: emailAccountController,
                                 errorText: ''),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
                               child: CommonButton(
                                 buttonTextWidget: Text(
                                   'Send',
@@ -421,12 +380,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Text(
                               'Please check your email for OTP',
-                              style: TextStyles(context)
-                                  .getRegularStyle(
-                                    size: 16,
-                                    color: ColorPalette.deepBlue,
-                                  )
-                                  .copyWith(fontStyle: FontStyle.italic),
+                              style: TextStyles(context).getRegularStyle(
+                                size: 16,
+                                color: ColorPalette.deepBlue,
+                              ).copyWith(fontStyle: FontStyle.italic),
                             ),
                             SizedBox(
                               height: size.height * 0.02,
@@ -453,8 +410,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
                               child: CommonButton(
                                 buttonTextWidget: Text(
                                   'Send',

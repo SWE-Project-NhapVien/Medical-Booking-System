@@ -1,5 +1,6 @@
 import 'package:doctor_webapp/bloc/DoctorLogin/doctor_login_bloc.dart';
 import 'package:doctor_webapp/bloc/ForgotPassword/forgot_password_bloc.dart';
+import 'package:doctor_webapp/bloc/Logout/logout_bloc.dart';
 import 'package:doctor_webapp/bloc_observer.dart';
 import 'package:doctor_webapp/screen/login/login_screen.dart';
 import 'package:doctor_webapp/screen/reset_password/reset_password.dart';
@@ -50,8 +51,8 @@ Widget _setAllProviders() {
   return MultiBlocProvider(
     providers: [
       BlocProvider<DoctorLoginBloc>(create: (context) => DoctorLoginBloc()),
-      BlocProvider<ForgotPasswordBloc>(
-          create: (context) => ForgotPasswordBloc()),
+      BlocProvider<ForgotPasswordBloc>(create: (context) => ForgotPasswordBloc()),
+      BlocProvider<LogoutBloc>(create: (context) => LogoutBloc()),
     ],
     child: const MyApp(),
   );

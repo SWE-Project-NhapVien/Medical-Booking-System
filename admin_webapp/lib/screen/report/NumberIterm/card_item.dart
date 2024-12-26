@@ -1,4 +1,4 @@
-import 'package:booking_doctor_project/utils/text_styles.dart';
+import 'package:admin_webapp/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable

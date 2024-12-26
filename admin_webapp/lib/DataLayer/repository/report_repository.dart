@@ -1,5 +1,5 @@
-import 'package:booking_doctor_project/DataLayer/data/Report_data_provider.dart';
-import 'package:booking_doctor_project/class/report.dart';
+import 'package:admin_webapp/DataLayer/data/report_data_provider.dart';
+import 'package:admin_webapp/class/report.dart';
 
 import '../../class/appointment.dart';
 

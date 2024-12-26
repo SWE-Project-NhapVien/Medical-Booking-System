@@ -1,4 +1,4 @@
-import 'package:booking_doctor_project/class/appointment.dart';
+import 'package:admin_webapp/class/appointment.dart';
 
 class Report {
   int totalPatientAccount;

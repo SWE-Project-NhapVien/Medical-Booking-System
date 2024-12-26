@@ -1,12 +1,12 @@
-import 'package:booking_doctor_project/bloc/report/report_event.dart';
-import 'package:booking_doctor_project/screen/report/BarChart/bar_chart_weekly_appointment.dart';
-import 'package:booking_doctor_project/screen/report/NumberIterm/card_item.dart';
-import 'package:booking_doctor_project/screen/report/RecentAppointments/recent_appointment.dart';
+import 'package:admin_webapp/bloc/report/report_event.dart';
+import 'package:admin_webapp/screen/report/BarChart/bar_chart_weekly_appointment.dart';
+import 'package:admin_webapp/screen/report/NumberIterm/card_item.dart';
+import 'package:admin_webapp/screen/report/RecentAppointments/recent_appointment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../DataLayer/data/Report_data_provider.dart';
+import '../../DataLayer/data/report_data_provider.dart';
 import '../../DataLayer/repository/report_repository.dart';
 import '../../bloc/report/report_bloc.dart';
 import '../../bloc/report/report_state.dart';

@@ -101,4 +101,68 @@ class Dialogs {
           );
         });
   }
+
+  Future<void> showLogoutDialog(BuildContext context, VoidCallback onConfirm) {
+    return showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel: '',
+        transitionDuration: const Duration(milliseconds: 300),
+        pageBuilder: (content, animation1, animation2) {
+          return Container();
+        },
+        transitionBuilder: (context, a1, a2, widget) {
+          return ScaleTransition(
+            scale: Tween<double>(begin: 0.5, end: 1.0).animate(a1),
+            child: FadeTransition(
+              opacity: Tween<double>(begin: 0.5, end: 1.0).animate(a1),
+              child: AlertDialog(
+                  backgroundColor: ColorPalette.blueFormColor,
+                  title: Text(
+                    'Logout',
+                    style: TextStyles(context).getTitleStyle(
+                        size: 18,
+                        fontWeight: FontWeight.w500,
+                        color: ColorPalette.deepBlue),
+                  ),
+                  content: Text(
+                    'Are you sure you want to logout?',
+                    style: TextStyles(context)
+                        .getRegularStyle(color: ColorPalette.deepBlue)
+                        .copyWith(fontStyle: FontStyle.italic),
+                  ),
+                  shape: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                      borderSide: BorderSide.none),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          onConfirm();
+                        },
+                        child: Text(
+                          'Logout',
+                          style: TextStyles(context).getTitleStyle(
+                            size: 18,
+                            fontWeight: FontWeight.w500,
+                            color: ColorPalette.blackColor,
+                          ),
+                        )),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'Cancel',
+                          style: TextStyles(context).getTitleStyle(
+                            size: 18,
+                            fontWeight: FontWeight.w500,
+                            color: ColorPalette.blackColor,
+                          ),
+                        ))
+                  ]),
+            ),
+          );
+        });
+  }
 }
