@@ -1,9 +1,13 @@
+import 'package:doctor_webapp/bloc/Logout/logout_bloc.dart';
+import 'package:doctor_webapp/routes/navigation_services.dart';
 import 'package:doctor_webapp/screen/appointment/appointment_screen.dart';
 import 'package:doctor_webapp/screen/home/home_screen.dart';
 import 'package:doctor_webapp/utils/color_palette.dart';
 import 'package:doctor_webapp/utils/enum.dart';
 import 'package:doctor_webapp/utils/fixed_web_component.dart';
+import 'package:doctor_webapp/widgets/common_dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 
 import 'profile/profile_screen.dart';
@@ -79,25 +83,34 @@ class _HandlePageViewState extends State<HandlePageView> {
   @override
   Widget build(BuildContext context) {
     double lottieSize = MediaQuery.of(context).size.width * 0.6;
-    return Scaffold(
-        body: Row(
-      children: [
-        _buildSideBar(),
-        isFirstTime
-            ? Center(
-                child: AlertDialog(
-                  backgroundColor: Colors.transparent,
-                  content: Lottie.network(
-                    FixedWebComponent.loading,
-                    width: lottieSize,
+    return BlocListener<LogoutBloc, LogoutState>(
+      listener: (context, state) {
+        if (state is LogoutSuccess) {
+          NavigationServices(context).popUntilLogin();
+        } else if (state is LogoutFailure) {
+          Dialogs(context).showErrorDialog(message: state.error);
+        }
+      },
+      child: Scaffold(
+          body: Row(
+        children: [
+          _buildSideBar(),
+          isFirstTime
+              ? Center(
+                  child: AlertDialog(
+                    backgroundColor: Colors.transparent,
+                    content: Lottie.network(
+                      FixedWebComponent.loading,
+                      width: lottieSize,
+                    ),
                   ),
+                )
+              : Expanded(
+                  child: _screen,
                 ),
-              )
-            : Expanded(
-                child: _screen,
-              ),
-      ],
-    ));
+        ],
+      )),
+    );
   }
 
   Widget _buildSideBar() {
@@ -153,7 +166,9 @@ class _HandlePageViewState extends State<HandlePageView> {
             icon: Icons.person,
             isSelected: _navigatorType == NavigatorType.profile,
             onClick: () => setState(() {
-              _screen = const ProfileScreen(doctorId: '00000000-0000-0000-0000-000000000002',);
+              _screen = const ProfileScreen(
+                doctorId: '00000000-0000-0000-0000-000000000002',
+              );
               _navigatorType = NavigatorType.profile;
             }),
           ),
@@ -164,7 +179,11 @@ class _HandlePageViewState extends State<HandlePageView> {
           child: _buildSideBarComponent(
             icon: Icons.logout,
             isSelected: _navigatorType == NavigatorType.logout,
-            onClick: () => {},
+            onClick: () async {
+              await Dialogs(context).showLogoutDialog(context, () {
+                BlocProvider.of<LogoutBloc>(context).add(const Logout());
+              });
+            },
           ),
         ),
       ],
