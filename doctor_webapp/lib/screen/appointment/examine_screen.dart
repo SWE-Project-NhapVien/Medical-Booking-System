@@ -348,6 +348,7 @@ class _DoctorNotesState extends State<DoctorNotes> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Doctor notes added successfully.')),
           );
+          Navigator.of(context).pop();
         } else if (state is DoctorNotesError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.errorMessage)),
