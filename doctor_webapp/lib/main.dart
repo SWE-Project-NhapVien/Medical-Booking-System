@@ -2,7 +2,7 @@ import 'package:doctor_webapp/bloc/DoctorLogin/doctor_login_bloc.dart';
 import 'package:doctor_webapp/bloc/ForgotPassword/forgot_password_bloc.dart';
 import 'package:doctor_webapp/bloc/Logout/logout_bloc.dart';
 import 'package:doctor_webapp/bloc_observer.dart';
-import 'package:doctor_webapp/screen/appointment/examine_screen.dart';
+import 'package:doctor_webapp/screen/login/login_screen.dart';
 import 'package:doctor_webapp/screen/reset_password/reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,8 +41,7 @@ class MyApp extends StatelessWidget {
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
-      '/': (BuildContext context) => const ExamineScreen(appointmentId: 'a21a1507-8895-4ad0-ab4b-026453a05ca0',),
-      //'/': (BuildContext context) => const LoginScreen(),
+      '/': (BuildContext context) => const LoginScreen(),
       '/reset-password': (BuildContext context) => const ResetPasswordScreen(),
     };
   }
