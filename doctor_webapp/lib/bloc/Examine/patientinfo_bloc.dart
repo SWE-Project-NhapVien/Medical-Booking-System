@@ -22,7 +22,7 @@ class PatientInfoBloc extends Bloc<PatientInfoEvent, PatientInfoState> {
         // Emit success state with the parsed data
         emit(PatientInfoLoaded(appointmentDetails: appointmentDetails));
       } else {
-        emit(PatientInfoError(errorMessage: 'No appointment data found.'));
+        emit(const PatientInfoError(errorMessage: 'No appointment data found.'));
       }
     } catch (e) {
       emit(PatientInfoError(errorMessage: 'Error fetching appointment details: $e'));

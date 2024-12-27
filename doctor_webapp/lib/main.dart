@@ -3,7 +3,6 @@ import 'package:doctor_webapp/bloc/ForgotPassword/forgot_password_bloc.dart';
 import 'package:doctor_webapp/bloc/Logout/logout_bloc.dart';
 import 'package:doctor_webapp/bloc_observer.dart';
 import 'package:doctor_webapp/screen/appointment/examine_screen.dart';
-import 'package:doctor_webapp/screen/login/login_screen.dart';
 import 'package:doctor_webapp/screen/reset_password/reset_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

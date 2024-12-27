@@ -15,7 +15,7 @@ class AddDoctorNoteEvent extends DoctorNotesEvent {
   final String diagnosis;
   final List<String> prescriptions;
 
-  AddDoctorNoteEvent({
+  const AddDoctorNoteEvent({
     required this.appointmentId,
     required this.symptoms,
     required this.diagnosis,

@@ -23,11 +23,11 @@ class DoctorNotesBloc extends Bloc<DoctorNotesEvent, DoctorNotesState> {
         'prescriptions': event.prescriptions, 
       }).select();
 
-      // if (response.error == null) {
-      //   emit(DoctorNotesAdded());
-      // } else {
-      //   emit(DoctorNotesError('Failed to add doctor notes: ${response.error.message}'));
-      // }
+      if (response.isNotEmpty) {
+        emit(DoctorNotesAdded());
+      } else {
+        emit(DoctorNotesError('Failed to add doctor notes.'));
+      }
     } catch (e) {
       emit(DoctorNotesError('Error adding doctor notes: $e'));
     }
