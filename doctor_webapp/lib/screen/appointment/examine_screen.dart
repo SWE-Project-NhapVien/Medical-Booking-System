@@ -52,26 +52,59 @@ class ExamineScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Row(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Patient Information Panel
-                      Expanded(
-                        flex: 1,
-                        child: PatientInformationPanel(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                'Examine Patient',
+                                style: TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorPalette.deepBlue,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                      const SizedBox(height: 16),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Patient Information Panel
+                          Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: PatientInformationPanel(),
+                          ),
+                          ),
 
-                      // Divider
-                      Container(
-                        width: 1,
-                        color: Colors.grey,
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                      ),
+                          // Divider
+                          Container(
+                          width: 10,
+                          color: Colors.grey,
+                          margin: const EdgeInsets.symmetric(horizontal: 32),
+                          ),
 
-                      // Doctor's Notes
-                      Expanded(
-                        flex: 1,
-                        child: DoctorNotes(appointmentId: appointmentId),
+                          // Doctor's Notes
+                          Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: DoctorNotes(appointmentId: appointmentId),
+                          ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
