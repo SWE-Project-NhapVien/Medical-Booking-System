@@ -142,9 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? const HomeView()
                 : selectedIndex == 1
                     ? const AppointmentScreen()
-                    : const ProfileScreen(
-                        doctorId: '00000000-0000-0000-0000-000000000002',
-                      ),
+                    : const ProfileScreen(),
           ],
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:doctor_webapp/utils/fixed_web_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:doctor_webapp/bloc/DoctorInfo/doctor_info_event.dart';
@@ -8,17 +9,14 @@ import 'package:doctor_webapp/utils/text_styles.dart';
 import 'package:intl/intl.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final String doctorId;
-
-  const ProfileScreen({super.key, required this.doctorId});
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final textStyles = TextStyles(context);
 
     return BlocProvider(
-      create: (context) =>
-          GetDoctorInfoBloc()..add(GetDoctorInfoEvent(doctorId)),
+      create: (context) => GetDoctorInfoBloc()..add(GetDoctorInfoEvent()),
       child: Expanded(
         child: BlocBuilder<GetDoctorInfoBloc, GetDoctorInfoState>(
           builder: (context, state) {
@@ -67,18 +65,8 @@ class ProfileScreen extends StatelessWidget {
                   backgroundColor: ColorPalette.greyColor,
                   backgroundImage: doctorData['ava_url'] != null
                       ? NetworkImage(doctorData['ava_url'])
-                      : const AssetImage('assets/placeholder.png')
-                          as ImageProvider,
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 20,
-                  child: CircleAvatar(
-                    radius: 16,
-                    backgroundColor: ColorPalette.deepBlue,
-                    child:
-                        const Icon(Icons.edit, color: Colors.white, size: 16),
-                  ),
+                      : const NetworkImage(
+                          FixedWebComponent.defaultPatientAvatar),
                 ),
               ],
             ),
@@ -105,7 +93,7 @@ class ProfileScreen extends StatelessWidget {
               context,
               textStyles,
               "Date of Birth",
-              _formatDate(doctorData['date_of_birth']),
+              _formatDate(doctorData['dob']),
             ),
             _buildInfoRow(context, textStyles, "Gender", doctorData['gender']),
             _buildInfoRow(

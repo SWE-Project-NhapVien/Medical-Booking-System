@@ -44,7 +44,7 @@ class _BarChartWeeklyAppointmentState extends State<BarChartWeeklyAppointment> {
       width: MediaQuery.of(context).size.width * 0.6,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: ColorPalette.greyColor,
+        color: ColorPalette.whiteColor,
       ),
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -53,8 +53,10 @@ class _BarChartWeeklyAppointmentState extends State<BarChartWeeklyAppointment> {
         children: <Widget>[
           Text(
             'Weekly Appointment',
-            style: TextStyles(context)
-                .getRegularStyle(color: ColorPalette.deepBlue, size: 20, fontWeight: FontWeight.w500),
+            style: TextStyles(context).getRegularStyle(
+                color: ColorPalette.deepBlue,
+                size: 20,
+                fontWeight: FontWeight.w500),
           ),
           const SizedBox(
             height: 32,

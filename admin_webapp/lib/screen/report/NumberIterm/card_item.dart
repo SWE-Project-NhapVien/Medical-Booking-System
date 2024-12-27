@@ -1,3 +1,4 @@
+import 'package:admin_webapp/utils/color_palette.dart';
 import 'package:admin_webapp/utils/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ class CardItem extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.2,
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: Card(
+        color: ColorPalette.whiteColor,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(

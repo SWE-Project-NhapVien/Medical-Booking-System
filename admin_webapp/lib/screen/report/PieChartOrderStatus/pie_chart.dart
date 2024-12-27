@@ -33,7 +33,7 @@ class PieChartOrderStatus extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: ColorPalette.greyColor,
+        color: ColorPalette.whiteColor,
       ),
       padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(
