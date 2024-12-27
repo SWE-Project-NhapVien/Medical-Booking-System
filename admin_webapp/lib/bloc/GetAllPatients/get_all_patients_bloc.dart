@@ -15,29 +15,10 @@ class GetAllPatientsBloc
         final response =
             await Supabase.instance.client.rpc('admin_read_all_patient');
         final result = List<Map<String, dynamic>>.from(response);
-        final allPatients = parsePatientInformation(result);
-        emit(GetAllPatientsSuccessfully(patients: allPatients));
+        emit(GetAllPatientsSuccessfully(patients: result));
       } catch (e) {
         emit(GetAllPatientsFailure(error: e.toString()));
       }
     });
-  }
-}
-
-List<Patient> parsePatientInformation(dynamic data) {
-  if (data is List) {
-    return data.map<Patient>((item) {
-      return Patient(
-        fullname: item['patient_full_name '],
-        email: item['patient_email'],
-        phone: item['patient_phone_number'],
-        address: item['patient_address'],
-        avaUrl: item['patient_ava_url'] ?? '',
-        allergies: item['patient_allergies'] ?? [],
-        medicalHistory: item['patient_medical_history'] ?? [],
-      );
-    }).toList();
-  } else {
-    return [];
   }
 }

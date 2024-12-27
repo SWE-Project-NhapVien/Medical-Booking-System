@@ -1,12 +1,9 @@
-import 'dart:convert';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
 class Patient {
-  String fullname;
-  String email;
-  String phone;
-  String address;
+  final String fullname;
+  final String email;
+  final String phone;
+  final String address;
+  final String dob;
   String? avaUrl;
   List<String>? allergies;
   List<String>? medicalHistory;
@@ -16,22 +13,9 @@ class Patient {
     required this.email,
     required this.phone,
     required this.address,
+    required this.dob,
     this.avaUrl,
     this.allergies,
     this.medicalHistory,
   });
-
-  static Future<void> saveProfile(Patient profile) async {
-    final prefs = await SharedPreferences.getInstance();
-    final profileJson = jsonEncode({
-      'fullname': profile.fullname,
-      'email': profile.email,
-      'phone': profile.phone,
-      'address': profile.address,
-      'avaUrl': profile.avaUrl,
-      'allergies': profile.allergies ?? [],
-      'medicalHistory': profile.medicalHistory ?? [],
-    });
-    await prefs.setString('selectedProfile', profileJson);
-  }
 }

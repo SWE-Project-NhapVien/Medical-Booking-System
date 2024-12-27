@@ -10,7 +10,7 @@ sealed class GetAllPatientsState extends Equatable {
 final class GetAllPatientsInitial extends GetAllPatientsState {}
 final class GetAllPatientsLoading extends GetAllPatientsState {}
 final class GetAllPatientsSuccessfully extends GetAllPatientsState {
-  final List<Patient> patients;
+  final List<Map<String, dynamic>> patients;
   
   const GetAllPatientsSuccessfully({required this.patients});
   
