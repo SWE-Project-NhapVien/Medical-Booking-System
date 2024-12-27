@@ -60,7 +60,7 @@ class ExamineScreen extends StatelessWidget {
                 // Doctor's Notes
                 Expanded(
                 flex: 1,
-                child: DoctorNotes(),
+                child: DoctorNotes(appointmentId: appointmentId),
                 ),
                 ],
                 ),
@@ -124,6 +124,9 @@ class ExamineScreen extends StatelessWidget {
   }
 
 class DoctorNotes extends StatelessWidget {
+  final String appointmentId;
+
+  const DoctorNotes({Key? key, required this.appointmentId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final TextEditingController symptomsController = TextEditingController();
@@ -181,8 +184,8 @@ class DoctorNotes extends StatelessWidget {
                 // Prescriptions Field
                 LabelAndTextField(
                   context: context,
-                  label: "Prescriptions (JSON format)",
-                  hintText: "Enter prescriptions in JSON format...",
+                  label: "Prescriptions",
+                  hintText: "Enter prescriptions, seperated by comma...",
                   controller: prescriptionsController,
                   errorText: "Prescriptions cannot be empty",
                   height: 150,
@@ -202,24 +205,11 @@ class DoctorNotes extends StatelessWidget {
                     return;
                   }
 
-                  Map<String, dynamic> prescriptions;
-                  try {
-                    prescriptions = Map<String, dynamic>.from(
-                    prescriptionsText.isNotEmpty
-                      ? jsonDecode(prescriptionsText)
-                      : {},
-                    );
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Invalid JSON format for prescriptions")),
-                    );
-                    return;
-                  }
+                  List<String> prescriptions = prescriptionsText.split(',').map((e) => e.trim()).toList();
 
                   context.read<DoctorNotesBloc>().add(
                       AddDoctorNoteEvent(
-                      appointmentId: "someAppointmentId", // Replace with dynamic value
+                        appointmentId: appointmentId,
                       symptoms: symptoms,
                       diagnosis: diagnosis,
                       prescriptions: prescriptions,

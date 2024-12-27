@@ -13,7 +13,7 @@ class AddDoctorNoteEvent extends DoctorNotesEvent {
   final String appointmentId;
   final String symptoms;
   final String diagnosis;
-  final Map<String, dynamic> prescriptions; // JSONB format
+  final List<String> prescriptions;
 
   AddDoctorNoteEvent({
     required this.appointmentId,
