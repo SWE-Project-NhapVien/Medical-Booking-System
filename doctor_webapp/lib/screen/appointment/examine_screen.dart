@@ -170,17 +170,43 @@ class PatientInformationPanel extends StatelessWidget {
   }
 }
 
-class DoctorNotes extends StatelessWidget {
+class DoctorNotes extends StatefulWidget {
   final String appointmentId;
+  const DoctorNotes({Key? key, required this.appointmentId}) : super(key: key);
 
-  const DoctorNotes({super.key, required this.appointmentId});
+  @override
+  _DoctorNotesState createState() => _DoctorNotesState();
+}
+
+class _DoctorNotesState extends State<DoctorNotes> {
+  final TextEditingController symptomsController = TextEditingController();
+  final TextEditingController diagnosisController = TextEditingController();
+  final TextEditingController prescriptionsController = TextEditingController();
+  final Map<String, String> errors = {};
+
+  bool validateFields() {
+    bool isValid = true;
+    errors.clear();
+
+    if (symptomsController.text.trim().isEmpty) {
+      errors['symptoms'] = "Symptoms cannot be empty";
+      isValid = false;
+    }
+    if (diagnosisController.text.trim().isEmpty) {
+      errors['diagnosis'] = "Diagnosis cannot be empty";
+      isValid = false;
+    }
+    if (prescriptionsController.text.trim().isEmpty) {
+      errors['prescriptions'] = "Prescriptions cannot be empty";
+      isValid = false;
+    }
+
+    setState(() {}); // Update the UI to display errors
+    return isValid;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController symptomsController = TextEditingController();
-    final TextEditingController diagnosisController = TextEditingController();
-    final TextEditingController prescriptionsController =
-        TextEditingController();
-
     return BlocConsumer<DoctorNotesBloc, DoctorNotesState>(
       listener: (context, state) {
         if (state is DoctorNotesAdded) {
@@ -211,7 +237,7 @@ class DoctorNotes extends StatelessWidget {
               label: "Symptoms",
               hintText: "Enter symptoms here...",
               controller: symptomsController,
-              errorText: "Symptoms cannot be empty",
+              errorText: errors['symptoms'] ?? '',
             ),
             const SizedBox(height: 16),
 
@@ -221,7 +247,7 @@ class DoctorNotes extends StatelessWidget {
               label: "Diagnosis",
               hintText: "Enter diagnosis here...",
               controller: diagnosisController,
-              errorText: "Diagnosis cannot be empty",
+              errorText: errors['diagnosis'] ?? '',
             ),
             const SizedBox(height: 16),
 
@@ -231,37 +257,32 @@ class DoctorNotes extends StatelessWidget {
               label: "Prescriptions",
               hintText: "Enter prescriptions, separated by comma...",
               controller: prescriptionsController,
-              errorText: "Prescriptions cannot be empty",
+              errorText: errors['prescriptions']?? '',
               height: 150,
             ),
             const SizedBox(height: 16),
 
             CommonButton(
               onTap: () {
-                final symptoms = symptomsController.text.trim();
-                final diagnosis = diagnosisController.text.trim();
-                final prescriptionsText = prescriptionsController.text.trim();
+                if (validateFields()) {
+                  final symptoms = symptomsController.text.trim();
+                  final diagnosis = diagnosisController.text.trim();
+                  final prescriptionsText = prescriptionsController.text.trim();
 
-                if (symptoms.isEmpty ||
-                    diagnosis.isEmpty ||
-                    prescriptionsText.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("All fields must be filled")),
-                  );
-                  return;
+                  List<String> prescriptions = prescriptionsText
+                      .split(',')
+                      .map((e) => e.trim())
+                      .toList();
+
+                  context.read<DoctorNotesBloc>().add(
+                        AddDoctorNoteEvent(
+                          appointmentId: widget.appointmentId,
+                          symptoms: symptoms,
+                          diagnosis: diagnosis,
+                          prescriptions: prescriptions,
+                        ),
+                      );
                 }
-
-                List<String> prescriptions =
-                    prescriptionsText.split(',').map((e) => e.trim()).toList();
-
-                context.read<DoctorNotesBloc>().add(
-                      AddDoctorNoteEvent(
-                        appointmentId: appointmentId,
-                        symptoms: symptoms,
-                        diagnosis: diagnosis,
-                        prescriptions: prescriptions,
-                      ),
-                    );
               },
               buttonText: 'Finish Examination',
             ),
