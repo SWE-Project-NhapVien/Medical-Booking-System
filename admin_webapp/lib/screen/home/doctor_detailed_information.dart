@@ -1,5 +1,4 @@
 import 'package:admin_webapp/bloc/GetDoctorSchedule/get_doctor_schedule_bloc.dart';
-import 'package:admin_webapp/bloc/UpdateDoctorSchedule/update_doctor_schedule_bloc.dart';
 import 'package:admin_webapp/class/doctor_schedule.dart';
 import 'package:admin_webapp/utils/color_palette.dart';
 import 'package:admin_webapp/utils/localfiles.dart';
@@ -9,7 +8,6 @@ import 'package:admin_webapp/widgets/common_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neat_and_clean_calendar/flutter_neat_and_clean_calendar.dart';
-import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class DoctorDetailedInformation extends StatefulWidget {
@@ -194,38 +192,4 @@ class _DoctorDetailedInformationState extends State<DoctorDetailedInformation> {
       ),
     );
   }
-}
-
-Widget _inforBox({
-  required String title,
-  required String info,
-  required BuildContext context,
-  required Size size,
-}) {
-  return Container(
-    width: size.width * 0.25,
-    padding: EdgeInsets.symmetric(
-        horizontal: size.width * 0.02, vertical: size.height * 0.01),
-    decoration: BoxDecoration(
-      color: ColorPalette.whiteColor,
-      borderRadius: BorderRadius.circular(15.0),
-    ),
-    child: Center(
-      child: Row(
-        children: [
-          Text(
-            '$title:',
-            style: TextStyles(context).getRegularStyle(
-                size: 14,
-                color: ColorPalette.deepBlue,
-                fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(width: 6.0),
-          Text(info,
-              style: TextStyles(context)
-                  .getRegularStyle(size: 14, color: ColorPalette.deepBlue)),
-        ],
-      ),
-    ),
-  );
 }

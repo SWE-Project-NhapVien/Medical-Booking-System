@@ -63,7 +63,7 @@ class ProfileScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: 80,
                   backgroundColor: ColorPalette.greyColor,
-                  backgroundImage: doctorData['ava_url'] != null
+                  backgroundImage: doctorData['ava_url'] != ''
                       ? NetworkImage(doctorData['ava_url'])
                       : const NetworkImage(
                           FixedWebComponent.defaultPatientAvatar),

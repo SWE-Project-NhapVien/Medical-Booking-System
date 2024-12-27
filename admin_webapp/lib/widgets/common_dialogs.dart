@@ -1,9 +1,7 @@
-import 'dart:convert';
 import 'package:admin_webapp/bloc/UpdateDoctorSchedule/update_doctor_schedule_bloc.dart';
 import 'package:admin_webapp/utils/color_palette.dart';
 import 'package:admin_webapp/utils/localfiles.dart';
 import 'package:admin_webapp/utils/text_styles.dart';
-import 'package:admin_webapp/widgets/common_button.dart';
 import 'package:admin_webapp/widgets/tap_effect%20copy.dart';
 
 import 'package:flutter/material.dart';
@@ -175,8 +173,8 @@ class Dialogs {
         });
   }
 
-  Future<void> showEditScheduleDialog(Size size, String doctorID,
-      DateTime selectedDate) {
+  Future<void> showEditScheduleDialog(
+      Size size, String doctorID, DateTime selectedDate) {
     List<String> timeSlots = [
       '09:00',
       '09:30',
@@ -287,8 +285,6 @@ class Dialogs {
                             "date": formatDate(selectedDate),
                           };
                         }).toList();
-                        String timeslotsJson = jsonEncode(timeslots);
-                        print('timeslotsJson: $timeslotsJson');
                         context.read<UpdateDoctorScheduleBloc>().add(
                             UpdateDoctorScheduleRequired(
                                 doctorID: doctorID, timeSlotJson: timeslots));
@@ -339,6 +335,6 @@ String convertToFullTime(String time) {
 }
 
 String formatDate(DateTime date) {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    return formatter.format(date);
-  }
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
+  return formatter.format(date);
+}

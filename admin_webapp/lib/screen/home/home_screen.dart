@@ -5,12 +5,14 @@ import 'package:admin_webapp/bloc/GetDoctorSchedule/get_doctor_schedule_bloc.dar
 import 'package:admin_webapp/bloc/UpdateDoctorSchedule/update_doctor_schedule_bloc.dart';
 import 'package:admin_webapp/class/doctor.dart';
 import 'package:admin_webapp/class/patient.dart';
+import 'package:admin_webapp/routes/navigation_services.dart';
 import 'package:admin_webapp/screen/home/add_new_doctor.dart';
 import 'package:admin_webapp/screen/home/doctor_detailed_information.dart';
 import 'package:admin_webapp/screen/home/doctor_information_card.dart';
 import 'package:admin_webapp/screen/home/patient_detailed_information.dart';
 import 'package:admin_webapp/screen/home/patient_information_card.dart';
 import 'package:admin_webapp/utils/color_palette.dart';
+import 'package:admin_webapp/utils/fixed_web_component.dart';
 import 'package:admin_webapp/utils/text_styles.dart';
 import 'package:admin_webapp/widgets/common_dialogs.dart';
 import 'package:flutter/material.dart';
@@ -108,34 +110,41 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else if (state is UpdateDoctorScheduleSuccess) {
                     Navigator.of(context).pop();
                     Dialogs(context).showAnimatedDialog(
-                        title: 'Update schedule successfully',
-                        content: 'Doctor schedule has been updated successfully',);
-                    context.read<GetDoctorScheduleBloc>().add(GetDoctorScheduleRequired(doctorID: selectedDoctor!.doctorID));
+                      title: 'Update schedule successfully',
+                      content: 'Doctor schedule has been updated successfully',
+                    );
+                    context.read<GetDoctorScheduleBloc>().add(
+                        GetDoctorScheduleRequired(
+                            doctorID: selectedDoctor!.doctorID));
                   } else if (state is UpdateDoctorScheduleFailure) {
                     Navigator.of(context).pop();
                     Dialogs(context).showErrorDialog(message: state.error);
                   }
                 },
-              )
+              ),
+              BlocListener<CreateNewAccountBloc, CreateNewAccountState>(
+                listener: (context, state) {
+                  if (state is CreateNewAccountSuccess) {
+                    NavigationServices(context)
+                        .pushCreateDoctorProfileScreen(state.doctorId);
+                  }
+                },
+              ),
             ],
             child: Scaffold(
-              backgroundColor: ColorPalette.blueFormColor,
+              backgroundColor: ColorPalette.mediumBlue,
               body: Padding(
-                padding: EdgeInsets.only(bottom: size.height * 0.02),
+                padding:
+                    EdgeInsets.symmetric(vertical: size.height * 0.05 - 20),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size.width * 0.01,
-                            vertical: size.height * 0.02),
-                        child: Text(
-                          "User Management",
-                          style: TextStyles(context).getTitleStyle(
-                              size: 40,
-                              color: ColorPalette.deepBlue,
-                              fontWeight: FontWeight.w500),
-                        ),
+                      Text(
+                        "User Management",
+                        style: TextStyles(context).getTitleStyle(
+                            size: 40,
+                            color: ColorPalette.deepBlue,
+                            fontWeight: FontWeight.w500),
                       ),
                       Expanded(
                         child: Row(children: [
@@ -265,7 +274,9 @@ class _HomeScreenState extends State<HomeScreen> {
           name: doctor['doctor_full_name'],
           specialization: doctor['doctor_specialization'].cast<String>(),
           phoneNumber: doctor['doctor_phone_number'],
-          avaUrl: doctor['doctor_ava_url'] ?? '',
+          avaUrl: doctor['doctor_ava_url'] != ''
+              ? doctor['doctor_ava_url']
+              : FixedWebComponent.defaultPatientAvatar,
           onTap: () {
             setState(() {
               selectedDoctor = Doctor(

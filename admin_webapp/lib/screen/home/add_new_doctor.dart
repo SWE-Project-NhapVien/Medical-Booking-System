@@ -35,62 +35,60 @@ class _AddNewDoctorState extends State<AddNewDoctor> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Expanded(
-      child: SizedBox(
-        width: size.width * 0.3,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LabelAndTextField(
-              context: context,
-              label: 'Email',
-              hintText: 'example@example.com',
-              controller: emailController,
-              errorText: emailError ?? '',
-            ),
-            LabelAndTextField(
-              context: context,
-              label: 'Password',
-              hintText: '********',
-              controller: passwordController,
-              errorText: passwordError ?? '',
-              suffixIconData: CupertinoIcons.eye_slash_fill,
-              selectedIconData: CupertinoIcons.eye_fill,
-              isObscured: obscurePassword,
-            ),
-            LabelAndTextField(
-              context: context,
-              label: 'Confirm Password',
-              hintText: '********',
-              controller: confirmPasswordController,
-              errorText: confirmPasswordError ?? '',
-              suffixIconData: CupertinoIcons.eye_slash_fill,
-              selectedIconData: CupertinoIcons.eye_fill,
-              isObscured: obscureConfirmPassword,
-            ),
-            SizedBox(
-              height: size.height * 0.02,
-            ),
-            Center(
-              child: SizedBox(
-                width: size.width * 0.2,
-                child: CommonButton(
-                  buttonTextWidget: Text(
-                    'Create',
-                    style: TextStyles(context).getTitleStyle(
-                      fontWeight: FontWeight.w400,
-                    ),
+    return SizedBox(
+      width: size.width * 0.3,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          LabelAndTextField(
+            context: context,
+            label: 'Email',
+            hintText: 'example@example.com',
+            controller: emailController,
+            errorText: emailError ?? '',
+          ),
+          LabelAndTextField(
+            context: context,
+            label: 'Password',
+            hintText: '********',
+            controller: passwordController,
+            errorText: passwordError ?? '',
+            suffixIconData: CupertinoIcons.eye_slash_fill,
+            selectedIconData: CupertinoIcons.eye_fill,
+            isObscured: obscurePassword,
+          ),
+          LabelAndTextField(
+            context: context,
+            label: 'Confirm Password',
+            hintText: '********',
+            controller: confirmPasswordController,
+            errorText: confirmPasswordError ?? '',
+            suffixIconData: CupertinoIcons.eye_slash_fill,
+            selectedIconData: CupertinoIcons.eye_fill,
+            isObscured: obscureConfirmPassword,
+          ),
+          SizedBox(
+            height: size.height * 0.02,
+          ),
+          Center(
+            child: SizedBox(
+              width: size.width * 0.2,
+              child: CommonButton(
+                buttonTextWidget: Text(
+                  'Create',
+                  style: TextStyles(context).getTitleStyle(
+                    fontWeight: FontWeight.w400,
                   ),
-                  onTap: () {
-                    _onSignUp();
-                  },
-                  height: size.height * 0.06,
-                  radius: 30,
                 ),
+                onTap: () {
+                  _onSignUp();
+                },
+                height: size.height * 0.06,
+                radius: 30,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

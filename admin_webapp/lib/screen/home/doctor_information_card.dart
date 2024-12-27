@@ -28,13 +28,9 @@ class DoctorInformationCard extends StatelessWidget {
       child: TapEffect(
         onClick: () => onTap(),
         child: Card(
-          color: ColorPalette.mediumBlue,
+          color: ColorPalette.blueFormColor,
           margin: EdgeInsets.fromLTRB(
-            size.width * 0.02,
-            size.height * 0.015,
-            size.width * 0.02,
-            0
-          ),
+              size.width * 0.02, size.height * 0.015, size.width * 0.02, 0),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           child: Padding(

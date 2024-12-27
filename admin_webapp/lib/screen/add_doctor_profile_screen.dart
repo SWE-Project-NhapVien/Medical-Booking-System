@@ -1,4 +1,6 @@
+import 'package:admin_webapp/bloc/GetAllDoctors/get_all_doctors_bloc.dart';
 import 'package:admin_webapp/bloc/doctor/CreateDoctorProfile/create_doctor_profile_bloc.dart';
+import 'package:admin_webapp/utils/localfiles.dart';
 import 'package:admin_webapp/widgets/common_date_field.dart';
 import 'package:admin_webapp/widgets/common_dialogs.dart';
 import 'package:admin_webapp/widgets/custom_dropdown.dart';
@@ -74,39 +76,31 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: ColorPalette.blueFormColor,
-      body: Row(
-        children: [
-          Container(
-            width: 88,
-          ),
-          Expanded(
-            child:
-                BlocConsumer<CreateDoctorProfileBloc, CreateDoctorProfileState>(
-              listener: (context, state) {
-                if (state is CreateDoctorProfileProcess) {
-                  Dialogs(context).showLoadingDialog();
-                } else if (state is CreateDoctorProfileSuccess) {
-                  Navigator.pop(context);
-                  Dialogs(context).showAnimatedDialog(
-                    title: 'Create Profile',
-                    content: 'Doctor profile has been created successfully.',
-                  );
-                } else if (state is CreateDoctorProfileFailure) {
-                  Navigator.pop(context);
-                  Dialogs(context).showErrorDialog(message: state.error);
-                }
-              },
-              builder: (context, state) {
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                    child: _buildDoctorInformationForm(size),
-                  ),
-                );
-              },
+      body: BlocConsumer<CreateDoctorProfileBloc, CreateDoctorProfileState>(
+        listener: (context, state) async {
+          if (state is CreateDoctorProfileProcess) {
+            Dialogs(context).showLoadingDialog();
+          } else if (state is CreateDoctorProfileSuccess) {
+            Navigator.pop(context);
+            await Dialogs(context).showAnimatedDialog(
+              title: 'Create Profile',
+              content: 'Doctor profile has been created successfully.',
+            );
+            context.read<GetAllDoctorsBloc>().add(const GetAllDoctorsEvent());
+            Navigator.pop(context);
+          } else if (state is CreateDoctorProfileFailure) {
+            Navigator.pop(context);
+            Dialogs(context).showErrorDialog(message: state.error);
+          }
+        },
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: _buildDoctorInformationForm(size),
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -145,7 +139,8 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
                 CircleAvatar(
                   radius: 80,
                   backgroundColor: ColorPalette.greyColor,
-                  backgroundImage: const AssetImage('assets/placeholder.png'),
+                  backgroundImage:
+                      const AssetImage(Localfiles.defaultProfilePicture),
                 ),
                 Positioned(
                   bottom: 0,
@@ -338,6 +333,7 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
               ],
             ),
 
+            const SizedBox(height: 20),
             // Profile Description Field
             LabelAndTextField(
               context: context,
@@ -373,7 +369,7 @@ class _CreateDoctorProfileScreenState extends State<CreateDoctorProfileScreen> {
                             education: educationController.text,
                             career: careerController.text,
                             description: descriptionController.text,
-                            avaUrl: ' ', //add later
+                            avaUrl: '', //add later
                             specialization: [selectedSpecialization],
                           ),
                         );

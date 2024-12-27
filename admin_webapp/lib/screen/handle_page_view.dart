@@ -1,5 +1,6 @@
 import 'package:admin_webapp/bloc/Logout/logout_bloc.dart';
 import 'package:admin_webapp/routes/navigation_services.dart';
+import 'package:admin_webapp/screen/home/home_screen.dart';
 import 'package:admin_webapp/screen/report/report_screen.dart';
 import 'package:admin_webapp/utils/color_palette.dart';
 import 'package:admin_webapp/utils/enum.dart';
@@ -42,7 +43,7 @@ class _HandlePageViewState extends State<HandlePageView> {
 
   @override
   void initState() {
-    _navigatorType = NavigatorType.home;
+    _navigatorType = NavigatorType.report;
     isFirstTime = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       starLoadingScreen();
@@ -90,8 +91,7 @@ class _HandlePageViewState extends State<HandlePageView> {
         }
       },
       child: Scaffold(
-          backgroundColor: ColorPalette.blueFormColor,
-
+          backgroundColor: ColorPalette.mediumBlue,
           body: Row(
             children: [
               _buildSideBar(),
@@ -140,10 +140,10 @@ class _HandlePageViewState extends State<HandlePageView> {
           left: _leftPaddingComponent - 2,
           child: _buildSideBarComponent(
             icon: Icons.home,
-            isSelected: _navigatorType == NavigatorType.home,
+            isSelected: _navigatorType == NavigatorType.report,
             onClick: () => setState(() {
               _screen = const ReportScreen();
-              _navigatorType = NavigatorType.home;
+              _navigatorType = NavigatorType.report;
             }),
           ),
         ),
@@ -151,14 +151,13 @@ class _HandlePageViewState extends State<HandlePageView> {
           top: _topMainComponentPadding + _mainComponentDistance,
           left: _leftPaddingComponent - 2,
           child: _buildSideBarComponent(
-
               icon: Icons.calendar_month,
-              isSelected: _navigatorType == NavigatorType.schedule,
+              isSelected: _navigatorType == NavigatorType.home,
               onClick: () {
-                if (_navigatorType != NavigatorType.schedule) {
+                if (_navigatorType != NavigatorType.home) {
                   setState(() {
-                    _screen = const ScheduleScreen();
-                    _navigatorType = NavigatorType.schedule;
+                    _screen = const HomeScreen();
+                    _navigatorType = NavigatorType.home;
                   });
                 }
               }),
