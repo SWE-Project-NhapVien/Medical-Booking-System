@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:doctor_webapp/bloc/Examine/doctor_notes_bloc.dart';
 import 'package:doctor_webapp/bloc/Examine/doctor_notes_event.dart';
 import 'package:doctor_webapp/bloc/Examine/doctor_notes_state.dart';
@@ -7,7 +5,6 @@ import 'package:doctor_webapp/bloc/Examine/patientinfo_bloc.dart';
 import 'package:doctor_webapp/bloc/Examine/patientinfo_event.dart';
 import 'package:doctor_webapp/bloc/Examine/patientinfo_state.dart';
 import 'package:doctor_webapp/utils/color_palette.dart';
-import 'package:doctor_webapp/utils/text_styles.dart';
 import 'package:doctor_webapp/widgets/comon_button.dart';
 import 'package:doctor_webapp/widgets/textfield_with_label.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +90,6 @@ class PatientInformationPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyles = TextStyles(context);
     return BlocBuilder<PatientInfoBloc, PatientInfoState>(
       builder: (context, state) {
         if (state is PatientInfoLoading) {
@@ -106,17 +102,21 @@ class PatientInformationPanel extends StatelessWidget {
               children: [
                 Text(
                   'Patient Name: ${patientData['first_name']} ${patientData['last_name']}',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
-                Text('Date of Birth: ${_formatDate(patientData['date_of_birth'])}'),
+                Text(
+                    'Date of Birth: ${_formatDate(patientData['date_of_birth'])}'),
                 Text('Blood Type: ${patientData['blood_type']}'),
                 Text('Gender: ${patientData['gender']}'),
                 Text('Allergies: ${patientData['allergies'].join(', ')}'),
                 Text('Height: ${patientData['height']} cm'),
                 Text('Weight: ${patientData['weight']} kg'),
-                Text('Emergency Contact: ${patientData['emergency_contact'].join(', ')}'),
-                Text('Medical History: ${patientData['medical_history'].join(', ')}'),
+                Text(
+                    'Emergency Contact: ${patientData['emergency_contact'].join(', ')}'),
+                Text(
+                    'Medical History: ${patientData['medical_history'].join(', ')}'),
                 Text('Description: ${patientData['description']}'),
               ],
             ),
@@ -145,7 +145,8 @@ class DoctorNotes extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController symptomsController = TextEditingController();
     final TextEditingController diagnosisController = TextEditingController();
-    final TextEditingController prescriptionsController = TextEditingController();
+    final TextEditingController prescriptionsController =
+        TextEditingController();
 
     return BlocConsumer<DoctorNotesBloc, DoctorNotesState>(
       listener: (context, state) {
@@ -208,14 +209,17 @@ class DoctorNotes extends StatelessWidget {
                 final diagnosis = diagnosisController.text.trim();
                 final prescriptionsText = prescriptionsController.text.trim();
 
-                if (symptoms.isEmpty || diagnosis.isEmpty || prescriptionsText.isEmpty) {
+                if (symptoms.isEmpty ||
+                    diagnosis.isEmpty ||
+                    prescriptionsText.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("All fields must be filled")),
                   );
                   return;
                 }
 
-                List<String> prescriptions = prescriptionsText.split(',').map((e) => e.trim()).toList();
+                List<String> prescriptions =
+                    prescriptionsText.split(',').map((e) => e.trim()).toList();
 
                 context.read<DoctorNotesBloc>().add(
                       AddDoctorNoteEvent(
