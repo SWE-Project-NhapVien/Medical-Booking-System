@@ -213,6 +213,7 @@ class ResultsView extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Container(
+                      key: Key("doctorListViewItem"),
                       height: 120,
                       decoration: BoxDecoration(
                         color: ColorPalette.mediumBlue, // Blue background
