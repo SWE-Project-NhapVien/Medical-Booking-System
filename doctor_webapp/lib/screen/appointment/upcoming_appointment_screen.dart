@@ -60,15 +60,16 @@ class _UpcomingAppointmentScreenState extends State<UpcomingAppointmentScreen> {
                       patientFullName: e.patientFullName,
                       date: e.date,
                       time: e.time,
-                      patientAvatarURL: e.patientAvatarURL ??
-                          FixedWebComponent.defaultPatientAvatar,
+                      patientAvatarURL:
+                          e.patientAvatarURL != '' && e.patientAvatarURL != null
+                              ? e.patientAvatarURL!
+                              : FixedWebComponent.defaultPatientAvatar,
                       onTap: () {
                         context
                             .read<GetSpecificAppointmentDataBloc>()
                             .add(GetSpecificAppointmentDataEvent(
                               appointmentId: e.appointmentId,
                             ));
-                        setState(() {});
                       },
                     ))
                 .toList();

@@ -1,18 +1,19 @@
-sealed class GetSpecificAppointmentDataState {}
+sealed class GetSpecificAppointmentDataState2 {}
 
-class GetSpecificAppointmentDataInitial
-    extends GetSpecificAppointmentDataState {}
+class GetSpecificAppointmentDataInitial2
+    extends GetSpecificAppointmentDataState2 {}
 
-class GetSpecificAppointmentDataLoading
-    extends GetSpecificAppointmentDataState {}
+class GetSpecificAppointmentDataLoading2
+    extends GetSpecificAppointmentDataState2 {}
 
-class GetSpecificAppointmentDataSuccess
-    extends GetSpecificAppointmentDataState {
+class GetSpecificAppointmentDataSuccess2
+    extends GetSpecificAppointmentDataState2 {
   final List appointmentData;
-  GetSpecificAppointmentDataSuccess(this.appointmentData);
+  GetSpecificAppointmentDataSuccess2(this.appointmentData);
 }
 
-class GetSpecificAppointmentDataError extends GetSpecificAppointmentDataState {
+class GetSpecificAppointmentDataError2
+    extends GetSpecificAppointmentDataState2 {
   final String message;
-  GetSpecificAppointmentDataError(this.message);
+  GetSpecificAppointmentDataError2(this.message);
 }

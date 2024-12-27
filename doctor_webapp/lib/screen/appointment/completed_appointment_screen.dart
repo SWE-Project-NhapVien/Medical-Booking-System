@@ -1,9 +1,9 @@
 import 'package:doctor_webapp/bloc/Appointment/appointment_bloc.dart';
 import 'package:doctor_webapp/bloc/Appointment/appointment_event.dart';
 import 'package:doctor_webapp/bloc/Appointment/appointment_state.dart';
-import 'package:doctor_webapp/bloc/SpecificAppointment/specific_appointment_bloc.dart';
-import 'package:doctor_webapp/bloc/SpecificAppointment/specific_appointment_event.dart';
-import 'package:doctor_webapp/bloc/SpecificAppointment/specific_appointment_state.dart';
+import 'package:doctor_webapp/bloc/SpecificAppointment2/specific_appointment2_bloc.dart';
+import 'package:doctor_webapp/bloc/SpecificAppointment2/specific_appointment2_event.dart';
+import 'package:doctor_webapp/bloc/SpecificAppointment2/specific_appointment2_state.dart';
 import 'package:doctor_webapp/screen/appointment/common_appointment_card.dart';
 import 'package:doctor_webapp/utils/fixed_web_component.dart';
 import 'package:flutter/material.dart';
@@ -31,10 +31,10 @@ class _CompletedAppointmentScreenState
   @override
   Widget build(BuildContext context) {
     double lottieSize = MediaQuery.of(context).size.width * 0.2;
-    return BlocConsumer<GetSpecificAppointmentDataBloc,
-        GetSpecificAppointmentDataState>(
-      listener: (context, state2) {
-        if (state2 is GetSpecificAppointmentDataSuccess) {
+    return BlocConsumer<GetSpecificAppointmentDataBloc2,
+        GetSpecificAppointmentDataState2>(
+      listener: (context, state3) {
+        if (state3 is GetSpecificAppointmentDataSuccess2) {
           setState(() {});
         }
       },
@@ -60,15 +60,16 @@ class _CompletedAppointmentScreenState
                       patientFullName: e.patientFullName,
                       date: e.date,
                       time: e.time,
-                      patientAvatarURL: e.patientAvatarURL ??
-                          FixedWebComponent.defaultPatientAvatar,
+                      patientAvatarURL:
+                          e.patientAvatarURL != '' && e.patientAvatarURL != null
+                              ? e.patientAvatarURL!
+                              : FixedWebComponent.defaultPatientAvatar,
                       onTap: () {
                         context
-                            .read<GetSpecificAppointmentDataBloc>()
-                            .add(GetSpecificAppointmentDataEvent(
+                            .read<GetSpecificAppointmentDataBloc2>()
+                            .add(GetSpecificAppointmentDataEvent2(
                               appointmentId: e.appointmentId,
                             ));
-                        setState(() {});
                       },
                     ))
                 .toList();

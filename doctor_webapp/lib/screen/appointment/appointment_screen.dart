@@ -1,6 +1,7 @@
 import 'package:doctor_webapp/DataLayer/data/appointment_data_provider.dart';
 import 'package:doctor_webapp/bloc/Appointment/appointment_bloc.dart';
 import 'package:doctor_webapp/bloc/SpecificAppointment/specific_appointment_bloc.dart';
+import 'package:doctor_webapp/bloc/SpecificAppointment2/specific_appointment2_bloc.dart';
 import 'package:doctor_webapp/screen/appointment/completed_appointment_screen.dart';
 import 'package:doctor_webapp/screen/appointment/detail_appointment_information_2.dart';
 import 'package:doctor_webapp/screen/appointment/upcoming_appointment_screen.dart';
@@ -45,6 +46,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           BlocProvider(
             create: (context) => GetSpecificAppointmentDataBloc(),
           ),
+          BlocProvider(
+            create: (context) => GetSpecificAppointmentDataBloc2(),
+          ),
         ],
         child: Expanded(
           child: Row(
@@ -76,20 +80,22 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                             children: [
                               TabBar(
                                 onTap: (value) {
-                                  switch (value) {
-                                    case 0:
-                                      appointmentType =
-                                          AppointmentType.upcoming;
-                                      break;
-                                    case 1:
-                                      appointmentType =
-                                          AppointmentType.completed;
-                                      break;
-                                    case 2:
-                                      appointmentType =
-                                          AppointmentType.cancelled;
-                                      break;
-                                  }
+                                  setState(() {
+                                    switch (value) {
+                                      case 0:
+                                        appointmentType =
+                                            AppointmentType.upcoming;
+                                        break;
+                                      case 1:
+                                        appointmentType =
+                                            AppointmentType.completed;
+                                        break;
+                                      case 2:
+                                        appointmentType =
+                                            AppointmentType.cancelled;
+                                        break;
+                                    }
+                                  });
                                 },
                                 padding: const EdgeInsets.all(10),
                                 unselectedLabelColor:
@@ -135,7 +141,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 ),
               ),
               const SizedBox(width: 30),
-              appointmentType == AppointmentType.upcoming
+              appointmentType == AppointmentType.upcoming ||
+                      appointmentType == AppointmentType.cancelled
                   ? const Expanded(
                       flex: 2, child: DetailAppointmentInformation())
                   : const Expanded(

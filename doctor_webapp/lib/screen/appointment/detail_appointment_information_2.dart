@@ -1,5 +1,5 @@
-import 'package:doctor_webapp/bloc/SpecificAppointment/specific_appointment_bloc.dart';
-import 'package:doctor_webapp/bloc/SpecificAppointment/specific_appointment_state.dart';
+import 'package:doctor_webapp/bloc/SpecificAppointment2/specific_appointment2_bloc.dart';
+import 'package:doctor_webapp/bloc/SpecificAppointment2/specific_appointment2_state.dart';
 import 'package:doctor_webapp/utils/color_palette.dart';
 import 'package:doctor_webapp/utils/fixed_web_component.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +17,9 @@ class _DetailAppointmentInformation2State
     extends State<DetailAppointmentInformation2> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetSpecificAppointmentDataBloc,
-        GetSpecificAppointmentDataState>(builder: (context, state) {
-      if (state is GetSpecificAppointmentDataSuccess) {
+    return BlocBuilder<GetSpecificAppointmentDataBloc2,
+        GetSpecificAppointmentDataState2>(builder: (context, state) {
+      if (state is GetSpecificAppointmentDataSuccess2) {
         return Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -40,8 +40,7 @@ class _DetailAppointmentInformation2State
                   radius: 80,
                   backgroundImage: NetworkImage(state.appointmentData[0]
                           ['ava_url'] ??
-                      FixedWebComponent
-                          .defaultPatientAvatar), // Replace with your image
+                      FixedWebComponent.defaultPatientAvatar),
                 ),
                 const SizedBox(height: 24),
                 Expanded(
@@ -148,6 +147,69 @@ class _DetailAppointmentInformation2State
                             const SizedBox(height: 8),
                             Text(
                               '${state.appointmentData[0]['description']}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: ColorPalette.blackColor,
+                              ),
+                            ),
+                            Divider(
+                              color: ColorPalette.deepBlue,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Symptoms',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: ColorPalette.deepBlue,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '${state.appointmentData[0]['symptoms']}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: ColorPalette.blackColor,
+                              ),
+                            ),
+                            Divider(
+                              color: ColorPalette.deepBlue,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'diagnosis',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: ColorPalette.deepBlue,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '${state.appointmentData[0]['diagnosis']}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: ColorPalette.blackColor,
+                              ),
+                            ),
+                            Divider(
+                              color: ColorPalette.deepBlue,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Prescriptions',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: ColorPalette.deepBlue,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              state.appointmentData[0]['prescriptions']
+                                  .toString()
+                                  .replaceAll('[', '')
+                                  .replaceAll(']', ''),
                               style: TextStyle(
                                 fontSize: 16,
                                 color: ColorPalette.blackColor,
