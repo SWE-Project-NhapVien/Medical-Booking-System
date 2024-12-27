@@ -9,7 +9,6 @@ import 'package:admin_webapp/widgets/common_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'home/home_screen.dart';
 
 class HandlePageView extends StatefulWidget {
   const HandlePageView({super.key});
@@ -55,10 +54,8 @@ class _HandlePageViewState extends State<HandlePageView> {
     await Future.delayed(const Duration(milliseconds: 400));
     setState(() {
       isFirstTime = false;
-      _screen = const HomeScreen();
-      
+      _screen = const ReportScreen();
     });
-    
   }
 
   @override
@@ -93,24 +90,25 @@ class _HandlePageViewState extends State<HandlePageView> {
         }
       },
       child: Scaffold(
+          backgroundColor: ColorPalette.mediumBlue,
           body: Row(
-        children: [
-          _buildSideBar(),
-          isFirstTime
-              ? Center(
-                  child: AlertDialog(
-                    backgroundColor: Colors.transparent,
-                    content: Lottie.network(
-                      FixedWebComponent.loading,
-                      width: lottieSize,
+            children: [
+              _buildSideBar(),
+              isFirstTime
+                  ? Center(
+                      child: AlertDialog(
+                        backgroundColor: Colors.transparent,
+                        content: Lottie.network(
+                          FixedWebComponent.loading,
+                          width: lottieSize,
+                        ),
+                      ),
+                    )
+                  : Expanded(
+                      child: _screen,
                     ),
-                  ),
-                )
-              : Expanded(
-                  child: _screen,
-                ),
-        ],
-      )),
+            ],
+          )),
     );
   }
 
@@ -143,7 +141,7 @@ class _HandlePageViewState extends State<HandlePageView> {
             icon: Icons.home,
             isSelected: _navigatorType == NavigatorType.home,
             onClick: () => setState(() {
-              _screen = const HomeScreen();
+              _screen = const ReportScreen();
               _navigatorType = NavigatorType.home;
             }),
           ),
@@ -159,21 +157,6 @@ class _HandlePageViewState extends State<HandlePageView> {
                   setState(() {
                     _screen = const ScheduleScreen();
                     _navigatorType = NavigatorType.schedule;
-                  });
-                }
-              }),
-        ),
-        Positioned(
-          top: _topMainComponentPadding + _mainComponentDistance * 2,
-          left: _leftPaddingComponent - 2,
-          child: _buildSideBarComponent(
-              icon: Icons.data_exploration,
-              isSelected: _navigatorType == NavigatorType.report,
-              onClick: () {
-                if (_navigatorType != NavigatorType.report) {
-                  setState(() {
-                    _screen = const ReportScreen();
-                    _navigatorType = NavigatorType.report;
                   });
                 }
               }),
