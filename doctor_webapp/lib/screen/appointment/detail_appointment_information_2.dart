@@ -1,22 +1,20 @@
 import 'package:doctor_webapp/bloc/SpecificAppointment/specific_appointment_bloc.dart';
 import 'package:doctor_webapp/bloc/SpecificAppointment/specific_appointment_state.dart';
-import 'package:doctor_webapp/routes/navigation_services.dart';
 import 'package:doctor_webapp/utils/color_palette.dart';
 import 'package:doctor_webapp/utils/fixed_web_component.dart';
-import 'package:doctor_webapp/widgets/comon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DetailAppointmentInformation extends StatefulWidget {
-  const DetailAppointmentInformation({super.key});
+class DetailAppointmentInformation2 extends StatefulWidget {
+  const DetailAppointmentInformation2({super.key});
 
   @override
-  State<DetailAppointmentInformation> createState() =>
-      _DetailAppointmentInformationState();
+  State<DetailAppointmentInformation2> createState() =>
+      _DetailAppointmentInformation2State();
 }
 
-class _DetailAppointmentInformationState
-    extends State<DetailAppointmentInformation> {
+class _DetailAppointmentInformation2State
+    extends State<DetailAppointmentInformation2> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GetSpecificAppointmentDataBloc,
@@ -163,24 +161,6 @@ class _DetailAppointmentInformationState
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: 260,
-                  child: CommonButton(
-                    backgroundColor: ColorPalette.whiteColor,
-                    onTap: () async {
-                      await NavigationServices(context)
-                          .pushExamineScreen(
-                              state.appointmentData[0]['appointment_id'])
-                          .then((_) {
-                        setState(() {});
-                      });
-                    },
-                    buttonText: 'Examine',
-                    textColor: ColorPalette.deepBlue,
-                    fontSize: 26,
-                  ),
-                )
               ],
             ),
           ),

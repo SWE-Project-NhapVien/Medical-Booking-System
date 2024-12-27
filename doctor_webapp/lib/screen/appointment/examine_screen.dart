@@ -56,7 +56,7 @@ class ExamineScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Patient Information Panel
-                      Expanded(
+                      const Expanded(
                         flex: 1,
                         child: PatientInformationPanel(),
                       ),
@@ -154,6 +154,7 @@ class DoctorNotes extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Doctor notes added successfully.')),
           );
+          Navigator.of(context).pop();
         } else if (state is DoctorNotesError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.errorMessage)),

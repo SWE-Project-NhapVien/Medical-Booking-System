@@ -37,9 +37,6 @@ class _UpcomingAppointmentScreenState extends State<UpcomingAppointmentScreen> {
         if (state2 is GetSpecificAppointmentDataSuccess) {
           setState(() {});
         }
-        if (state2 is GetSpecificAppointmentDataError) {
-          print(state2.message);
-        }
       },
       builder: (context, state) {
         return BlocConsumer<AppointmentBloc, AppointmentState>(
@@ -54,8 +51,6 @@ class _UpcomingAppointmentScreenState extends State<UpcomingAppointmentScreen> {
                 ),
               ),
             );
-          } else if (state is ErrorAppointmentState) {
-            print(state.message);
           }
         }, builder: (context, state) {
           if (state is SucessAppointmentState) {
