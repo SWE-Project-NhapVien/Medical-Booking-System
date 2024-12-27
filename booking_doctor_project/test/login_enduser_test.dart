@@ -5,7 +5,6 @@ import 'package:booking_doctor_project/bloc/patient/GetAProfile/get_a_profile_bl
 import 'package:booking_doctor_project/bloc/patient/ForgotPassword/forgot_password_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/LogIn/log_in_bloc.dart';
 import 'package:booking_doctor_project/widgets/common_textfield.dart';
-import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
