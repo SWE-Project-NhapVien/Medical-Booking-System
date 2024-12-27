@@ -14,7 +14,7 @@ class PatientInfoBloc extends Bloc<PatientInfoEvent, PatientInfoState> {
     try {
       final supabase = Supabase.instance.client;
 
-      final response = await supabase.rpc('get_appointment_details', params: {'id': event.appointmentId});
+      final response = await supabase.rpc('get_appointment_patient', params: {'p_appointment_id': event.appointmentId});
 
       if (response != null && response.isNotEmpty) {
         final appointmentDetails = response[0] as Map<String, dynamic>;
@@ -22,10 +22,10 @@ class PatientInfoBloc extends Bloc<PatientInfoEvent, PatientInfoState> {
         // Emit success state with the parsed data
         emit(PatientInfoLoaded(appointmentDetails: appointmentDetails));
       } else {
-        emit(PatientInfoError(message: 'No appointment data found.'));
+        emit(PatientInfoError(errorMessage: 'No appointment data found.'));
       }
     } catch (e) {
-      emit(PatientInfoError(message: 'Error fetching appointment details: $e'));
+      emit(PatientInfoError(errorMessage: 'Error fetching appointment details: $e'));
     }
   }
 }

@@ -6,9 +6,12 @@ import 'package:doctor_webapp/bloc/Examine/doctor_notes_state.dart';
 import 'package:doctor_webapp/bloc/Examine/patientinfo_bloc.dart';
 import 'package:doctor_webapp/bloc/Examine/patientinfo_event.dart';
 import 'package:doctor_webapp/bloc/Examine/patientinfo_state.dart';
+import 'package:doctor_webapp/utils/color_palette.dart';
+import 'package:doctor_webapp/utils/text_styles.dart';
 import 'package:doctor_webapp/widgets/textfield_with_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 
 class ExamineScreen extends StatelessWidget {
@@ -16,40 +19,52 @@ class ExamineScreen extends StatelessWidget {
 
   const ExamineScreen({Key? key, required this.appointmentId}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorPalette.blueFormColor,
       body: Row(
         children: [
           // Navigation bar placeholder
           SizedBox(width: 88),
 
-          // Main content area
-          Expanded(
+            // Main content area
+            Expanded(
             child: MultiBlocProvider(
               providers: [
-                BlocProvider(
-                  create: (context) => PatientInfoBloc()
-                    ..add(FetchPatientInfoEvent(appointmentId)),
+              BlocProvider(
+                create: (context) => PatientInfoBloc()
+                ..add(FetchPatientInfoEvent(appointmentId)),
+              ),
+              BlocProvider(
+                create: (context) => DoctorNotesBloc(),
+              ),
+              ],
+              child: Row(
+              children: [
+                // Patient Information Panel
+                Expanded(
+                flex: 1,
+                child: PatientInformationPanel(),
                 ),
-                BlocProvider(
-                  create: (context) => DoctorNotesBloc(),
+
+                // Divider
+                const VerticalDivider(
+                width: 1,
+                thickness: 1,
+                color: Colors.grey,
+                ),
+
+                // Doctor's Notes
+                Expanded(
+                flex: 1,
+                child: DoctorNotes(),
                 ),
               ],
-              child: Column(
-                children: [
-                  // Patient Information Panel
-                  PatientInformationPanel(),
-
-                  // Spacer
-                  const SizedBox(height: 16),
-
-                  // Doctor's Notes
-                  DoctorNotes(),
-                ],
               ),
             ),
-          ),
+            ),
         ],
       ),
     );
@@ -59,6 +74,7 @@ class ExamineScreen extends StatelessWidget {
 class PatientInformationPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final textStyles = TextStyles(context);
     return BlocBuilder<PatientInfoBloc, PatientInfoState>(
       builder: (context, state) {
         if (state is PatientInfoLoading) {
@@ -69,14 +85,37 @@ class PatientInformationPanel extends StatelessWidget {
             margin: const EdgeInsets.all(16),
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Patient Name: ${patientData['name']}',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text('Age: ${patientData['age']}'),
-                  Text('Condition: ${patientData['condition']}'),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${patientData['first_name']} ${patientData['last_name']}",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: ColorPalette.blackColor,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Date of Birth: ${patientData['date_of_birth']}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: ColorPalette.blackColor,
+                      ),
+                    ),
+                    Divider(height: 32, color: ColorPalette.greyColor),
+                    _buildInfoRow("Blood Type", patientData['blood_type'], textStyles),
+                    _buildInfoRow("Gender", patientData['gender'], textStyles),
+                    _buildInfoRow("Height", "${patientData['height']} cm", textStyles),
+                    _buildInfoRow("Weight", "${patientData['weight']} kg", textStyles),
+                    _buildInfoRow("Medical History", patientData['medical_history'], textStyles),
+                    _buildInfoRow("Allergies", (patientData['allergies'] as List<String>).join(', '), textStyles),
+                    _buildInfoRow("Emergency Contact", (patientData['emergency_contact'] as List<String>).join(', '), textStyles),
+
+                  ],
+                ),
               ),
             ),
           );
@@ -86,6 +125,37 @@ class PatientInformationPanel extends StatelessWidget {
           return const SizedBox();
         }
       },
+    );
+    
+  }
+  String _formatDate(String? timestamp) {
+    if (timestamp == null || timestamp.isEmpty) return "N/A";
+    final date = DateTime.parse(timestamp);
+    return DateFormat('yyyy-MM-dd').format(date); // Format to show only date.
+  }
+
+  Widget _buildInfoRow(String label, String? value, TextStyles textStyles) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "$label: ",
+            style: textStyles.getRegularStyle(
+              size: 20,
+              fontWeight: FontWeight.w500,
+              color: ColorPalette.blackColor,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value ?? "N/A",
+              style: textStyles.getRegularStyle(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
