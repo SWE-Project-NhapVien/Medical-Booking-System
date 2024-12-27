@@ -129,29 +129,107 @@ class PatientInformationPanel extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (state is PatientInfoLoaded) {
           final patientData = state.appointmentDetails;
+
           return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Patient Name: ${patientData['first_name']} ${patientData['last_name']}',
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                    'Date of Birth: ${_formatDate(patientData['date_of_birth'])}'),
-                Text('Blood Type: ${patientData['blood_type']}'),
-                Text('Gender: ${patientData['gender']}'),
-                Text('Allergies: ${patientData['allergies'].join(', ')}'),
-                Text('Height: ${patientData['height']} cm'),
-                Text('Weight: ${patientData['weight']} kg'),
-                Text(
-                    'Emergency Contact: ${patientData['emergency_contact'].join(', ')}'),
-                Text(
-                    'Medical History: ${patientData['medical_history'].join(', ')}'),
-                Text('Description: ${patientData['description']}'),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Patient Information',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildReadOnlyField(
+                    context,
+                    label: 'Full Name',
+                    value:
+                        '${patientData['first_name']} ${patientData['last_name']}',
+                  ),
+                    Row(
+                    children: [
+                      Expanded(
+                      child: _buildReadOnlyField(
+                      context,
+                      label: 'Date of Birth',
+                      value: _formatDate(patientData['date_of_birth']),
+                      ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                      child: _buildReadOnlyField(
+                      context,
+                      label: 'Gender',
+                      value: patientData['gender'],
+                      ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                      child: _buildReadOnlyField(
+                      context,
+                      label: 'Blood Type',
+                      value: patientData['blood_type'],
+                      )
+                      ),
+                    ],
+                    ),
+                    
+
+          
+                    Row(
+                    children: [
+                      Expanded(
+                      child: _buildReadOnlyField(
+                        context,
+                        label: 'Height',
+                        value: '${patientData['height']} cm',
+                      ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                      child: _buildReadOnlyField(
+                        context,
+                        label: 'Weight',
+                        value: '${patientData['weight']} kg',
+                      ),
+                      ),
+                    ],
+                    ),
+                  _buildReadOnlyField(
+                    context,
+                    label: 'Allergies',
+                    value: patientData['allergies'].isEmpty
+                        ? 'None'
+                        : patientData['allergies'].join(', '),
+                  ),
+                  _buildReadOnlyField(
+                    context,
+                    label: 'Medical History',
+                    value: patientData['medical_history'].isEmpty
+                        ? 'No history available'
+                        : patientData['medical_history'].join(', '),
+                  ),
+
+                  _buildReadOnlyField(
+                    context,
+                    label: 'Contact Details',
+                    value: patientData['emergency_contact'].isEmpty
+                        ? 'No emergency contact provided'
+                        : patientData['emergency_contact'].join(', '),
+                  ),
+
+                  _buildReadOnlyField(
+                    context,
+                    label: 'Description',
+                    value: patientData['description'] ?? 'No description added',
+                    height: 100,
+                  ),
+                ],
+              ),
             ),
           );
         } else if (state is PatientInfoError) {
@@ -163,12 +241,69 @@ class PatientInformationPanel extends StatelessWidget {
     );
   }
 
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.grey,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReadOnlyField(
+    BuildContext context, {
+    required String label,
+    required String value,
+    double height = 60,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (label.isNotEmpty)
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          Container(
+            padding: const EdgeInsets.all(12.0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(13),
+              color: Colors.grey[100],
+            ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   String _formatDate(String? timestamp) {
     if (timestamp == null || timestamp.isEmpty) return "N/A";
     final date = DateTime.parse(timestamp);
     return DateFormat('yyyy-MM-dd').format(date); // Format to show only date.
   }
 }
+
 
 class DoctorNotes extends StatefulWidget {
   final String appointmentId;
@@ -228,8 +363,11 @@ class _DoctorNotesState extends State<DoctorNotes> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('Doctor\'s Notes:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
+                style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),),
+            const SizedBox(height: 16),
 
             // Symptoms Field
             LabelAndTextField(
@@ -239,7 +377,6 @@ class _DoctorNotesState extends State<DoctorNotes> {
               controller: symptomsController,
               errorText: errors['symptoms'] ?? '',
             ),
-            const SizedBox(height: 16),
 
             // Diagnosis Field
             LabelAndTextField(
@@ -249,8 +386,6 @@ class _DoctorNotesState extends State<DoctorNotes> {
               controller: diagnosisController,
               errorText: errors['diagnosis'] ?? '',
             ),
-            const SizedBox(height: 16),
-
             // Prescriptions Field
             LabelAndTextField(
               context: context,
@@ -260,7 +395,6 @@ class _DoctorNotesState extends State<DoctorNotes> {
               errorText: errors['prescriptions']?? '',
               height: 150,
             ),
-            const SizedBox(height: 16),
 
             CommonButton(
               onTap: () {
