@@ -32,7 +32,7 @@ class CardItem extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: Text(
                   'From October 2024',
-                  style: TextStyles(context).getDescriptionStyle(),
+                  style: TextStyles(context).getDescriptionStyle().copyWith(fontSize: 14),
                 ),
               )
             ],

@@ -1,11 +1,11 @@
 import 'package:admin_webapp/bloc/Logout/logout_bloc.dart';
 import 'package:admin_webapp/routes/navigation_services.dart';
 import 'package:admin_webapp/screen/report/report_screen.dart';
-import 'package:admin_webapp/screen/schedule/schedule_screen.dart';
 import 'package:admin_webapp/utils/color_palette.dart';
 import 'package:admin_webapp/utils/enum.dart';
 import 'package:admin_webapp/utils/fixed_web_component.dart';
 import 'package:admin_webapp/widgets/common_dialogs.dart';
+import 'package:admin_webapp/widgets/tap_effect.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -90,7 +90,8 @@ class _HandlePageViewState extends State<HandlePageView> {
         }
       },
       child: Scaffold(
-          backgroundColor: ColorPalette.mediumBlue,
+          backgroundColor: ColorPalette.blueFormColor,
+
           body: Row(
             children: [
               _buildSideBar(),
@@ -150,6 +151,7 @@ class _HandlePageViewState extends State<HandlePageView> {
           top: _topMainComponentPadding + _mainComponentDistance,
           left: _leftPaddingComponent - 2,
           child: _buildSideBarComponent(
+
               icon: Icons.calendar_month,
               isSelected: _navigatorType == NavigatorType.schedule,
               onClick: () {
@@ -183,7 +185,7 @@ class _HandlePageViewState extends State<HandlePageView> {
       required VoidCallback onClick}) {
     Color selectedColor = ColorPalette.backgroundSelectSideBarComponent;
 
-    if (_bottomPadding <= 9 && icon == Icons.logout) {
+    if (_bottomPadding <= 10 && icon == Icons.logout) {
       return Container();
     } else if (_mainComponentDistance < thresholdDistanceComponent &&
         icon != Icons.logout) {
@@ -193,16 +195,21 @@ class _HandlePageViewState extends State<HandlePageView> {
     }
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => onClick(),
+      child: TapEffect(
+        onClick: () => onClick(),
         child: Container(
           height: _sideBarComponentHeight * 0.4,
-          width: _sideBarWidth * 0.722,
+          width: _sideBarWidth * 0.73,
           decoration: BoxDecoration(
             color: isSelected ? selectedColor : Colors.transparent,
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(5.0),
           ),
-          child: FittedBox(child: Icon(icon, color: ColorPalette.whiteColor)),
+          child: Center(
+              child: Icon(
+            icon,
+            color: ColorPalette.whiteColor,
+            size: 36,
+          )),
         ),
       ),
     );

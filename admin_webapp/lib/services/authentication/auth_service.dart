@@ -15,6 +15,21 @@ class AdminAuthServices {
     }
   }
 
+  Future<AuthResponse> signUpWithEmailPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      return await _supabase.auth.signUp(
+        email: email,
+        password: password,
+        emailRedirectTo: 'myapp://create-profile',
+      );
+    } on AuthException catch (e) {
+      throw Exception('Failed to sign up: ${e.message}');
+    }
+  }
+
   Future<void> signOut() async {
     try {
       await _supabase.auth.signOut();

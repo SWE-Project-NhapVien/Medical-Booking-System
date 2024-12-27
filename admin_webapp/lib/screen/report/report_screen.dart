@@ -48,8 +48,10 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
 
   @override
   Widget build(BuildContext context) {
-    double lottieSize = MediaQuery.of(context).size.width * 0.2;
+    final size = MediaQuery.of(context).size;
+    double lottieSize = size.width * 0.2;
     return Scaffold(
+
       backgroundColor: ColorPalette.mediumBlue,
       body: Padding(
         padding: EdgeInsets.only(

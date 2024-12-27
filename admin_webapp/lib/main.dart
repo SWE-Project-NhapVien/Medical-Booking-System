@@ -1,6 +1,10 @@
 import 'package:admin_webapp/bloc/AdminLogin/login_bloc.dart';
 import 'package:admin_webapp/bloc/ForgotPassword/forgot_password_bloc.dart';
+import 'package:admin_webapp/bloc/GetAllDoctors/get_all_doctors_bloc.dart';
+import 'package:admin_webapp/bloc/GetAllPatients/get_all_patients_bloc.dart';
 import 'package:admin_webapp/bloc/Logout/logout_bloc.dart';
+import 'package:admin_webapp/bloc/UpdateDoctorSchedule/update_doctor_schedule_bloc.dart';
+import 'package:admin_webapp/screen/handle_page_view.dart';
 import 'package:admin_webapp/screen/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,15 +29,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        routes: _buildRoutes(),
-        title: 'Admin Webapp',
-  );
-}
+      debugShowCheckedModeBanner: false,
+      routes: _buildRoutes(),
+      title: 'Admin Webapp',
+      supportedLocales: const [
+        Locale('en'),
+      ],
+    );
+  }
 
   Map<String, WidgetBuilder> _buildRoutes() {
     return {
-      '/': (BuildContext context) => const LoginScreen(),
+      '/': (BuildContext context) => const HandlePageView(),
     };
   }
 }
@@ -42,8 +49,15 @@ Widget _setAllProviders() {
   return MultiBlocProvider(
     providers: [
       BlocProvider<LoginBloc>(create: (context) => LoginBloc()),
-      BlocProvider<ForgotPasswordBloc>(create: (context) => ForgotPasswordBloc()),
+      BlocProvider<ForgotPasswordBloc>(
+          create: (context) => ForgotPasswordBloc()),
       BlocProvider<LogoutBloc>(create: (context) => LogoutBloc()),
+      BlocProvider<GetAllPatientsBloc>(
+          create: (context) => GetAllPatientsBloc()),
+      BlocProvider<GetAllDoctorsBloc>(create: (context) => GetAllDoctorsBloc()),
+      BlocProvider(
+        create: (context) => UpdateDoctorScheduleBloc(),
+      ),
     ],
     child: const MyApp(),
   );

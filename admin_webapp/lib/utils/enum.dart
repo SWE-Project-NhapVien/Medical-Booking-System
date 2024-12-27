@@ -17,6 +17,6 @@ enum ColorType {
   BilobaFlower,
 }
 
-enum NavigatorType { home, schedule, report, logout }
+enum NavigatorType { home, report, logout }
 
 enum AppointmentType { upcoming, completed, cancelled }
