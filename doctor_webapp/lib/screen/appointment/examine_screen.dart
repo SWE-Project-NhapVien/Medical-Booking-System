@@ -226,7 +226,7 @@ class DoctorNotes extends StatelessWidget {
                       ),
                     );
               },
-              buttonText: 'Save Notes',
+              buttonText: 'Finish Examination',
             ),
           ],
         );

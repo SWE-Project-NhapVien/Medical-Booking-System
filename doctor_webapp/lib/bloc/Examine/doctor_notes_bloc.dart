@@ -20,11 +20,22 @@ class DoctorNotesBloc extends Bloc<DoctorNotesEvent, DoctorNotesState> {
         'appointment_id': event.appointmentId,
         'symptoms': event.symptoms,
         'diagnosis': event.diagnosis,
-        'prescriptions': event.prescriptions, 
+        'prescriptions': event.prescriptions,
       }).select();
 
-      if (response.isNotEmpty) {
-        emit(DoctorNotesAdded());
+      // Check if the response is valid
+      if (response != null && response.isNotEmpty) {
+        // Update the status of the appointment to 'Completed'
+        final updateResponse = await supabase.from('appointments').update({
+          'status': 'Completed',
+        }).eq('appointment_id', event.appointmentId).select();
+
+        // Check if the update response is valid
+        if (updateResponse != null && updateResponse.isNotEmpty) {
+          emit(DoctorNotesAdded());
+        } else {
+          emit(DoctorNotesError('Failed to update appointment status.'));
+        }
       } else {
         emit(DoctorNotesError('Failed to add doctor notes.'));
       }
