@@ -68,6 +68,7 @@ class _CompletedAppointmentScreenState
                             .add(GetSpecificAppointmentDataEvent(
                               appointmentId: e.appointmentId,
                             ));
+                        setState(() {});
                       },
                     ))
                 .toList();

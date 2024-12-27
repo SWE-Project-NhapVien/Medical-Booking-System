@@ -68,6 +68,7 @@ class _UpcomingAppointmentScreenState extends State<UpcomingAppointmentScreen> {
                             .add(GetSpecificAppointmentDataEvent(
                               appointmentId: e.appointmentId,
                             ));
+                        setState(() {});
                       },
                     ))
                 .toList();

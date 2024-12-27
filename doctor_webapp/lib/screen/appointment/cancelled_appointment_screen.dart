@@ -68,6 +68,8 @@ class _CancelledAppointmentScreenState
                             .add(GetSpecificAppointmentDataEvent(
                               appointmentId: e.appointmentId,
                             ));
+
+                        setState(() {});
                       },
                     ))
                 .toList();

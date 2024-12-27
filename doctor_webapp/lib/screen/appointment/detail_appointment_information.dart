@@ -40,12 +40,10 @@ class _DetailAppointmentInformationState
                 const SizedBox(height: 40),
                 CircleAvatar(
                   radius: 80,
-                  backgroundImage: NetworkImage(
-                      state.appointmentData[0]['ava_url'] == '' ||
-                              state.appointmentData[0]['ava_url'] == null
-                          ? state.appointmentData[0]['ava_url']
-                          : FixedWebComponent
-                              .defaultPatientAvatar), // Replace with your image
+                  backgroundImage: NetworkImage(state.appointmentData[0]
+                          ['ava_url'] ??
+                      FixedWebComponent
+                          .defaultPatientAvatar), // Replace with your image
                 ),
                 const SizedBox(height: 24),
                 Expanded(
