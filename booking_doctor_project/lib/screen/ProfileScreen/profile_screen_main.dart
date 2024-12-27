@@ -72,8 +72,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           shape: BoxShape.circle,
                           image: DecorationImage(
                               image: Image.network(state.profileInfo[0]
-                                              ['ava_url'] !=
-                                          ''
+                                                  ['ava_url'] !=
+                                              '' &&
+                                          state.profileInfo[0]['ava_url'] !=
+                                              null
                                       ? state.profileInfo[0]['ava_url']
                                       : 'https://vikaxjhrmnewkrlovxmi.supabase.co/storage/v1/object/public/web/default_avatar.png')
                                   .image)),
