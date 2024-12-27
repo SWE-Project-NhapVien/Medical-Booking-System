@@ -8,6 +8,7 @@ import 'package:doctor_webapp/bloc/Examine/patientinfo_event.dart';
 import 'package:doctor_webapp/bloc/Examine/patientinfo_state.dart';
 import 'package:doctor_webapp/utils/color_palette.dart';
 import 'package:doctor_webapp/utils/text_styles.dart';
+import 'package:doctor_webapp/widgets/comon_button.dart';
 import 'package:doctor_webapp/widgets/textfield_with_label.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,104 +62,66 @@ class ExamineScreen extends StatelessWidget {
                 flex: 1,
                 child: DoctorNotes(),
                 ),
-              ],
+                ],
+                ),
               ),
+              ),
+            ],
             ),
-            ),
-        ],
-      ),
-    );
-  }
-}
+          );
+          }
+        }
 
-class PatientInformationPanel extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+        
+  class PatientInformationPanel extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
     final textStyles = TextStyles(context);
     return BlocBuilder<PatientInfoBloc, PatientInfoState>(
       builder: (context, state) {
-        if (state is PatientInfoLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state is PatientInfoLoaded) {
-          final patientData = state.appointmentDetails;
-          return Card(
-            margin: const EdgeInsets.all(16),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${patientData['first_name']} ${patientData['last_name']}",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: ColorPalette.blackColor,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      "Date of Birth: ${patientData['date_of_birth']}",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: ColorPalette.blackColor,
-                      ),
-                    ),
-                    Divider(height: 32, color: ColorPalette.greyColor),
-                    _buildInfoRow("Blood Type", patientData['blood_type'], textStyles),
-                    _buildInfoRow("Gender", patientData['gender'], textStyles),
-                    _buildInfoRow("Height", "${patientData['height']} cm", textStyles),
-                    _buildInfoRow("Weight", "${patientData['weight']} kg", textStyles),
-                    _buildInfoRow("Medical History", patientData['medical_history'], textStyles),
-                    _buildInfoRow("Allergies", (patientData['allergies'] as List<String>).join(', '), textStyles),
-                    _buildInfoRow("Emergency Contact", (patientData['emergency_contact'] as List<String>).join(', '), textStyles),
-
-                  ],
-                ),
-              ),
-            ),
-          );
-        } else if (state is PatientInfoError) {
-          return Center(child: Text(state.errorMessage));
-        } else {
-          return const SizedBox();
-        }
+      if (state is PatientInfoLoading) {
+        return const Center(child: CircularProgressIndicator());
+      } else if (state is PatientInfoLoaded) {
+        final patientData = state.appointmentDetails;
+        return Card(
+        margin: const EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            Text('Patient Name: ${patientData['first_name']} ${patientData['last_name']}',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text('Date of Birth: ${_formatDate(patientData['date_of_birth'])}'),
+            Text('Blood Type: ${patientData['blood_type']}'),
+            Text('Gender: ${patientData['gender']}'),
+            Text('Allergies: ${patientData['allergies'].join(', ')}'),
+            Text('Height: ${patientData['height']} cm'),
+            Text('Weight: ${patientData['weight']} kg'),
+            Text('Emergency Contact: ${patientData['emergency_contact'].join(', ')}'),
+            Text('Medical History: ${patientData['medical_history'].join(', ')}'),
+            Text('Description: ${patientData['description']}'),
+            ],
+          ),
+          ),
+        ),
+        );
+      } else if (state is PatientInfoError) {
+        return Center(child: Text(state.errorMessage));
+      } else {
+        return const SizedBox();
+      }
       },
     );
-    
-  }
-  String _formatDate(String? timestamp) {
+    }
+
+    String _formatDate(String? timestamp) {
     if (timestamp == null || timestamp.isEmpty) return "N/A";
     final date = DateTime.parse(timestamp);
     return DateFormat('yyyy-MM-dd').format(date); // Format to show only date.
+    }
   }
-
-  Widget _buildInfoRow(String label, String? value, TextStyles textStyles) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "$label: ",
-            style: textStyles.getRegularStyle(
-              size: 20,
-              fontWeight: FontWeight.w500,
-              color: ColorPalette.blackColor,
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value ?? "N/A",
-              style: textStyles.getRegularStyle(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class DoctorNotes extends StatelessWidget {
   @override
@@ -226,44 +189,44 @@ class DoctorNotes extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                ElevatedButton(
-                  onPressed: () {
-                    final symptoms = symptomsController.text.trim();
-                    final diagnosis = diagnosisController.text.trim();
-                    final prescriptionsText = prescriptionsController.text.trim();
+                CommonButton(
+                  onTap: () {
+                  final symptoms = symptomsController.text.trim();
+                  final diagnosis = diagnosisController.text.trim();
+                  final prescriptionsText = prescriptionsController.text.trim();
 
-                    if (symptoms.isEmpty || diagnosis.isEmpty || prescriptionsText.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("All fields must be filled")),
-                      );
-                      return;
-                    }
+                  if (symptoms.isEmpty || diagnosis.isEmpty || prescriptionsText.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("All fields must be filled")),
+                    );
+                    return;
+                  }
 
-                    Map<String, dynamic> prescriptions;
-                    try {
-                      prescriptions = Map<String, dynamic>.from(
-                        prescriptionsText.isNotEmpty
-                            ? jsonDecode(prescriptionsText)
-                            : {},
-                      );
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text("Invalid JSON format for prescriptions")),
-                      );
-                      return;
-                    }
+                  Map<String, dynamic> prescriptions;
+                  try {
+                    prescriptions = Map<String, dynamic>.from(
+                    prescriptionsText.isNotEmpty
+                      ? jsonDecode(prescriptionsText)
+                      : {},
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Invalid JSON format for prescriptions")),
+                    );
+                    return;
+                  }
 
-                    context.read<DoctorNotesBloc>().add(
-                          AddDoctorNoteEvent(
-                            appointmentId: "someAppointmentId", // Replace with dynamic value
-                            symptoms: symptoms,
-                            diagnosis: diagnosis,
-                            prescriptions: prescriptions,
-                          ),
-                        );
+                  context.read<DoctorNotesBloc>().add(
+                      AddDoctorNoteEvent(
+                      appointmentId: "someAppointmentId", // Replace with dynamic value
+                      symptoms: symptoms,
+                      diagnosis: diagnosis,
+                      prescriptions: prescriptions,
+                      ),
+                    );
                   },
-                  child: const Text('Save Notes'),
+                  buttonText: 'Save Notes',
                 ),
               ],
             ),
