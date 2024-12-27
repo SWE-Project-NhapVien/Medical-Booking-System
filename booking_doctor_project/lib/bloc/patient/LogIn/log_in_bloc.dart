@@ -15,7 +15,7 @@ class LogInBloc extends Bloc<LogInEvent, LogInState> {
           emit(LogInSuccess());
         }
       } catch (e) {
-        if (e.toString().contains("invalid-credentials")) {
+        if (e.toString().contains("invalid_credentials")) {
           emit(const LogInFailure(error: "Invalid email or password."));
         }  else {
           emit(LogInFailure(error: e.toString()));

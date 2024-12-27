@@ -139,7 +139,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     onTap: () {
+                      debugPrint("Tapped");
                       if (_validateAndLogin()) {
+                        debugPrint("Not empty, ${emailController.text.trim()}, ${passwordController.text}");
                         BlocProvider.of<LogInBloc>(context).add(LogInRequired(
                           email: emailController.text.trim(),
                           password: passwordController.text,
