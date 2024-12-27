@@ -10,7 +10,6 @@ import 'package:booking_doctor_project/bloc/patient/ProfileInfo/profile_info_blo
 import 'package:booking_doctor_project/bloc/patient/ResetPassword/reset_password_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/SignUp/sign_up_bloc.dart';
 import 'package:booking_doctor_project/bloc/patient/UpdateProfile/update_profile_bloc.dart';
-import 'package:booking_doctor_project/bloc_observer.dart';
 import 'package:booking_doctor_project/medical_booking_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +23,6 @@ void main() async {
   await Supabase.initialize(
       url: dotenv.env['SUPABASE_URL']!,
       anonKey: dotenv.env['SUPABASE_ANON_KEY']!);
-  Bloc.observer = SimpleBlocObserver();
 
   Supabase.instance.client.auth.onAuthStateChange.listen((data) {
     final event = data.event;
