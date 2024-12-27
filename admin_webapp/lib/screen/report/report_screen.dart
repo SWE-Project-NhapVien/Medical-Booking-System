@@ -13,7 +13,6 @@ import '../../bloc/report/report_state.dart';
 import '../../class/report.dart';
 import '../../utils/color_palette.dart';
 import '../../utils/fixed_web_component.dart';
-import '../../utils/text_styles.dart';
 import 'PieChartOrderStatus/pie_chart.dart';
 
 class ReportScreen extends StatelessWidget {
@@ -52,59 +51,109 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
     final size = MediaQuery.of(context).size;
     double lottieSize = size.width * 0.2;
     return Scaffold(
-      backgroundColor: ColorPalette.blueFormColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.01, vertical: size.height * 0.02),
-            child: Text(
-              "Report",
-              style: TextStyles(context).getTitleStyle(
-                  size: 40,
-                  color: ColorPalette.deepBlue,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: size.width * 0.01),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: ColorPalette.whiteColor,
-              ),
-              child: BlocConsumer<ReportBloc, ReportState>(
-                listener: (context, state) {
-                  if (state is LoadingReportState) {
-                    Center(
-                      child: AlertDialog(
-                        backgroundColor: Colors.transparent,
-                        content: Lottie.asset(
-                          FixedWebComponent.loading,
-                          width: lottieSize,
-                        ),
+
+      backgroundColor: ColorPalette.mediumBlue,
+      body: Padding(
+        padding: EdgeInsets.only(
+            left: 10,
+            right: 20,
+            top: MediaQuery.of(context).size.height * 0.05 - 20,
+            bottom: MediaQuery.of(context).size.height * 0.05 - 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 507,
+                  decoration: BoxDecoration(
+                    color: ColorPalette.whiteColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      '“Wear the white coat with dignity and pride—it is an honor and privilege to get to serve the public as a physician.”  - Bill H. Warren',
+                      style: TextStyle(
+                        color: ColorPalette.deepBlue,
+                        fontSize: 12,
                       ),
-                    );
-                  } else if (state is ErrorReportState) {
-                    print(state.message);
-                  }
-                },
-                builder: (context, state) {
-                  if (state is SucessReportState) {
-                    Report report = state.report;
-                    int totalAppointment = report.appointments.length;
-                    int priceAppointment = totalAppointment != 0
-                        ? report.appointments[0].price
-                        : 125000;
-                    return SingleChildScrollView(
-                        child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: size.width * 0.01),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: ColorPalette.whiteColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.settings,
+                      color: ColorPalette.deepBlue,
+                      size: 30,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: ColorPalette.whiteColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.notifications,
+                      color: ColorPalette.deepBlue,
+                      size: 30,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: ColorPalette.mediumBlue,
+                ),
+                child: BlocConsumer<ReportBloc, ReportState>(
+                  listener: (context, state) {
+                    if (state is LoadingReportState) {
+                      Center(
+                        child: AlertDialog(
+                          backgroundColor: Colors.transparent,
+                          content: Lottie.asset(
+                            FixedWebComponent.loading,
+                            width: lottieSize,
+                          ),
+                        ),
+                      );
+                    } else if (state is ErrorReportState) {
+                      print(state.message);
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is SucessReportState) {
+                      Report report = state.report;
+                      int totalAppointment = report.appointments.length;
+                      int priceAppointment = totalAppointment != 0
+                          ? report.appointments[0].price
+                          : 125000;
+                      return SingleChildScrollView(
+                          child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               // card
                               CardItem(
@@ -112,14 +161,23 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
                                 description:
                                     report.appointments.length.toString(),
                               ),
+                              const SizedBox(
+                                width: 10,
+                              ),
                               CardItem(
                                 title: 'Total revenue',
                                 description:
                                     '${report.appointments.length * priceAppointment} VND',
                               ),
+                              const SizedBox(
+                                width: 10,
+                              ),
                               CardItem(
                                 title: 'An appointment price',
                                 description: '$priceAppointment VND',
+                              ),
+                              const SizedBox(
+                                width: 10,
                               ),
                               CardItem(
                                 title: 'Total patient',
@@ -128,13 +186,10 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
                               ),
                             ],
                           ),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: Column(
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
                                 children: [
                                   BarChartWeeklyAppointment(
                                     appointment: report.appointments,
@@ -146,31 +201,29 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
                                       appointmentList: report.appointments),
                                 ],
                               ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Padding(
-                                padding:
-                                    EdgeInsets.only(right: size.width * 0.01),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Expanded(
                                 child: PieChartOrderStatus(
                                   appointments: report.appointments,
                                 ),
-                              ),
-                            )
-                          ],
-                        ),
+                              )
+                            ],
+                          ),
 
-                        // recent
-                      ],
-                    ));
-                  } else {
-                    return Container();
-                  }
-                },
+                          // recent
+                        ],
+                      ));
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

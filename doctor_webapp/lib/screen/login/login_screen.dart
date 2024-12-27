@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
             title: 'Success',
             content: 'Login Successful',
           );
-          NavigationServices(context).pushHandlePageView();
+          NavigationServices(context).pushHomeScreen();
         } else if (state is DoctorLoginFailure) {
           Navigator.of(context).pop();
           Dialogs(context).showErrorDialog(message: state.error);
@@ -196,27 +196,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: size.height * 0.02,
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: size.width * 0.001),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.width * 0.001),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Flexible(
-                          child: Text(
-                            'Don’t have an account? ',
-                            style: TextStyles(context)
-                                .getRegularStyle(fontWeight: FontWeight.w200),
-                          ),
+                        Text(
+                          'Don’t have an account? ',
+                          style: TextStyles(context)
+                              .getRegularStyle(fontWeight: FontWeight.w200),
                         ),
                         TapEffect(
                           onClick: () {
                             //
                           },
-                          child: Flexible(
-                            child: Text(
-                              'Contact the Admin',
-                              style: TextStyles(context).getRegularStyle(
-                                color: ColorPalette.deepBlue,
-                              ),
+                          child: Text(
+                            'Contact the Admin',
+                            style: TextStyles(context).getRegularStyle(
+                              color: ColorPalette.deepBlue,
                             ),
                           ),
                         ),
@@ -306,7 +303,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 controller: emailAccountController,
                                 errorText: ''),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
                               child: CommonButton(
                                 buttonTextWidget: Text(
                                   'Send',
@@ -420,10 +418,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             Text(
                               'Please check your email for OTP',
-                              style: TextStyles(context).getRegularStyle(
-                                size: 16,
-                                color: ColorPalette.deepBlue,
-                              ).copyWith(fontStyle: FontStyle.italic),
+                              style: TextStyles(context)
+                                  .getRegularStyle(
+                                    size: 16,
+                                    color: ColorPalette.deepBlue,
+                                  )
+                                  .copyWith(fontStyle: FontStyle.italic),
                             ),
                             SizedBox(
                               height: size.height * 0.02,
@@ -450,7 +450,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
                               child: CommonButton(
                                 buttonTextWidget: Text(
                                   'Send',

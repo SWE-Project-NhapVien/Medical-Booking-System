@@ -1,5 +1,6 @@
 import 'package:booking_doctor_project/class/appointment.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'cancelled_appointment_event.dart';
 import 'cancelled_appointment_state.dart';
@@ -29,8 +30,10 @@ class CancelledAppointmentBloc
   List<Appointment> parseAppointments(dynamic data) {
     if (data is List) {
       return data.map((item) {
+        DateTime date = DateTime.parse(item['appointment_date']);
+        String formattedDate = DateFormat('MMMM d, y').format(date);
         return Appointment(
-          appointmentDate: item['appointment_date'].toString(),
+          appointmentDate: formattedDate,
           appointmentTime: item['appointment_time'].toString(),
           appointmentId: item['appointment_id'],
           doctorFullName:
@@ -38,6 +41,7 @@ class CancelledAppointmentBloc
           doctorAvatar: item['doctor_avatar_url'],
           specializations: item['doctor_specialization'].cast<String>(),
           result: null,
+          description: item['description'],
           status: 'canceled',
           price: item['appointment_price'].toString(),
         );

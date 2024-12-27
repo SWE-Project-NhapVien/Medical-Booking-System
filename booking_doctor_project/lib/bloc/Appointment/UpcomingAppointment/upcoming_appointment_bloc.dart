@@ -44,6 +44,7 @@ class UpcomingAppointmentBloc
           doctorAvatar: item['doctor_avatar_url'],
           specializations: item['doctor_specialization'].cast<String>(),
           result: null,
+          description: item['description'],
           status: 'upcoming',
           price: item['appointment_price'].toString(),
         );

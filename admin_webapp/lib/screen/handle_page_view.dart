@@ -9,7 +9,6 @@ import 'package:admin_webapp/widgets/tap_effect.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'home/home_screen.dart';
 
 class HandlePageView extends StatefulWidget {
   const HandlePageView({super.key});
@@ -55,7 +54,7 @@ class _HandlePageViewState extends State<HandlePageView> {
     await Future.delayed(const Duration(milliseconds: 400));
     setState(() {
       isFirstTime = false;
-      _screen = const HomeScreen();
+      _screen = const ReportScreen();
     });
   }
 
@@ -92,6 +91,7 @@ class _HandlePageViewState extends State<HandlePageView> {
       },
       child: Scaffold(
           backgroundColor: ColorPalette.blueFormColor,
+
           body: Row(
             children: [
               _buildSideBar(),
@@ -142,7 +142,7 @@ class _HandlePageViewState extends State<HandlePageView> {
             icon: Icons.home,
             isSelected: _navigatorType == NavigatorType.home,
             onClick: () => setState(() {
-              _screen = const HomeScreen();
+              _screen = const ReportScreen();
               _navigatorType = NavigatorType.home;
             }),
           ),
@@ -151,13 +151,14 @@ class _HandlePageViewState extends State<HandlePageView> {
           top: _topMainComponentPadding + _mainComponentDistance,
           left: _leftPaddingComponent - 2,
           child: _buildSideBarComponent(
-              icon: Icons.data_exploration,
-              isSelected: _navigatorType == NavigatorType.report,
+
+              icon: Icons.calendar_month,
+              isSelected: _navigatorType == NavigatorType.schedule,
               onClick: () {
-                if (_navigatorType != NavigatorType.report) {
+                if (_navigatorType != NavigatorType.schedule) {
                   setState(() {
-                    _screen = const ReportScreen();
-                    _navigatorType = NavigatorType.report;
+                    _screen = const ScheduleScreen();
+                    _navigatorType = NavigatorType.schedule;
                   });
                 }
               }),

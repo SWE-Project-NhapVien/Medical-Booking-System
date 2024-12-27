@@ -1,4 +1,5 @@
-import 'package:doctor_webapp/screen/handle_page_view.dart';
+import 'package:doctor_webapp/screen/appointment/examine_screen.dart';
+import 'package:doctor_webapp/screen/home/home_screen.dart';
 import 'package:doctor_webapp/screen/login/login_screen.dart';
 import 'package:doctor_webapp/screen/reset_password/reset_password.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,17 @@ class NavigationServices {
     return _pushMaterialPageRoute(const ResetPasswordScreen());
   }
 
-  Future<dynamic> pushHandlePageView() {
-    return _pushMaterialPageRoute(const HandlePageView());
+  Future<dynamic> pushHomeScreen() {
+    return _pushMaterialPageRoute(const HomeScreen());
   }
+
+  Future<dynamic> pushExamineScreen(String appointmentId) {
+    return _pushMaterialPageRoute(ExamineScreen(appointmentId: appointmentId));
+  }
+
+  // Future<dynamic> pushHandlePageView() {
+  //   return _pushMaterialPageRoute(const HandlePageView());
+  // }
 
   void popUntilLogin() {
     Navigator.of(context).pushAndRemoveUntil(

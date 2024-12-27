@@ -299,7 +299,6 @@ class UpcomingAppointmentView extends StatelessWidget {
         return Column(
           children: [
             Container(
-              height: 170,
               decoration: BoxDecoration(
                 color: ColorPalette.mediumBlue,
                 borderRadius: BorderRadius.circular(20),
@@ -418,31 +417,6 @@ class UpcomingAppointmentView extends StatelessWidget {
                     ),
                     const SizedBox(
                       height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: ColorPalette.deepBlue,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Detail",
-                                  style: TextStyle(
-                                    color: ColorPalette.whiteColor,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),

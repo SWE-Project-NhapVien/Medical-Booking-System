@@ -15,7 +15,7 @@ class CardItem extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.2,
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: Card(
-        color: ColorPalette.greyColor,
+        color: ColorPalette.whiteColor,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(

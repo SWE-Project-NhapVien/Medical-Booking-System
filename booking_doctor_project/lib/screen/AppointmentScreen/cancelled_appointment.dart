@@ -56,6 +56,7 @@ class _CancelledAppointmentState extends State<CancelledAppointment> {
             );
           } else {
             return ListView.builder(
+              padding: EdgeInsets.zero,
               itemCount: appointments.length,
               itemBuilder: (context, index) {
                 final appointment = appointments[index];

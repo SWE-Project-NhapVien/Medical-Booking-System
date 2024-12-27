@@ -14,7 +14,7 @@ class GetDoctorInfoBloc extends Bloc<GetInfoEvent, GetDoctorInfoState> {
     try {
       final supabase = Supabase.instance.client;
 
-      final response = await supabase.rpc('get_doctor_data', params: {'id': event.doctorId});
+      final response = await supabase.rpc('get_doctor_data2');
 
       if (response.isNotEmpty) {
         final doctorData = response[0] as Map<String, dynamic>;
@@ -28,5 +28,4 @@ class GetDoctorInfoBloc extends Bloc<GetInfoEvent, GetDoctorInfoState> {
       emit(GetDoctorInfoError('Error fetching doctor info: $e'));
     }
   }
-
 }
