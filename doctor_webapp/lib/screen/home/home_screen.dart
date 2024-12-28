@@ -1,4 +1,5 @@
 import 'package:doctor_webapp/screen/appointment/appointment_screen.dart';
+import 'package:doctor_webapp/screen/home/notification_screen.dart';
 import 'package:doctor_webapp/screen/profile/profile_screen.dart';
 import 'package:doctor_webapp/utils/color_palette.dart';
 import 'package:flutter/material.dart';
@@ -190,11 +191,14 @@ class HomeView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Center(
-                  child: Icon(
-                    Icons.settings,
-                    color: ColorPalette.deepBlue,
-                    size: 30,
-                  ),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.settings,
+                      color: ColorPalette.deepBlue,
+                      size: 30,
+                    ),
+                    onPressed: () => debugPrint("Hello"),
+                  )
                 ),
               ),
               const SizedBox(
@@ -208,11 +212,19 @@ class HomeView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Center(
-                  child: Icon(
-                    Icons.notifications,
-                    color: ColorPalette.deepBlue,
-                    size: 30,
-                  ),
+                  child: IconButton(
+                    icon: Icon(
+                        Icons.notifications,
+                        color: ColorPalette.deepBlue,
+                        size: 30,
+                    ),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationScreen(),
+                      ),
+                    ),
+                  )
                 ),
               ),
             ],
