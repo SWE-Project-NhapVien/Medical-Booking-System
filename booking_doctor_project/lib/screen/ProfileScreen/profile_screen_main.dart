@@ -204,21 +204,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
+            key: Key("ProfileInfo"),
             onTap: () => profileInfoLayoutEvent(context),
             child: _profileInfoLayout(),
           ),
           SizedBox(height: size.height * 0.02),
           GestureDetector(
+            key: Key("Policy"),
             onTap: () => policyLayoutEvent(context),
             child: _policyLayout(size),
           ),
           SizedBox(height: size.height * 0.02),
           GestureDetector(
+            key: Key("SwithProfile"),
             onTap: () => switchProfileLayoutEvent(context),
             child: _switchProfileLayout(),
           ),
           SizedBox(height: size.height * 0.02),
           GestureDetector(
+            key: Key("Logout"),
             onTap: () {
               showDialog(
                   context: context,
@@ -271,6 +275,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                     const Spacer(),
                                     ElevatedButton(
+                                      key: Key("logoutButton"),
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor:
                                               ColorPalette.deepBlue),

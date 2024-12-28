@@ -65,6 +65,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           width: 140,
                           height: 36,
                           child: TextField(
+                            key: Key("DateField"),
                             controller: dateController,
                             style: TextStyle(color: ColorPalette.deepBlue),
                             showCursor: false,
@@ -104,6 +105,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: SizedBox(
                             height: 36,
                             child: TextField(
+                              key: Key("SearchField"),
                               controller: searchController,
                               style: TextStyle(color: ColorPalette.deepBlue),
                               cursorColor: ColorPalette.deepBlue,
