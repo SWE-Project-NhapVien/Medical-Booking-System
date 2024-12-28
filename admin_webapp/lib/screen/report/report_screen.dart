@@ -51,7 +51,6 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
     final size = MediaQuery.of(context).size;
     double lottieSize = size.width * 0.2;
     return Scaffold(
-
       backgroundColor: ColorPalette.mediumBlue,
       body: Padding(
         padding: EdgeInsets.only(
@@ -100,18 +99,23 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
                 const SizedBox(
                   width: 16,
                 ),
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: ColorPalette.whiteColor,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.notifications,
-                      color: ColorPalette.deepBlue,
-                      size: 30,
+                GestureDetector(
+                  onTap: () {
+                    _showNotificationDialog(context);
+                  },
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: ColorPalette.whiteColor,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.notifications,
+                        color: ColorPalette.deepBlue,
+                        size: 30,
+                      ),
                     ),
                   ),
                 ),
@@ -224,6 +228,135 @@ class _ReportScreenHelperState extends State<ReportScreenHelper> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showNotificationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            width: 360,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: ColorPalette.deepBlue,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Today",
+                      style: TextStyle(
+                        color: ColorPalette.whiteColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop(); // Close dialog
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: ColorPalette.whiteColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                _buildNotificationItem(
+                    icon: Icons.calendar_today,
+                    title: "Scheduled Appointment",
+                    time: "2 M",
+                    content:
+                        "You have a new appointment on December, 31 15:30"),
+                _buildNotificationItem(
+                    icon: Icons.event,
+                    title: "Scheduled Change",
+                    time: "2 H",
+                    content:
+                        "Appointment on December,27 10:AM has been canceled"),
+                _buildNotificationItem(
+                    icon: Icons.note_alt,
+                    title: "Medical Notes",
+                    time: "3 H",
+                    content:
+                        "Update medical results complete for Khang Nguyen"),
+                const SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop(); // Close dialog
+                  },
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      "Mark all",
+                      style: TextStyle(
+                        color: ColorPalette.whiteColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildNotificationItem(
+      {required IconData icon,
+      required String title,
+      required String time,
+      required String content}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundColor: Colors.white,
+            child: Icon(icon, color: Colors.blue[700]),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                Text(
+                  content,
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            time,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
