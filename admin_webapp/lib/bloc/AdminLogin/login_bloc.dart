@@ -9,7 +9,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
     on<LoginRequired>((event, emit) async {
       emit(LoginProcess());
-      try{
+      try {
         final result = await AdminAuthServices().signInWithEmailPassword(
           email: event.email,
           password: event.password,
@@ -18,12 +18,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(LoginSuccess());
         }
       } catch (e) {
-        if (e.toString().contains("invalid-credentials")) {
+        if (e.toString().contains("invalid_credentials")) {
           emit(const LoginFailure(error: "Invalid email or password."));
-        }  else {
+        } else {
           emit(LoginFailure(error: e.toString()));
         }
       }
     });
-  } 
+  }
 }

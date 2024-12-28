@@ -16,9 +16,9 @@ class PieChartOrderStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double numberOfCancelledAppointment = 20;
-    double numberOfCompletedAppointment = 10;
-    double numberOfPendingAppointment = 30;
+    double numberOfCancelledAppointment = 0;
+    double numberOfCompletedAppointment = 0;
+    double numberOfPendingAppointment = 0;
 
     for (var element in appointments) {
       if (element.status == 'Cancelled') {

@@ -229,13 +229,11 @@ class ResultsView extends StatelessWidget {
                             decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                    image: result[index]['ava_url'] == null
-                                        ? Image.network(
-                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2F8DoZLvVpkbPZs1z1dBzXKLvgRNwgUrstA&s',
-                                          ).image
-                                        : Image.network(
-                                            result[index]['ava_url'],
-                                          ).image)),
+                                  image: result[index]['ava_url']['ava_url'] !=
+                                          ''
+                                      ? result[index]['ava_url']['ava_url']
+                                      : 'https://vikaxjhrmnewkrlovxmi.supabase.co/storage/v1/object/public/web/default_avatar.png',
+                                )),
                           ),
                           const SizedBox(width: 10),
                           Column(

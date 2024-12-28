@@ -51,7 +51,8 @@ Widget _setAllProviders() {
   return MultiBlocProvider(
     providers: [
       BlocProvider<DoctorLoginBloc>(create: (context) => DoctorLoginBloc()),
-      BlocProvider<ForgotPasswordBloc>(create: (context) => ForgotPasswordBloc()),
+      BlocProvider<ForgotPasswordBloc>(
+          create: (context) => ForgotPasswordBloc()),
       BlocProvider<LogoutBloc>(create: (context) => LogoutBloc()),
     ],
     child: const MyApp(),

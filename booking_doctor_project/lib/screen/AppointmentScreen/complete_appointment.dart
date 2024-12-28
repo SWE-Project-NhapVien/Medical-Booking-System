@@ -65,6 +65,7 @@ class _CompleteAppointmentState extends State<CompleteAppointment> {
                     appointmentName: appointment.specializations.join(', '),
                     date: appointment.appointmentDate,
                     time: appointment.appointmentTime.substring(0, 5),
+                    price: appointment.price.toString(),
                     onTap: () {
                       NavigationServices(context)
                           .pushAppointmentDetail(appointment: appointment);

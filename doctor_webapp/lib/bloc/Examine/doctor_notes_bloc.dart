@@ -24,21 +24,26 @@ class DoctorNotesBloc extends Bloc<DoctorNotesEvent, DoctorNotesState> {
       }).select();
 
       // Check if the response is valid
-      if (response != null && response.isNotEmpty) {
-        final insertedId = response[0]['appointment_id']; 
+      if (response.isNotEmpty) {
+        final insertedId = response[0]['appointment_id'];
 
         // Update the status of the appointment to 'Completed'
-        final updateResponse = await supabase.from('appointments').update({
-          'status': 'Completed',
-        }).eq('appointment_id', event.appointmentId).select();
+        final updateResponse = await supabase
+            .from('appointments')
+            .update({
+              'status': 'Completed',
+            })
+            .eq('appointment_id', event.appointmentId)
+            .select();
 
         // Check if the update response is valid
-        if (updateResponse != null && updateResponse.isNotEmpty) {
+        if (updateResponse.isNotEmpty) {
           emit(DoctorNotesAdded());
         } else {
           // Rollback: Delete the inserted doctor's notes
           await supabase.from('medicalresults').delete().eq('id', insertedId);
-          emit(DoctorNotesError('Failed to update appointment status. Changes rolled back.'));
+          emit(DoctorNotesError(
+              'Failed to update appointment status. Changes rolled back.'));
         }
       } else {
         emit(DoctorNotesError('Failed to add doctor notes.'));
