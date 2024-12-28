@@ -16,9 +16,9 @@ class PieChartOrderStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double numberOfCancelledAppointment = 20;
-    double numberOfCompletedAppointment = 10;
-    double numberOfPendingAppointment = 30;
+    double numberOfCancelledAppointment = 0;
+    double numberOfCompletedAppointment = 0;
+    double numberOfPendingAppointment = 0;
 
     for (var element in appointments) {
       if (element.status == 'Cancelled') {
@@ -33,7 +33,7 @@ class PieChartOrderStatus extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: ColorPalette.greyColor,
+        color: ColorPalette.whiteColor,
       ),
       padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(

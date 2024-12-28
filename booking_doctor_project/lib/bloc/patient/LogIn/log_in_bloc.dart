@@ -6,18 +6,19 @@ part 'log_in_event.dart';
 part 'log_in_state.dart';
 
 class LogInBloc extends Bloc<LogInEvent, LogInState> {
-  LogInBloc(): super(LogInInitial()) {
+  LogInBloc() : super(LogInInitial()) {
     on<LogInRequired>((event, emit) async {
       emit(LogInProcess());
       try {
-        final result = await AuthServices().signInWithEmailPassword(email: event.email, password: event.password);
+        final result = await AuthServices().signInWithEmailPassword(
+            email: event.email, password: event.password);
         if (result.session != null) {
           emit(LogInSuccess());
         }
       } catch (e) {
-        if (e.toString().contains("invalid-credentials")) {
+        if (e.toString().contains("invalid_credentials")) {
           emit(const LogInFailure(error: "Invalid email or password."));
-        }  else {
+        } else {
           emit(LogInFailure(error: e.toString()));
         }
       }
