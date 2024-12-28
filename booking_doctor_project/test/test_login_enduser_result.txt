@@ -1,0 +1,58 @@
+ID: Login as end user_1
+Test case: Correct input
+Input: 
++ nvk01052004@gmail.com 
++ Khang123
+Expected Output: Allows the user to proceed
+Output: Same as ER
+Status: Passed
+Reason: 
+  
+ID: Login as end user_2
+Test case: Email cannot be empty
+Input: 
++  
++ password123
+Expected Output: 
++ Disallowed access 
++ Show the error message
+Output: Same with ER
+Status: Passed
+Reason: 
+  
+ID: Login as end user_3
+Test case: Incorrect input
+Input: 
++ minhco2910@gmail.com 
++ password123
+Expected Output: 
++ Disallowed access 
++ Show the error message
+Output: Same as ER
+Status: Passed
+Reason: 
+  
+ID: Login as end user_4
+Test case: Incorrect input
+Input: 
++ !!#^%$ 
++ !!#^%$
+Expected Output: 
++ Disallowed access 
++ Show the error message
+Output: Same as ER
+Status: Passed
+Reason: 
+  
+ID: Login as end user_5
+Test case: Password cannot be empty.
+Input: 
++ example@gmail.com 
++ 
+Expected Output: 
++ Disallowed access 
++ Show the error message
+Output: Same with ER
+Status: Passed
+Reason: 
+  
