@@ -81,10 +81,10 @@ class ExamineScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Patient Information Panel
-                          Expanded(
+                          const Expanded(
                             flex: 1,
                             child: Padding(
-                              padding: const EdgeInsets.all(16.0),
+                              padding: EdgeInsets.all(16.0),
                               child: PatientInformationPanel(),
                             ),
                           ),
@@ -235,20 +235,6 @@ class PatientInformationPanel extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.grey,
-        ),
-      ),
-    );
-  }
-
   Widget _buildReadOnlyField(
     BuildContext context, {
     required String label,
@@ -300,7 +286,7 @@ class PatientInformationPanel extends StatelessWidget {
 
 class DoctorNotes extends StatefulWidget {
   final String appointmentId;
-  const DoctorNotes({Key? key, required this.appointmentId}) : super(key: key);
+  const DoctorNotes({super.key, required this.appointmentId});
 
   @override
   _DoctorNotesState createState() => _DoctorNotesState();
@@ -341,6 +327,7 @@ class _DoctorNotesState extends State<DoctorNotes> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Doctor notes added successfully.')),
           );
+          Navigator.of(context).pop();
         } else if (state is DoctorNotesError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.errorMessage)),
