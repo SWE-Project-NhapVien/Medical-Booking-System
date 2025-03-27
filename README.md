@@ -5,6 +5,10 @@ This project implements a comprehensive healthcare platform designed to streamli
 ## Use cases
 ![image](https://github.com/user-attachments/assets/cc000289-9e59-46ff-8f7f-bf61a6e960b7)
 
+## Database
+![image](https://github.com/user-attachments/assets/6a4e8c21-6114-484f-b253-ab9f68ab89c5)
+
+
 ## Screenshots
 
 **Patient's Mobile App:**
